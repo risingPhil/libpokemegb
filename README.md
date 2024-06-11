@@ -1,6 +1,7 @@
 # Introduction
 
 This project implements functionality to read stats, front sprites, Trainers' party/PC boxes and other various properties either from the ROM or from a save file of Gen 1 and Gen 2 Pokémon games.
+It also has support and data to inject the Distribution event pokémon into gen 1 and gen 2 pokémon save files.
 
 I'm happy to accept pull requests if the community wants to do them.
 
