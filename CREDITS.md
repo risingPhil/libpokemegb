@@ -1,4 +1,4 @@
-#Credits
+# Credits
 
 First of all, I want to thank the people behind Bulbapedia. The documentation was extensive and without it, I never would've started on this project.
 
@@ -15,7 +15,7 @@ Below, I've listed an overview of the documents and other resources used during 
 
 While several github repos are listed, I didn't copy any of the code. Instead I used these as reference while debugging some of the bugs I encountered.
 
-#Actual links:
+# Actual links:
 
 https://github.com/magical/pokemon-sprites-rby
 
