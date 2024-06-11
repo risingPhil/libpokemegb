@@ -23,7 +23,8 @@ The library was developed on Linux. I haven't tried building it on Windows or WS
 To build it, you can do this:
 
 \#Build with 12 threads (Change the thread number to what you want):
-make -j 12
+
+    make -j 12
 
 # Goal
 This project was built as a stepping stone for the next project I want to do: To experiment with the N64 transfer pak with libdragon. In that project, I want to be able to inject Distribution pokémon into a cartridge using the N64 transfer pak. That's why the initial feature set is what it is.
