@@ -27,6 +27,15 @@ To build it, you can do this:
 
     make -j 12
 
+# Usage
+You can add the library to your project and use either the Gen1GameReader or Gen2GameReader alongside an instance of the BufferBasedRomReader and BufferBasedSaveManager.
+
+There are also a few standalone example applications that are being built while building this project.
+
+The most interesting one of those for most will probably be the addDistributionPoke application:
+
+It gives you a menu in the terminal to select a distribution event pokémon into your save file.
+
 # Goal
 This project was built as a stepping stone for the next project I want to do: To experiment with the N64 transfer pak with libdragon. In that project, I want to be able to inject Distribution pokémon into a cartridge using the N64 transfer pak. That's why the initial feature set is what it is.
 
