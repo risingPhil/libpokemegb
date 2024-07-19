@@ -155,7 +155,7 @@ uint8_t Gen2ItemList::getCount()
 
 uint8_t Gen2ItemList::getCapacity()
 {
-	return 20;
+	return (type_ == Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET) ? 26 : 20;
 }
 
 bool Gen2ItemList::getEntry(uint8_t index, uint8_t &outItemId, uint8_t &outCount)
@@ -165,7 +165,11 @@ bool Gen2ItemList::getEntry(uint8_t index, uint8_t &outItemId, uint8_t &outCount
 		return false;
 	}
 
-	if (!saveManager_.advance(1 + (index * 2)))
+	// It looks like the key item pocket doesn't have a count value.
+	// During my test if I try to write a GS ball with count 1 to crystal and store the count value, I get a random master ball showing up (which has itemId 1)
+	// before the gs ball in the list.
+	const uint32_t advanceAmount = (type_ == Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET) ? 1 + index : 1 + (index * 2);
+	if (!saveManager_.advance(advanceAmount))
 	{
 		return false;
 	}
@@ -183,8 +187,20 @@ bool Gen2ItemList::getNextEntry(uint8_t &outItemId, uint8_t &outCount)
 		return false;
 	}
 
-	saveManager_.readByte(outCount);
+	// 2 things here:
+	// - The bulbapedia article: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_II)#Item_lists
+	//   gets the order of count vs itemId wrong. At least during my tests with a Pokémon crystal AND gold save
+	// - The key item pocket doesn't appear to store a count value at all.
+	//   see my other comment at ::getEntry() for more info
 	saveManager_.readByte(outItemId);
+	if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+	{
+		saveManager_.readByte(outCount);
+	}
+	else
+	{
+		outCount = 1;
+	}
 
 	return true;
 }
@@ -203,13 +219,19 @@ bool Gen2ItemList::add(uint8_t itemId, uint8_t itemCount)
 	{
 		if(curItemId == itemId)
 		{
-			uint8_t newCount = curItemCount + itemCount;
-			if(newCount > 99)
+			// the key item pocket doesn't appear to have a count field per entry.
+			// For more info see the related comment @getEntry()
+			if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
 			{
-				newCount = 99;
+				uint8_t newCount = curItemCount + itemCount;
+				if(newCount > 99)
+				{
+					newCount = 99;
+				}
+				saveManager_.rewind(1); // count is the second field of each entry (yes, Bulbapedia appears to get it wrong here)
+				saveManager_.writeByte(newCount);
+				saveManager_.advance();
 			}
-			saveManager_.rewind();
-			saveManager_.writeByte(newCount);
 			return true;
 		}
 	}
@@ -221,12 +243,19 @@ bool Gen2ItemList::add(uint8_t itemId, uint8_t itemCount)
 		return false;
 	}
 	
+	// Bulbapedia gets the order wrong here. itemId should go first, then itemCount
+	// at least this is the case during my tests with a Pokémon Crystal AND Gold save
+	saveManager_.writeByte(itemId);
 	// in the while loop, getNextEntry has returned false on the last iteration, so that means
 	// we've arrived at the terminator of the list. This is the exact position at which we need to write our new entry.
 	// convenient, isn't it?
 	// so let's write the new entry...
-	saveManager_.writeByte(itemCount);
-	saveManager_.writeByte(itemId);
+	if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+	{
+		// the key item pocket doesn't appear to have a count field per entry.
+		// For more info see the related comment @getEntry()
+		saveManager_.writeByte(itemCount);
+	}
 	// now write the new terminator
 	saveManager_.writeByte(0xFF);
 
