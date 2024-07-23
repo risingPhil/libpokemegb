@@ -18,6 +18,7 @@ public:
     ~Gen1Party();
 
     bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon);
+    bool setPokemon(uint8_t index, Gen1TrainerPokemon& poke);
     uint8_t getNumberOfPokemon();
     uint8_t getMaxNumberOfPokemon();
     const char* getPokemonNickname(uint8_t index);
@@ -41,6 +42,7 @@ public:
     ~Gen1Box();
 
     bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon);
+    bool setPokemon(uint8_t index, Gen1TrainerPokemon& poke);
     uint8_t getNumberOfPokemon();
     uint8_t getMaxNumberOfPokemon();
     const char* getPokemonNickname(uint8_t index);

@@ -224,6 +224,50 @@ bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPok
     return true;
 }
 
+bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
+{
+    const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
+    const uint8_t FIRST_POKE_STRUCT_OFFSET = 8;
+    Gen1TrainerPartyMeta partyMeta;
+    getPartyMetadata(saveManager_, partyMeta);
+
+    if(partyIndex >= partyMeta.number_of_pokemon)
+    {
+        // You can't use this function to add a pokemon. Only to replace one.
+        return false;
+    }
+
+    partyMeta.species_index_list[partyIndex] = poke.poke_index;
+
+    if(partyMeta.number_of_pokemon != getMaxNumberOfPokemon())
+    {
+        // we need to add a terminator
+        partyMeta.species_index_list[partyMeta.number_of_pokemon] = 0xFF;
+    }
+
+    writePartyMetadata(saveManager_, partyMeta);
+
+    // make sure the stat fields are filled in by recalculating them.
+    // this is the same as what happens when withdrawing them from an ingame PC box
+    gen1_recalculatePokeStats(gameReader_, poke);
+    poke.current_hp = poke.max_hp;
+
+    saveManager_.seek(0x2F2C + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
+    writeCommonPokeData(saveManager_, poke);
+
+    // according to https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_data_structure_(Generation_I)
+    // the level is stored a second time here for some reason.
+    saveManager_.writeByte(poke.level);
+
+    saveManager_.writeUint16(poke.max_hp, Endianness::BIG);
+    saveManager_.writeUint16(poke.atk, Endianness::BIG);
+    saveManager_.writeUint16(poke.def, Endianness::BIG);
+    saveManager_.writeUint16(poke.speed, Endianness::BIG);
+    saveManager_.writeUint16(poke.special, Endianness::BIG);
+
+    return true;
+}
+
 uint8_t Gen1Party::getNumberOfPokemon()
 {
     Gen1TrainerPartyMeta partyMeta;
@@ -297,45 +341,28 @@ void Gen1Party::setOriginalTrainerOfPokemon(uint8_t partyIndex, const char* orig
 
 bool Gen1Party::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
 {
-    const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
-    const uint8_t FIRST_POKE_STRUCT_OFFSET = 8;
     Gen1TrainerPartyMeta partyMeta;
     getPartyMetadata(saveManager_, partyMeta);
+    const uint8_t partyIndex = partyMeta.number_of_pokemon;
 
-    if(partyMeta.number_of_pokemon >= 6)
+    if(partyIndex >= getMaxNumberOfPokemon())
     {
         // no room for this pokemon
         return false;
     }
-    const uint8_t partyIndex = partyMeta.number_of_pokemon;
-    partyMeta.species_index_list[partyIndex] = poke.poke_index;
     ++partyMeta.number_of_pokemon;
 
-    if(partyMeta.number_of_pokemon != 6)
+    if(partyMeta.number_of_pokemon != getMaxNumberOfPokemon())
     {
         // we need to add a terminator
         partyMeta.species_index_list[partyMeta.number_of_pokemon] = 0xFF;
     }
 
     writePartyMetadata(saveManager_, partyMeta);
-
-    // make sure the stat fields are filled in by recalculating them.
-    // this is the same as what happens when withdrawing them from an ingame PC box
-    gen1_recalculatePokeStats(gameReader_, poke);
-    poke.current_hp = poke.max_hp;
-
-    saveManager_.seek(0x2F2C + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
-    writeCommonPokeData(saveManager_, poke);
-
-    // according to https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_data_structure_(Generation_I)
-    // the level is stored a second time here for some reason.
-    saveManager_.writeByte(poke.level);
-
-    saveManager_.writeUint16(poke.max_hp, Endianness::BIG);
-    saveManager_.writeUint16(poke.atk, Endianness::BIG);
-    saveManager_.writeUint16(poke.def, Endianness::BIG);
-    saveManager_.writeUint16(poke.speed, Endianness::BIG);
-    saveManager_.writeUint16(poke.special, Endianness::BIG);
+    if(!setPokemon(partyIndex, poke))
+    {
+        return false;
+    }
 
     // now store the original trainer string and name/nickname
     setOriginalTrainerOfPokemon(partyIndex, originalTrainerID);
@@ -373,6 +400,42 @@ bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon)
     gameReader_.readPokemonStatsForIndex(outTrainerPokemon.poke_index, stats);
     outTrainerPokemon.level = getLevelForExp(outTrainerPokemon.exp, stats.growth_rate);
     
+    return true;
+}
+
+bool Gen1Box::setPokemon(uint8_t index, Gen1TrainerPokemon& poke)
+{
+    const uint8_t BOX_POKEMON_NUM_BYTES = 33;
+    const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
+    Gen1TrainerBoxMeta boxMeta;
+    const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+
+    if(index >= boxMeta.number_of_pokemon)
+    {
+        // You can't use this function to add a pokemon. Only to replace one.
+        return false;
+    }
+
+    boxMeta.species_index_list[index] = poke.poke_index;
+
+    writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+
+    // make sure the stat fields are filled in by recalculating them.
+    // this is the same as what happens when withdrawing them from an ingame PC box
+    gen1_recalculatePokeStats(gameReader_, poke);
+    poke.current_hp = poke.max_hp;
+
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    saveManager_.seekToBankOffset(bankIndex, boxOffset + FIRST_POKE_STRUCT_OFFSET + (index * BOX_POKEMON_NUM_BYTES));
+
+    writeCommonPokeData(saveManager_, poke);
+
+    // now update the checksum. Note that this is NOT the only checksum that will need to be updated. There's also the whole bank checksum.
+    // this needs to be updated by Gen1GameReader once it is done manipulating the boxes
+    updateChecksum(currentBoxIndex);
+
     return true;
 }
 
@@ -465,40 +528,30 @@ void Gen1Box::setOriginalTrainerOfPokemon(uint8_t index, const char* originalTra
 
 bool Gen1Box::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
 {
-    const uint8_t BOX_POKEMON_NUM_BYTES = 33;
-    const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    const uint8_t index = boxMeta.number_of_pokemon;
 
-    if(boxMeta.number_of_pokemon >= 6)
+    if(index >= getMaxNumberOfPokemon())
     {
         // no room for this pokemon
         return false;
     }
-    const uint8_t index = boxMeta.number_of_pokemon;
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
     
-    boxMeta.species_index_list[index] = poke.poke_index;
     ++boxMeta.number_of_pokemon;
 
-    if(boxMeta.number_of_pokemon != 6)
+    if(boxMeta.number_of_pokemon != getMaxNumberOfPokemon())
     {
         // we need to add a terminator
         boxMeta.species_index_list[boxMeta.number_of_pokemon] = 0xFF;
     }
 
-    // make sure the stat fields are filled in by recalculating them.
-    // this is the same as what happens when withdrawing them from an ingame PC box
-    gen1_recalculatePokeStats(gameReader_, poke);
-    poke.current_hp = poke.max_hp;
-
     writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
-
-    saveManager_.seekToBankOffset(bankIndex, boxOffset + FIRST_POKE_STRUCT_OFFSET + (index * BOX_POKEMON_NUM_BYTES));
-
-    writeCommonPokeData(saveManager_, poke);
+    if(!setPokemon(index, poke))
+    {
+        return false;
+    }
 
     // now store the original trainer string and name/nickname
     setOriginalTrainerOfPokemon(index, originalTrainerID);
