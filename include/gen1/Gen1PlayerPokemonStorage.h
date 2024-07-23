@@ -24,7 +24,7 @@ public:
     /**
      * Reads the pokemon data structure at the specified partyIndex
      */
-    bool getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon);
+    bool getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel = true);
     /**
      * Overwrites the pokemon data structure at the specified partyIndex
      */
@@ -56,7 +56,7 @@ public:
      * Gets the pokemon species index at the given index within the box
      */
     uint8_t getSpeciesAtIndex(uint8_t index);
-    bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon);
+    bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel = true);
     bool setPokemon(uint8_t index, Gen1TrainerPokemon& poke);
     uint8_t getNumberOfPokemon();
     uint8_t getMaxNumberOfPokemon();
