@@ -1,6 +1,6 @@
 #include "Moves.h"
 
-const char *moveToString(Move move)
+const char *getMoveString(Move move)
 {
     switch (move)
     {
