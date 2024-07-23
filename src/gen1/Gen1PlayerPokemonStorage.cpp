@@ -198,6 +198,18 @@ Gen1Party::~Gen1Party()
 {
 }
 
+uint8_t Gen1Party::getSpeciesAtIndex(uint8_t partyIndex)
+{
+    Gen1TrainerPartyMeta partyMeta;
+    getPartyMetadata(saveManager_, partyMeta);
+
+    if(partyIndex >= partyMeta.number_of_pokemon)
+    {
+        return 0;
+    }
+    return partyMeta.species_index_list[partyIndex];
+}
+
 bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon)
 {
     Gen1PokeStats stats;
@@ -380,6 +392,20 @@ Gen1Box::Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t 
 
 Gen1Box::~Gen1Box()
 {
+}
+
+uint8_t Gen1Box::getSpeciesAtIndex(uint8_t index)
+{
+    Gen1TrainerBoxMeta boxMeta;
+    const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+
+    if(index >= boxMeta.number_of_pokemon)
+    {
+        return 0;
+    }
+
+    return boxMeta.species_index_list[index];
 }
 
 bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon)
