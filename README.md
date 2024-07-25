@@ -37,7 +37,7 @@ The most interesting one of those for most will probably be the addDistributionP
 It gives you a menu in the terminal to select a distribution event pokémon into your save file.
 
 # Goal
-This project was built as a stepping stone for the next project I want to do: To experiment with the N64 transfer pak with libdragon. In that project, I want to be able to inject Distribution pokémon into a cartridge using the N64 transfer pak. That's why the initial feature set is what it is.
+This project was built as a stepping stone for [PokeMe64](https://github.com/risingPhil/PokeMe64): This project injects Distribution pokémon into a cartridge using the N64 transfer pak. That's why the initial feature set of libpokemegb is what it is.
 
 I also hope that if someone else wants to work on something similar, that he/she finds the functionality they want or inspiration to implement it themselves. I tried to document the resources I used during development in the code.
 
