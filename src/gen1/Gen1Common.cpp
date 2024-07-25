@@ -142,6 +142,7 @@ void gen1_recalculatePokeStats(Gen1GameReader& reader, Gen1TrainerPokemon& poke)
     Gen1PokeStats stats;
     reader.readPokemonStatsForIndex(poke.poke_index, stats);
 
+	poke.level = getLevelForExp(poke.exp, stats.growth_rate);
     poke.max_hp = calculatePokeStat(PokeStat::HP, stats.base_hp, getStatIV(PokeStat::HP, poke.iv_data), poke.hp_effort_value, poke.level);
     poke.atk = calculatePokeStat(PokeStat::ATK, stats.base_attack, getStatIV(PokeStat::ATK, poke.iv_data), poke.atk_effort_value, poke.level);
     poke.def = calculatePokeStat(PokeStat::DEF, stats.base_defense, getStatIV(PokeStat::DEF, poke.iv_data), poke.def_effort_value, poke.level);
