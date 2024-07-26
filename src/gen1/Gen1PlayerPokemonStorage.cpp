@@ -198,7 +198,19 @@ Gen1Party::~Gen1Party()
 {
 }
 
-bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon)
+uint8_t Gen1Party::getSpeciesAtIndex(uint8_t partyIndex)
+{
+    Gen1TrainerPartyMeta partyMeta;
+    getPartyMetadata(saveManager_, partyMeta);
+
+    if(partyIndex >= partyMeta.number_of_pokemon)
+    {
+        return 0;
+    }
+    return partyMeta.species_index_list[partyIndex];
+}
+
+bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel)
 {
     Gen1PokeStats stats;
     const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
@@ -209,7 +221,7 @@ bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPok
     readCommonPokeData(saveManager_, outTrainerPokemon);
 
     // according to https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_data_structure_(Generation_I)
-    // the level is stored a second time here for some reason. Ignore it.
+    // the level is stored a second time here for some reason. 
     saveManager_.advance();
 
     saveManager_.readUint16(outTrainerPokemon.max_hp, Endianness::BIG);
@@ -219,8 +231,13 @@ bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPok
     saveManager_.readUint16(outTrainerPokemon.special, Endianness::BIG);
 
     // the level field above is kinda unreliable. the only reliable way is to base it on the exp field
-    gameReader_.readPokemonStatsForIndex(outTrainerPokemon.poke_index, stats);
-    outTrainerPokemon.level = getLevelForExp(outTrainerPokemon.exp, stats.growth_rate);
+    // doing the recalculation causes a performance hit though, because the stats data is being read.
+    // shouldRecalculateLevel == false lets you avoid this.
+    if(shouldRecalculateLevel)
+    {
+        gameReader_.readPokemonStatsForIndex(outTrainerPokemon.poke_index, stats);
+        outTrainerPokemon.level = getLevelForExp(outTrainerPokemon.exp, stats.growth_rate);
+    }
     return true;
 }
 
@@ -382,7 +399,21 @@ Gen1Box::~Gen1Box()
 {
 }
 
-bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon)
+uint8_t Gen1Box::getSpeciesAtIndex(uint8_t index)
+{
+    Gen1TrainerBoxMeta boxMeta;
+    const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+
+    if(index >= boxMeta.number_of_pokemon)
+    {
+        return 0;
+    }
+
+    return boxMeta.species_index_list[index];
+}
+
+bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel)
 {
     Gen1PokeStats stats;
     const uint8_t BOX_POKEMON_NUM_BYTES = 33;
@@ -397,8 +428,13 @@ bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon)
     readCommonPokeData(saveManager_, outTrainerPokemon);
 
     // the level field above is kinda unreliable. the only reliable way is to base it on the exp field
-    gameReader_.readPokemonStatsForIndex(outTrainerPokemon.poke_index, stats);
-    outTrainerPokemon.level = getLevelForExp(outTrainerPokemon.exp, stats.growth_rate);
+    // doing the recalculation causes a performance hit though, because the stats data is being read.
+    // shouldRecalculateLevel == false lets you avoid this.
+    if(shouldRecalculateLevel)
+    {
+        gameReader_.readPokemonStatsForIndex(outTrainerPokemon.poke_index, stats);
+        outTrainerPokemon.level = getLevelForExp(outTrainerPokemon.exp, stats.growth_rate);
+    }
     
     return true;
 }

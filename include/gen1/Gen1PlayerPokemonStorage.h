@@ -17,8 +17,19 @@ public:
     Gen1Party(Gen1GameReader& gameReader, ISaveManager& saveManager);
     ~Gen1Party();
 
-    bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon);
-    bool setPokemon(uint8_t index, Gen1TrainerPokemon& poke);
+    /**
+     * Gets the pokemon species index at the given partyIndex
+     */
+    uint8_t getSpeciesAtIndex(uint8_t partyIndex);
+    /**
+     * Reads the pokemon data structure at the specified partyIndex
+     */
+    bool getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel = true);
+    /**
+     * Overwrites the pokemon data structure at the specified partyIndex
+     */
+    bool setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke);
+
     uint8_t getNumberOfPokemon();
     uint8_t getMaxNumberOfPokemon();
     const char* getPokemonNickname(uint8_t index);
@@ -41,7 +52,11 @@ public:
     Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex);
     ~Gen1Box();
 
-    bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon);
+    /**
+     * Gets the pokemon species index at the given index within the box
+     */
+    uint8_t getSpeciesAtIndex(uint8_t index);
+    bool getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, bool shouldRecalculateLevel = true);
     bool setPokemon(uint8_t index, Gen1TrainerPokemon& poke);
     uint8_t getNumberOfPokemon();
     uint8_t getMaxNumberOfPokemon();
