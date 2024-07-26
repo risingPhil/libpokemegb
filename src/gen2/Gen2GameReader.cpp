@@ -689,3 +689,11 @@ bool Gen2GameReader::isGameCrystal() const
 {
     return (gameType_ == Gen2GameType::CRYSTAL);
 }
+
+void Gen2GameReader::unlockGsBallEvent()
+{
+    saveManager_.seek(0x3E3C);
+    saveManager_.writeByte(0xB);
+    saveManager_.seek(0x3E44);
+    saveManager_.writeByte(0xB);
+}

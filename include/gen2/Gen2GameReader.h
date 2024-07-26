@@ -178,6 +178,11 @@ public:
      * @brief Checks whether we're currently dealing with Pokémon Crystal
      */
     bool isGameCrystal() const;
+
+    /**
+     * @brief Unlocks the GS Ball event in Pokemon crystal
+     */
+    void unlockGsBallEvent();
 protected:
 private:
     IRomReader &romReader_;

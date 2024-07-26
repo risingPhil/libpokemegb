@@ -11,43 +11,6 @@
 #include <cstring>
 #include <cstdlib>
 
-#define POKEMON_CRYSTAL_ITEM_ID_GS_BALL 0x73
-
-static void gen2ReceiveGSBall(Gen2GameReader& gameReader)
-{
-    bool alreadyHasOne = false;
-
-    const char* trainerName = gameReader.getTrainerName();
-    Gen2ItemList keyItemPocket = gameReader.getItemList(Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET);
-    if(keyItemPocket.getCount() > 0)
-    {
-        uint8_t itemId;
-        uint8_t itemCount;
-        bool gotEntry = keyItemPocket.getEntry(0, itemId, itemCount);
-
-        while(gotEntry)
-        {
-            if(itemId == POKEMON_CRYSTAL_ITEM_ID_GS_BALL)
-            {
-                alreadyHasOne = true;
-                break;
-            }
-            gotEntry = keyItemPocket.getNextEntry(itemId, itemCount);
-        }
-    }
-    
-    if(alreadyHasOne)
-    {
-        fprintf(stderr, "ERROR: It appears you already have one!");
-    }
-    else
-    {
-        keyItemPocket.add(POKEMON_CRYSTAL_ITEM_ID_GS_BALL, 1);
-        gameReader.finishSave();
-        fprintf(stdout, "%s obtained a GS Ball!", trainerName);
-    }
-}
-
 int main(int argc, char** argv)
 {
     if(argc != 3)
@@ -94,14 +57,8 @@ int main(int argc, char** argv)
     }
     
     Gen2GameReader gameReader(romReader, saveManager, gen2Type);
-    gen2ReceiveGSBall(gameReader);
-
-    // Test for adding rare candy
-#if 0
-    Gen2ItemList itemPocket = gameReader.getItemList(Gen2ItemListType::GEN2_ITEMLISTTYPE_ITEMPOCKET);
-    itemPocket.add(0x20, 27);
+    gameReader.unlockGsBallEvent();
     gameReader.finishSave();
-#endif
 
     FILE* f = fopen(argv[2], "w");
     fwrite(saveBuffer, 1, saveFileSize, f);
