@@ -455,6 +455,7 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
             result = i;
 
             updateWholeBoxBankChecksum(getGen1BoxBankIndex(i, currentBoxIndex));
+            break;
         }   
     }
     setPokedexFlag(PokedexFlag::POKEDEX_SEEN, pokedexNumber);

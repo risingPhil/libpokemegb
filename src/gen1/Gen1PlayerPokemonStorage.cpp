@@ -539,6 +539,7 @@ bool Gen1Box::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const
         return false;
     }
     
+    boxMeta.species_index_list[index] = poke.poke_index;
     ++boxMeta.number_of_pokemon;
 
     if(boxMeta.number_of_pokemon != getMaxNumberOfPokemon())
