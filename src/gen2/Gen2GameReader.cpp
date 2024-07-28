@@ -695,8 +695,29 @@ bool Gen2GameReader::isGameCrystal() const
 
 void Gen2GameReader::unlockGsBallEvent()
 {
+    if(!isGameCrystal())
+    {
+        return;
+    }
+
+    // let's remove the GS ball from the players' inventory first (if it exists)
+    // this is to cover up my earlier fuck up with PokeMe64 which only handed out the item.
+    // it also is part of making the event repeatable.
+    Gen2ItemList itemList = getItemList(Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET);
+    itemList.remove(CRYSTAL_ITEM_ID_GS_BALL);
+
+    // now let's reset the GS Ball related event flags (to make the event repeatable)
+    setEventFlag(CRYSTAL_EVENTFLAG_RECEIVED_GSBALL, false);
+    setEventFlag(CRYSTAL_EVENTFLAG_KURT_CAN_CHECK_GSBALL, false);
+    setEventFlag(CRYSTAL_EVENTFLAG_KURT_READY_TO_RETURN_GSBALL, false);
+    setEventFlag(CRYSTAL_EVENTFLAG_GSBALL_USABLE_IN_ILEX_FOREST_SHRINE, false);
+
+    // unlock the event itself. This triggers the NPC to stop you when trying to leave the Golden Rod pokémon center
+    // to give you the GS Ball.
+    // to be honest I have no clue what the exact meaning of this byte is. But hey, it works!
     saveManager_.seek(0x3E3C);
     saveManager_.writeByte(0xB);
+    // this is a mirror of the previous byte. It's supposedly not needed. But let's just set it to be safe.
     saveManager_.seek(0x3E44);
     saveManager_.writeByte(0xB);
 }

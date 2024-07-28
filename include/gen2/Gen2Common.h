@@ -6,6 +6,16 @@
 class Gen2GameReader;
 class ISaveManager;
 
+// source: https://bulbapedia.bulbagarden.net/wiki/List_of_items_by_index_number_(Generation_II)
+#define CRYSTAL_ITEM_ID_GS_BALL 0x73
+
+// Based on https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Resources/text/script/gen2/flags_c_en.txt
+// Look at this file to see more events
+#define CRYSTAL_EVENTFLAG_KURT_CAN_CHECK_GSBALL 190
+#define CRYSTAL_EVENTFLAG_KURT_READY_TO_RETURN_GSBALL 191
+#define CRYSTAL_EVENTFLAG_GSBALL_USABLE_IN_ILEX_FOREST_SHRINE 192
+#define CRYSTAL_EVENTFLAG_RECEIVED_GSBALL 832
+
 enum class Gen2GameType
 {
     INVALID,

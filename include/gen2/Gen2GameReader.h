@@ -181,15 +181,33 @@ public:
 
     /**
      * @brief Unlocks the GS Ball event in Pokemon crystal
+     * Note: this function is made to be repeatable: it removes an existing GS Ball entry first and resets all the 
+     * GS ball related event flags.
+     * 
+     * This is for 2 reasons: I screwed up my first versions of PokeMe64: they only gave you the GS Ball item, but didn't
+     * change any of the event flags. Obviously this has changed now.
+     * 
+     * Therefore after executing this function, the GS Ball event stats from the beginning again:
+     * you can get a GS Ball by leaving the Golden Rod Pokemon center, even if you had done the event before
+     * 
+     * Secondly, it's just nice to be able to trigger the GS Ball/Celebi event more than once.
+     * 
+     * Don't forget to call finishSave() after using this function!
      */
     void unlockGsBallEvent();
 
     /**
      * @brief Retrieves the value of the given event flag
+     * Hint: You can find the number and meaning of various event flags here:
+     * https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Resources/text/script/gen2/flags_c_en.txt
      */
     bool getEventFlag(uint16_t flagNumber);
     /**
      * @brief Sets the value of the given event flag number
+     * Hint: You can find the number and  meaning of different event flags here:
+     * https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Resources/text/script/gen2/flags_c_en.txt
+     * 
+     * Don't forget to call finishSave() after using this function!
      */
     void setEventFlag(uint16_t flagNumber, bool enabled);
 protected:
