@@ -9,6 +9,9 @@
 #define CRYSTAL_PICS_FIX 0x36
 #define CRYSTAL_BANK_PICS_1 72
 
+#define EVENT_FLAGS_OFFSET_GOLDSILVER 0x261F
+#define EVENT_FLAGS_OFFSET_CRYSTAL 0x2600
+
 static const uint8_t crystalPicsBanks[] = {
     CRYSTAL_BANK_PICS_1 + 0,
     CRYSTAL_BANK_PICS_1 + 1,
@@ -696,4 +699,42 @@ void Gen2GameReader::unlockGsBallEvent()
     saveManager_.writeByte(0xB);
     saveManager_.seek(0x3E44);
     saveManager_.writeByte(0xB);
+}
+
+bool Gen2GameReader::getEventFlag(uint16_t flagNumber)
+{
+    const uint16_t saveOffset = (isGameCrystal()) ? EVENT_FLAGS_OFFSET_CRYSTAL : EVENT_FLAGS_OFFSET_GOLDSILVER;
+    uint8_t byteVal;
+    const uint8_t flag = 1 << (flagNumber % 8);
+
+    saveManager_.seek(saveOffset + (flagNumber / 8));
+    saveManager_.readByte(byteVal);
+
+    return (byteVal & flag);
+}
+
+#include <cstdio>
+
+void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
+{
+    const uint16_t saveOffset = (isGameCrystal()) ? EVENT_FLAGS_OFFSET_CRYSTAL : EVENT_FLAGS_OFFSET_GOLDSILVER;
+    uint8_t byteVal;
+    uint8_t resultVal;
+    const uint8_t flag = 1 << (flagNumber % 8);
+
+    saveManager_.seek(saveOffset + (flagNumber / 8));
+    saveManager_.readByte(byteVal);
+    saveManager_.rewind(1);
+
+    // first calculate the value of the byte with the bit reset to 0
+    resultVal = byteVal & (~flag);
+
+    // now apply the flag if enabled == true
+    if(enabled)
+    {
+        resultVal |= flag;
+    }
+    printf("%s: flagNumber %hu, enabled: %d, orig byte: 0x%02x, new byte 0x%02x\n", __FUNCTION__, flagNumber, enabled, byteVal, resultVal);
+
+    saveManager_.writeByte(resultVal);
 }

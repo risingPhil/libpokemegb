@@ -11,6 +11,8 @@ all:
 	$(MAKE) -C gen2_gsball $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_addItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_removeItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C gen2_getEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C gen2_setEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 
 clean:
 	$(MAKE) -C do_stuff_gen1 clean
@@ -22,3 +24,5 @@ clean:
 	$(MAKE) -C gen2_gsball clean
 	$(MAKE) -C gen2_addItem clean
 	$(MAKE) -C gen2_removeItem clean
+	$(MAKE) -C gen2_getEventFlag clean
+	$(MAKE) -C gen2_setEventFlag clean

@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 {
     if(argc != 3)
     {
-        fprintf(stderr, "Usage: addDistributionPoke <path/to/rom.gbc> <path/to/file.sav>\n");
+        fprintf(stderr, "Usage: gen2_gsball <path/to/rom.gbc> <path/to/file.sav>\n");
         return 1;
     }
 

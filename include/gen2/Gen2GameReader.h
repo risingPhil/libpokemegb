@@ -183,6 +183,15 @@ public:
      * @brief Unlocks the GS Ball event in Pokemon crystal
      */
     void unlockGsBallEvent();
+
+    /**
+     * @brief Retrieves the value of the given event flag
+     */
+    bool getEventFlag(uint16_t flagNumber);
+    /**
+     * @brief Sets the value of the given event flag number
+     */
+    void setEventFlag(uint16_t flagNumber, bool enabled);
 protected:
 private:
     IRomReader &romReader_;
