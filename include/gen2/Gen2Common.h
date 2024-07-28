@@ -74,10 +74,12 @@ enum Gen2GrowthRate
 
 enum Gen2ItemListType
 {
+    GEN2_ITEMLISTTYPE_INVALID,
     GEN2_ITEMLISTTYPE_ITEMPOCKET,
     GEN2_ITEMLISTTYPE_KEYITEMPOCKET,
     GEN2_ITEMLISTTYPE_BALLPOCKET,
-    GEN2_ITEMLISTTYPE_PC
+    GEN2_ITEMLISTTYPE_PC,
+    GEN2_ITEMLISTTYPE_MAX
 };
 
 typedef struct Gen2TrainerPokemon
@@ -142,6 +144,8 @@ public:
      * WARNING: You must call finishSave() on the Gen2GameReader after calling this function. Not doing so will corrupt your save file!
      */
     bool add(uint8_t itemId, uint8_t itemCount);
+
+    bool remove(uint8_t itemId);
 protected:
 private:
     bool seekToBasePos();
@@ -189,5 +193,7 @@ bool gen2_isPokemonShiny(Gen2TrainerPokemon &poke);
  * @brief This function makes the necessary IV changes to make the pokemon shiny
  */
 void gen2_makePokemonShiny(Gen2TrainerPokemon& poke);
+
+const char* gen2_getItemListTypeString(Gen2ItemListType type);
 
 #endif

@@ -266,6 +266,81 @@ bool Gen2ItemList::add(uint8_t itemId, uint8_t itemCount)
 	return true;
 }
 
+bool Gen2ItemList::remove(uint8_t itemId)
+{
+	uint8_t curItemId;
+	uint8_t curItemCount;
+
+	const uint8_t numItems = getCount();
+
+	// search for an existing item entry
+	// if found, we'll increase the itemcount
+	// if not found, the internal position of the savemanager will have conveniently moved
+	// to the position we'd actually need to write the new entry to
+	while(getNextEntry(curItemId, curItemCount))
+	{
+		if(curItemId == itemId)
+		{
+			break;
+		}
+	}
+
+	if(curItemId != itemId)
+	{
+		return false;
+	}
+
+	while(getNextEntry(curItemId, curItemCount))
+	{
+		// okay, we need to rewind to the item we want to replace first. right now we're just past the item we just read to replace it with
+		if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+		{
+			saveManager_.rewind(4);
+		}
+		else
+		{
+			// the key item pocket doesn't appear to have a count field per entry.
+			saveManager_.rewind(2);
+		}
+		saveManager_.writeByte(curItemId);
+		if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+		{
+			// the key item pocket doesn't appear to have a count field per entry.
+			// For more info see the related comment @getEntry()
+			saveManager_.writeByte(curItemCount);
+		}
+
+		// now we need to advance 1 item to make sure we're not reading the same entry again on the next loop
+		if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+		{
+			saveManager_.advance(2);
+		}
+		else
+		{
+			// the key item pocket doesn't appear to have a count field per entry.
+			saveManager_.advance(1);
+		}
+	}
+
+	if(type_ != Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET)
+	{
+		saveManager_.rewind(2);
+	}
+	else
+	{
+		saveManager_.rewind(1);
+	}
+
+	// now write the new terminator
+	saveManager_.writeByte(0xFF);
+
+	// the only thing left is to increase the list counter
+	seekToBasePos();
+	saveManager_.writeByte(numItems - 1);
+
+	return true;
+}
+
 bool Gen2ItemList::seekToBasePos()
 {
 	uint32_t offset;
@@ -409,4 +484,21 @@ void gen2_makePokemonShiny(Gen2TrainerPokemon& poke)
 	// all the other groups of 4 bits need to be set to 10 (SPEED, DEFENSE, SPECIAL)
 	poke.iv_data[0] = (atkIV << 4) | 0xA;
 	poke.iv_data[1] = 0xAA;
+}
+
+const char* gen2_getItemListTypeString(Gen2ItemListType type)
+{
+	switch(type)
+	{
+		case Gen2ItemListType::GEN2_ITEMLISTTYPE_ITEMPOCKET:
+			return "Item Pocket";
+		case Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET:
+			return "Key Item Pocket";
+		case Gen2ItemListType::GEN2_ITEMLISTTYPE_BALLPOCKET:
+			return "Ball Pocket";
+		case Gen2ItemListType::GEN2_ITEMLISTTYPE_PC:
+			return "PC";
+		default:
+			return "Invalid";
+	}
 }
