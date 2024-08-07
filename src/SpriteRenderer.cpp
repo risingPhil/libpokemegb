@@ -3,6 +3,8 @@
 
 #include <cstdio>
 
+using OutputFormat = SpriteRenderer::OutputFormat;
+
 // The next set of functions are defined to remove the white background from a decoded RGBA pokémon sprite by doing edge detection
 // The code below is specific for RGBA32, NOT RGBA16.
 // For PokeMe64, however, I'll need RGBA16.
@@ -16,12 +18,22 @@ static uint32_t getRGBA32Offset(int row, int column, int spriteWidthInPixels)
     return row * spriteWidthInPixels * 4 + column * 4;
 }
 
+static uint32_t getRGBA16Offset(int row, int column, int spriteWidthInPixels)
+{
+    return row * spriteWidthInPixels * 2 + column * 2;   
+}
+
 /**
  * @brief Returns whether the pixel at the specified buffer offset is white
  */
 static bool rgba32_is_white(uint8_t* buffer, uint32_t srcOffset)
 {
-    return ((*(uint32_t *)(buffer + srcOffset)) == 0xFFFFFFFF);
+    return ((*((uint32_t *)(buffer + srcOffset))) == 0xFFFFFFFF);
+}
+
+static bool rgba16_is_white(uint8_t* buffer, uint32_t srcOffset)
+{
+    return ((*((uint16_t *)(buffer + srcOffset))) == 0xFFFF);
 }
 
 /**
@@ -29,8 +41,17 @@ static bool rgba32_is_white(uint8_t* buffer, uint32_t srcOffset)
  */
 static void rgba32_make_transparent(uint8_t* buffer, uint32_t srcOffset)
 {
-    (*(uint32_t *)(buffer + srcOffset)) = 0;
+    (*((uint32_t *)(buffer + srcOffset))) = 0;
 }
+
+/**
+ * @brief Makes the pixel at the specified buffer offset transparent
+ */
+static void rgba16_make_transparent(uint8_t* buffer, uint32_t srcOffset)
+{
+    (*((uint16_t *)(buffer + srcOffset))) &= 0xFFFE;
+}
+
 
 /**
  * @brief returns the alpha component of the RGBA color at the specified buffer offset
@@ -41,21 +62,54 @@ static uint8_t rgba32_alpha(uint8_t* buffer, uint32_t srcOffset)
 }
 
 /**
+ * @brief returns the alpha component of the RGBA16 color at the specified buffer offset
+ */
+static uint8_t rgba16_alpha(uint8_t* buffer, uint32_t srcOffset)
+{
+    return (*((uint16_t *)(buffer + srcOffset))) & 0x1;
+}
+
+/**
  * @brief This function makes the pixel at the specified row and column index transparent if it's white
  */
-static bool transformWhiteBackgroundPixel(uint8_t *rgbaBuffer, int row, int column, int spriteWidthInPixels)
+static bool transformWhiteBackgroundPixel(uint8_t *buffer, OutputFormat format, int row, int column, int spriteWidthInPixels)
 {
-    const uint32_t srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
+    uint32_t srcOffset;
+    uint8_t alpha;
+    bool white;
+    
+    switch(format)
+    {
+    case OutputFormat::RGBA16:
+        srcOffset = getRGBA16Offset(row, column, spriteWidthInPixels);
+        alpha = rgba16_alpha(buffer, srcOffset);
+        white = rgba16_is_white(buffer, srcOffset);
+        break;
+    case OutputFormat::RGBA32:
+        srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
+        alpha = rgba32_alpha(buffer, srcOffset);
+        white = rgba32_is_white(buffer, srcOffset);
+        break;
+    default:
+        return false;
+    }
 
-    if (rgba32_alpha(rgbaBuffer, srcOffset) == 0)
+    if (alpha == 0)
     {
         return true;
     }
 
-    if (rgba32_is_white(rgbaBuffer, srcOffset))
+    if (white)
     {
         // make transparent
-        rgba32_make_transparent(rgbaBuffer, srcOffset);
+        if(format == OutputFormat::RGBA32)
+        {
+            rgba32_make_transparent(buffer, srcOffset);
+        }
+        else
+        {
+            rgba16_make_transparent(buffer, srcOffset);
+        }
         return true;
     }
     else
@@ -68,55 +122,114 @@ static bool transformWhiteBackgroundPixel(uint8_t *rgbaBuffer, int row, int colu
 /**
  * @brief This function will make the pixel at the given row and column index and its white neighbours transparent recursively.
  */
-static void removeBackground_Phase2_MakeNeighbourPixelsTransparent(uint8_t *rgbaBuffer, int row, int column, int spriteWidthInPixels, int spriteHeightInPixels)
+static void removeBackground_Phase2_MakeNeighbourPixelsTransparent(uint8_t *buffer, OutputFormat format, int row, int column, int spriteWidthInPixels, int spriteHeightInPixels)
 {
-    const uint32_t srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
-    if (rgba32_alpha(rgbaBuffer, srcOffset) == 0)
+    uint32_t srcOffset;
+    uint32_t neighbourOffset;
+    uint8_t alpha;
+    bool white;
+    
+    if(format == OutputFormat::RGBA32)
+    {
+        srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
+        alpha = rgba32_alpha(buffer, srcOffset);
+    }
+    else
+    {
+        srcOffset = getRGBA16Offset(row, column, spriteWidthInPixels);
+        alpha = rgba16_alpha(buffer, srcOffset);
+    }
+    if (alpha == 0)
     {
         return;
     }
 
     // make transparent
-    rgba32_make_transparent(rgbaBuffer, srcOffset);
+    if(format == OutputFormat::RGBA32)
+    {
+        rgba32_make_transparent(buffer, srcOffset);
+    }
+    else
+    {
+        rgba16_make_transparent(buffer, srcOffset);
+    }
 
     // now start making neighbouring white pixels transparant recursively
     // top neighbour
     if (row)
     {
-        const uint32_t neighbourOffset = getRGBA32Offset(row - 1, column, spriteWidthInPixels);
-        if (rgba32_is_white(rgbaBuffer, neighbourOffset))
+        if(format == OutputFormat::RGBA32)
         {
-            removeBackground_Phase2_MakeNeighbourPixelsTransparent(rgbaBuffer, row - 1, column, spriteWidthInPixels, spriteHeightInPixels);
+            neighbourOffset = getRGBA32Offset(row - 1, column, spriteWidthInPixels);
+            white = rgba32_is_white(buffer, neighbourOffset);
+        }
+        else
+        {
+            neighbourOffset = getRGBA16Offset(row - 1, column, spriteWidthInPixels);
+            white = rgba16_is_white(buffer, neighbourOffset);
+        }
+        if (white)
+        {
+            removeBackground_Phase2_MakeNeighbourPixelsTransparent(buffer, format, row - 1, column, spriteWidthInPixels, spriteHeightInPixels);
         }
     }
 
     // right neighbour
     if (column < spriteWidthInPixels - 1)
     {
-        const uint32_t neighbourOffset = getRGBA32Offset(row, column + 1, spriteWidthInPixels);
-        if (rgba32_is_white(rgbaBuffer, neighbourOffset))
+        if(format == OutputFormat::RGBA32)
         {
-            removeBackground_Phase2_MakeNeighbourPixelsTransparent(rgbaBuffer, row, column + 1, spriteWidthInPixels, spriteHeightInPixels);
+            neighbourOffset = getRGBA32Offset(row, column + 1, spriteWidthInPixels);
+            white = rgba32_is_white(buffer, neighbourOffset);
+        }
+        else
+        {
+            neighbourOffset = getRGBA16Offset(row, column + 1, spriteWidthInPixels);
+            white = rgba16_is_white(buffer, neighbourOffset);
+        }
+        if (white)
+        {
+            removeBackground_Phase2_MakeNeighbourPixelsTransparent(buffer, format, row, column + 1, spriteWidthInPixels, spriteHeightInPixels);
         }
     }
 
     // bottom neighbour
     if (row < spriteHeightInPixels - 1)
     {
-        const uint32_t neighbourOffset = getRGBA32Offset(row + 1, column, spriteWidthInPixels);
-        if (rgba32_is_white(rgbaBuffer, neighbourOffset))
+        if(format == OutputFormat::RGBA32)
         {
-            removeBackground_Phase2_MakeNeighbourPixelsTransparent(rgbaBuffer, row + 1, column, spriteWidthInPixels, spriteHeightInPixels);
+            neighbourOffset = getRGBA32Offset(row + 1, column, spriteWidthInPixels);
+            white = rgba32_is_white(buffer, neighbourOffset);
+        }
+        else
+        {
+            neighbourOffset = getRGBA16Offset(row + 1, column, spriteWidthInPixels);
+            white = rgba16_is_white(buffer, neighbourOffset);
+        }
+
+        if (white)
+        {
+            removeBackground_Phase2_MakeNeighbourPixelsTransparent(buffer, format, row + 1, column, spriteWidthInPixels, spriteHeightInPixels);
         }
     }
 
     // left neighbour
     if (column)
     {
-        const uint32_t neighbourOffset = getRGBA32Offset(row, column - 1, spriteWidthInPixels);
-        if (rgba32_is_white(rgbaBuffer, neighbourOffset))
+        if(format == OutputFormat::RGBA32)
         {
-            removeBackground_Phase2_MakeNeighbourPixelsTransparent(rgbaBuffer, row, column - 1, spriteWidthInPixels, spriteHeightInPixels);
+            neighbourOffset = getRGBA32Offset(row, column - 1, spriteWidthInPixels);
+            white = rgba32_is_white(buffer, neighbourOffset);
+        }
+        else
+        {
+            neighbourOffset = getRGBA16Offset(row, column - 1, spriteWidthInPixels);
+            white = rgba16_is_white(buffer, neighbourOffset);
+        }
+
+        if (white)
+        {
+            removeBackground_Phase2_MakeNeighbourPixelsTransparent(buffer, format, row, column - 1, spriteWidthInPixels, spriteHeightInPixels);
         }
     }
 }
@@ -126,10 +239,11 @@ static void removeBackground_Phase2_MakeNeighbourPixelsTransparent(uint8_t *rgba
  * We will check the pixel neighbours to figure out whether we can connect this pixel with a transparent one.
  * If we can find a transparent pixel in our direct neighbouring pixels, we'll turn this pixel and all its white neighbours transparant (using removeBackground_Phase2_MakeNeighbourPixelsTransparent).
  */
-static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int row, int column, int spriteWidthInPixels, int spriteHeightInPixels)
+static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *buffer, OutputFormat format, int row, int column, int spriteWidthInPixels, int spriteHeightInPixels)
 {
     uint32_t neighBourOffset;
     bool foundTransparentPixel = false;
+    uint8_t alpha;
     // allright, we currently have a white pixel.
     // now we're going to search if we can find a transparent pixel around this one.
     // if we can find one, we transform any white pixels around us recursively. If we just find a non-white, non-transparent pixel, we'll ignore it
@@ -137,8 +251,17 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
     // check alpha value of the left neighbour (if any)
     if (column)
     {
-        neighBourOffset = getRGBA32Offset(row, column - 1, spriteWidthInPixels);
-        if (rgba32_alpha(rgbaBuffer, neighBourOffset) == 0)
+        if(format == OutputFormat::RGBA32)
+        {
+            neighBourOffset = getRGBA32Offset(row, column - 1, spriteWidthInPixels);
+            alpha = rgba32_alpha(buffer, neighBourOffset);
+        }
+        else
+        {
+            neighBourOffset = getRGBA16Offset(row, column - 1, spriteWidthInPixels);
+            alpha = rgba16_alpha(buffer, neighBourOffset);
+        }
+        if (alpha == 0)
         {
             foundTransparentPixel = true;
         }
@@ -147,8 +270,17 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
     // now check the alpha value of the bottom neighbour (if any)
     if (!foundTransparentPixel && row < spriteHeightInPixels)
     {
-        neighBourOffset = getRGBA32Offset(row + 1, column, spriteWidthInPixels);
-        if (rgba32_alpha(rgbaBuffer, neighBourOffset) == 0)
+        if(format == OutputFormat::RGBA32)
+        {
+            neighBourOffset = getRGBA32Offset(row + 1, column, spriteWidthInPixels);
+            alpha = rgba32_alpha(buffer, neighBourOffset);
+        }
+        else
+        {
+            neighBourOffset = getRGBA16Offset(row + 1, column, spriteWidthInPixels);
+            alpha = rgba16_alpha(buffer, neighBourOffset);
+        }
+        if (alpha == 0)
         {
             foundTransparentPixel = true;
         }
@@ -157,8 +289,18 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
     // now check the alpha value of the right neighbour (if any)
     if (!foundTransparentPixel && column < spriteWidthInPixels - 1)
     {
-        neighBourOffset = getRGBA32Offset(row, column + 1, spriteWidthInPixels);
-        if (rgba32_alpha(rgbaBuffer, neighBourOffset) == 0)
+        if(format == OutputFormat::RGBA32)
+        {
+            neighBourOffset = getRGBA32Offset(row, column + 1, spriteWidthInPixels);
+            alpha = rgba32_alpha(buffer, neighBourOffset);
+        }
+        else
+        {
+            neighBourOffset = getRGBA16Offset(row, column + 1, spriteWidthInPixels);
+            alpha = rgba16_alpha(buffer, neighBourOffset);
+        }
+
+        if (alpha == 0)
         {
             foundTransparentPixel = true;
         }
@@ -167,8 +309,18 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
     // now check the alpha value of the top neighbour (if any)
     if(!foundTransparentPixel && row)
     {
-        neighBourOffset = getRGBA32Offset(row - 1, column, spriteWidthInPixels);
-        if (rgba32_alpha(rgbaBuffer, neighBourOffset) == 0)
+        if(format == OutputFormat::RGBA32)
+        {
+            neighBourOffset = getRGBA32Offset(row - 1, column, spriteWidthInPixels);
+            alpha = rgba32_alpha(buffer, neighBourOffset);
+        }
+        else
+        {
+            neighBourOffset = getRGBA16Offset(row - 1, column, spriteWidthInPixels);
+            alpha = rgba16_alpha(buffer, neighBourOffset);
+        }
+
+        if (alpha == 0)
         {
             foundTransparentPixel = true;
         }
@@ -178,7 +330,7 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
     // we should turn the current pixel and its white neighbours transparent
     if (foundTransparentPixel)
     {
-        removeBackground_Phase2_MakeNeighbourPixelsTransparent(rgbaBuffer, row, column, spriteWidthInPixels, spriteHeightInPixels);
+        removeBackground_Phase2_MakeNeighbourPixelsTransparent(buffer, format, row, column, spriteWidthInPixels, spriteHeightInPixels);
     }
 }
 
@@ -190,10 +342,12 @@ static void removeBackground_Phase2_dealWithWhitePixel(uint8_t *rgbaBuffer, int 
  * - for the remaining white pixels, try to connect them to a transparent pixel using the pixel neighbours. If we find a transparent neighbour,
  * turn the white pixel and its white neighbours transparent recursively until all the connected white pixels are transparent.
  */
-static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int spriteHeightInPixels)
+static void removeBackground(uint8_t *buffer, OutputFormat format, int spriteWidthInPixels, int spriteHeightInPixels)
 {
+    uint32_t srcOffset;
     int row;
     int column;
+    bool white;
     
     // edge detection: scan from left-to-right, right-to-left, top-to-bottom, bottom-to-top on a half image each.
     // keep removing white pixels until you encounter a non-white pixel (if you do, move to the next row/column)
@@ -202,7 +356,7 @@ static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int s
     {
         for (column = 0; column < spriteWidthInPixels / 2; ++column)
         {
-            if (!transformWhiteBackgroundPixel(rgbaBuffer, row, column, spriteWidthInPixels))
+            if (!transformWhiteBackgroundPixel(buffer, format, row, column, spriteWidthInPixels))
             {
                 // found edge. break inner loop and go to the next row
                 break;
@@ -215,7 +369,7 @@ static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int s
     {
         for (column = spriteWidthInPixels - 1; column >= spriteWidthInPixels / 2; --column)
         {
-            if (!transformWhiteBackgroundPixel(rgbaBuffer, row, column, spriteWidthInPixels))
+            if (!transformWhiteBackgroundPixel(buffer, format, row, column, spriteWidthInPixels))
             {
                 // found edge. break inner loop and go to the next row
                 break;
@@ -228,7 +382,7 @@ static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int s
     {
         for (row = 0; row < spriteHeightInPixels / 2; ++row)
         {
-            if (!transformWhiteBackgroundPixel(rgbaBuffer, row, column, spriteWidthInPixels))
+            if (!transformWhiteBackgroundPixel(buffer, format, row, column, spriteWidthInPixels))
             {
                 // found edge. break inner loop and go to the next row
                 break;
@@ -241,7 +395,7 @@ static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int s
     {
         for (row = spriteHeightInPixels - 1; row >= spriteHeightInPixels / 2; --row)
         {
-            if (!transformWhiteBackgroundPixel(rgbaBuffer, row, column, spriteWidthInPixels))
+            if (!transformWhiteBackgroundPixel(buffer, format, row, column, spriteWidthInPixels))
             {
                 // found edge. break inner loop and go to the next row
                 break;
@@ -259,11 +413,20 @@ static void removeBackground(uint8_t *rgbaBuffer, int spriteWidthInPixels, int s
     {
         for (row = 0; row < spriteHeightInPixels; ++row)
         {
-            const uint32_t srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
-            const bool white = rgba32_is_white(rgbaBuffer, srcOffset);
+            if(format == OutputFormat::RGBA32)
+            {
+                srcOffset = getRGBA32Offset(row, column, spriteWidthInPixels);
+                white = rgba32_is_white(buffer, srcOffset);
+            }
+            else
+            {
+                srcOffset = getRGBA16Offset(row, column, spriteWidthInPixels);
+                white = rgba16_is_white(buffer, srcOffset);
+            }
+
             if (white)
             {
-                removeBackground_Phase2_dealWithWhitePixel(rgbaBuffer, row, column, spriteWidthInPixels, spriteHeightInPixels);
+                removeBackground_Phase2_dealWithWhitePixel(buffer, format, row, column, spriteWidthInPixels, spriteHeightInPixels);
             }
         }
     }
@@ -370,13 +533,13 @@ uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, 
 
     if(removeWhiteBackground)
     {
-        if(format != OutputFormat::RGBA32)
+        if(format == OutputFormat::RGB)
         {
-            fprintf(stderr, "[SpriteRenderer]: %s: ERROR: removeBackground is only supported for OutputFormat::RGBA32 right now!", __FUNCTION__);
+            fprintf(stderr, "[SpriteRenderer]: %s: ERROR: removeBackground is not supported for OutputFormat::RGB!", __FUNCTION__);
             return buffer_;
         }
 
-        removeBackground(buffer_, spriteBufferWidthInPixels, spriteBufferHeightInPixels);
+        removeBackground(buffer_, format, spriteBufferWidthInPixels, spriteBufferHeightInPixels);
     }
 
     return buffer_;
