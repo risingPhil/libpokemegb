@@ -5,10 +5,8 @@
 
 using OutputFormat = SpriteRenderer::OutputFormat;
 
-// The next set of functions are defined to remove the white background from a decoded RGBA pokémon sprite by doing edge detection
-// The code below is specific for RGBA32, NOT RGBA16.
-// For PokeMe64, however, I'll need RGBA16.
-// TODO: rework the code to be able to do both.
+// The next set of functions are defined to remove the white background from a decoded RGBA pokémon sprite by doing edge detection.
+// Both RGBA32 and RGBA16 formats are supported
 
 /**
  * @brief Returns the byte offset for the pixel at the specified row and column in a RGBA buffer
@@ -432,7 +430,7 @@ static void removeBackground(uint8_t *buffer, OutputFormat format, int spriteWid
     }
 }
 
-// end of the removeBackground RGBA32 specific code
+// end of the removeBackground specific code
 
 uint32_t SpriteRenderer::getNumRGBBytesFor(uint8_t numHTiles, uint8_t numVTiles) const
 {
