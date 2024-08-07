@@ -448,6 +448,24 @@ uint8_t* convertGBColorPaletteToRGB24(uint16_t palette[4])
     return result;
 }
 
+uint16_t* convertGBColorPaletteToRGBA16(uint16_t palette[4])
+{
+    static uint16_t result[4];
+
+    uint16_t *cur = result;
+    for(uint8_t i=0; i < 4; ++i)
+    {
+        // format is 15 bit BGR (https://www.huderlem.com/demos/gameboypalette.html)
+        const uint16_t b5 = (palette[i] >> 10) & 0x1F;
+        const uint16_t g5 = (palette[i] >> 5) & 0x1F;
+        const uint16_t r5 = palette[i] & 0x1F;
+
+        (*cur) = (r5 << 11) | (g5 << 6) | (b5 << 1) | 0x1;
+        ++cur;
+    }
+    return result;
+}
+
 uint8_t getStatIV(PokeStat type, const uint8_t iv_data[2])
 {
     // https://bulbapedia.bulbagarden.net/wiki/Individual_values

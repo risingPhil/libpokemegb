@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <time.h>
 
+using OutputFormat = SpriteRenderer::OutputFormat;
+
 // This example application just does some random stuff with Gen 2 game + save.
 // This was merely used during development of this library and is therefore unfocused/chaotic in nature.
 
@@ -140,12 +142,7 @@ static void decodePokemonSpriteByIndex(Gen2GameReader& gameReader, uint8_t i)
     printStats("\t", stats);
 
     gameReader.readFrontSpritePointer(i, bankIndex, pointer);
-    // There's a bug with some sprites. (artefacts)
-    // it's either in the decodeSprite or drawRGB call.
-    // but drawRGB is also used for gen 1, where I haven't seen any artefacting.
-    // so it would make sense that the problem would be in decodeSprite.
-    // but the code there is so simple, that it doesn't make any sense for a problem to be in there.
-    //unless there's some memory corruption somewhere, but I haven't seen it.
+
     spriteBuffer = gameReader.decodeSprite(bankIndex, pointer);
     if(!spriteBuffer)
     {
@@ -154,7 +151,7 @@ static void decodePokemonSpriteByIndex(Gen2GameReader& gameReader, uint8_t i)
     }
     
     gameReader.readColorPaletteForPokemon(i, false, colorPalette);
-    rgbBuffer = renderer.drawRGB(spriteBuffer, colorPalette, spriteWidthInTiles, spriteHeightInTiles);
+    rgbBuffer = renderer.draw(spriteBuffer, OutputFormat::RGB, colorPalette, spriteWidthInTiles, spriteHeightInTiles);
 
     snprintf(fileNameBuf, sizeof(fileNameBuf), "%s.png", pokeName);
     write_png(fileNameBuf, rgbBuffer, spriteWidthInTiles * 8, spriteHeightInTiles * 8);

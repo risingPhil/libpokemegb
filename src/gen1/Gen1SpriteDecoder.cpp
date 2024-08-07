@@ -5,6 +5,8 @@
 #include <cstring>
 #include <cstdio>
 
+using OutputFormat = SpriteRenderer::OutputFormat;
+
 // #define DUMP_SPRITEBITPLANES 1
 
 // if you want to compare with something, you can use the chrome devtools on https://rgmechex.com/tech/gen1decompress.html
@@ -353,7 +355,7 @@ static void dumpDecodedSprite(uint8_t* spriteBuffer, const char* binPath, const 
     fwrite(spriteBuffer, 1, SPRITE_BITPLANE_BUFFER_SIZE_IN_BYTES * 2, f);
     fclose(f);
 
-    rgbBuffer = renderer.drawRGB(spriteBuffer, monochromeGBColorPalette, 7, 7);
+    rgbBuffer = renderer.draw(spriteBuffer, OutputFormat::RGB, monochromeGBColorPalette, 7, 7);
     
     f = fopen(rawPath, "w");
     fwrite(rgbBuffer, 1, rgbBufferSize, f);

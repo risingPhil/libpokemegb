@@ -71,6 +71,15 @@ extern uint16_t monochromeGBColorPalette[4];
 uint8_t* convertGBColorPaletteToRGB24(uint16_t palette[4]);
 
 /**
+ * @brief converts the given gameboy color palette to RGBA16 values.
+ * Will always return a uint16_t[4] array.
+ * 
+ * @param palette 
+ * @return uint8_t* 
+ */
+uint16_t* convertGBColorPaletteToRGBA16(uint16_t palette[4]);
+
+/**
  * @brief This function gets the specific IV value for the given PokeStat type
  */
 uint8_t getStatIV(PokeStat type, const uint8_t iv_data[2]);

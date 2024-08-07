@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <time.h>
 
+using OutputFormat = SpriteRenderer::OutputFormat;
+
 // This example application just does some random stuff with Gen 1 game + save.
 // This was merely used during development of this library and is therefore unfocused/chaotic in nature.
 
@@ -220,7 +222,7 @@ int main(int argc, char** argv)
         gen1Reader.readPokemonStatsForIndex(i, stats);
         gen1Reader.readColorPalette(gen1Reader.getColorPaletteIndexByPokemonNumber(stats.pokedex_number), colorPalette);
         spriteBuffer = gen1Reader.decodeSprite(stats.sprite_bank, stats.pointer_to_frontsprite);
-        rgbBuffer = renderer.drawRGB(spriteBuffer, colorPalette, 7, 7);
+        rgbBuffer = renderer.draw(spriteBuffer, OutputFormat::RGB, colorPalette, 7, 7);
         
         snprintf(fileNameBuf, sizeof(fileNameBuf), "%s.png", pokeName);
         write_png(fileNameBuf, rgbBuffer, 56, 56);
