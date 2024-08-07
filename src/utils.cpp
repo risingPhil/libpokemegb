@@ -189,9 +189,10 @@ uint32_t byteSwapUint32(uint32_t val)
 	return __builtin_bswap32(val);
 }
 
-bool write_png(const char *filename, unsigned char *rgb_data, int width, int height)
+bool write_png(const char *filename, unsigned char *rgb_data, int width, int height, bool hasAlpha)
 {
 #ifdef PNG_SUPPORT
+    const int numColorComponents = (hasAlpha) ? 4 : 3;
     FILE *fp = fopen(filename, "wb");
     if (!fp) {
         perror("fopen");
@@ -219,15 +220,16 @@ bool write_png(const char *filename, unsigned char *rgb_data, int width, int hei
 
     png_init_io(png, fp);
 
+    const int colorType = (hasAlpha) ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     // Set the image information
-    png_set_IHDR(png, info, width, height, 8, PNG_COLOR_TYPE_RGB,
+    png_set_IHDR(png, info, width, height, 8, colorType,
                  PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
     png_write_info(png, info);
 
     // Write the image data
     for (int y = 0; y < height; y++) {
-        png_bytep row_pointer = (png_bytep)(rgb_data + y * width * 3);
+        png_bytep row_pointer = (png_bytep)(rgb_data + y * width * numColorComponents);
         png_write_row(png, row_pointer);
     }
 

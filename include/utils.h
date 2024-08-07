@@ -30,7 +30,7 @@ uint32_t byteSwapUint32(uint32_t val);
 /**
  * Function to write an RGB24 image to a PNG file
  */
-bool write_png(const char *filename, unsigned char *rgb_data, int width, int height);
+bool write_png(const char *filename, unsigned char *rgb_data, int width, int height, bool hasAlpha = false);
 
 /**
  * @brief This function reads an entire file into a buffer.
