@@ -473,13 +473,16 @@ uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, 
     {
         case OutputFormat::RGB:
             rgbPalette = convertGBColorPaletteToRGB24(palette);
+            rgba16Palette = nullptr;
             numColorComponents = 3;
             break;
         case OutputFormat::RGBA32:
             rgbPalette = convertGBColorPaletteToRGB24(palette);
+            rgba16Palette = nullptr;
             numColorComponents = 4;
             break;
         case OutputFormat::RGBA16:
+            rgbPalette = nullptr;
             rgba16Palette = convertGBColorPaletteToRGBA16(palette);
             numColorComponents = 2;
             break;

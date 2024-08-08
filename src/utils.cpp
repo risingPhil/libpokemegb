@@ -243,6 +243,7 @@ bool write_png(const char *filename, unsigned char *rgb_data, int width, int hei
 	(void)rgb_data;
 	(void)width;
 	(void)height;
+    (void)hasAlpha;
 	
 	fprintf(stderr, "Error: Can't write %s! PNG support was not enabled at build time!\n", filename);
 	return false;
