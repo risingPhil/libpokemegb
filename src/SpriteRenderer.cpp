@@ -26,7 +26,10 @@ static uint32_t getRGBA16Offset(int row, int column, int spriteWidthInPixels)
  */
 static bool rgba32_is_white(uint8_t* buffer, uint32_t srcOffset)
 {
-    return ((*((uint32_t *)(buffer + srcOffset))) == 0xFFFFFFFF);
+    const uint32_t colorVal = *((uint32_t *)(buffer + srcOffset));
+    // generic white: 0xFFFFFFFF
+    // gen 1 pokemon colorpalette white: 0xFFEEFFFF or 0xFFF6FFFF (after convertGBColorPaletteToRGBA24() and adding alpha)
+    return (colorVal == 0xFFFFFFFF || (colorVal == 0xFFFFEEFF) || (colorVal == 0xFFF6FFFF));
 }
 
 static bool rgba16_is_white(uint8_t* buffer, uint32_t srcOffset)
