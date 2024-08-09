@@ -31,7 +31,10 @@ static bool rgba32_is_white(uint8_t* buffer, uint32_t srcOffset)
 
 static bool rgba16_is_white(uint8_t* buffer, uint32_t srcOffset)
 {
-    return ((*((uint16_t *)(buffer + srcOffset))) == 0xFFFF);
+    const uint16_t colorVal = *((uint16_t *)(buffer + srcOffset));
+    // generic white: 0xFFFF
+    // gen 1 pokemon colorpalette white: 0xFF7F or 0xFFFD (after convertGBColorPaletteToRGBA16())
+    return (colorVal == 0xFFFF || colorVal == 0xFF7F || colorVal == 0xFFFD);
 }
 
 /**
