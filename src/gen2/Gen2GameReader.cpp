@@ -358,9 +358,9 @@ bool Gen2GameReader::readColorPaletteForPokemon(uint8_t index, bool shiny, uint1
     (*curColor) = 0x7FFF;
     ++curColor;
     // only the second and third color are actually stored in gen 2
-    romReader_.read((uint8_t *)curColor, 2);
+    romReader_.readUint16(*curColor, Endianness::LITTLE);
     ++curColor;
-    romReader_.read((uint8_t *)curColor, 2);
+    romReader_.readUint16(*curColor, Endianness::LITTLE);
     ++curColor;
     // last color is always black
     (*curColor) = 0;
