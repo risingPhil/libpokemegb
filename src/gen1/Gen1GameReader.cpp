@@ -271,8 +271,6 @@ void Gen1GameReader::readColorPalette(uint8_t paletteId, uint16_t* outColorPalet
 {
     uint16_t* cur = outColorPalette;
     const uint16_t* end = cur + 4;
-    uint8_t byte1;
-    uint8_t byte2;
 
     // based on https://datacrystal.romhacking.net/wiki/Pok%C3%A9mon_Red_and_Blue/ROM_map
     // and https://bulbapedia.bulbagarden.net/wiki/List_of_color_palettes_by_index_number_(Generation_I)
@@ -280,10 +278,7 @@ void Gen1GameReader::readColorPalette(uint8_t paletteId, uint16_t* outColorPalet
     romReader_.seek(romOffset + (paletteId * 8));
     while(cur < end)
     {
-        romReader_.readByte(byte1);
-        romReader_.readByte(byte2);
-        // stored in little endian -> least significant bits of the 16 bit value are stored first
-        (*cur) = (((uint16_t)byte2 << 8) | byte1);
+        romReader_.readUint16((*cur), Endianness::LITTLE);
         ++cur;
     }
 
