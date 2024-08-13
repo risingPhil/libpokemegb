@@ -507,6 +507,6 @@ const char *getMoveString(Move move)
     case Move::BEAT_UP:
         return "Beat Up";
     default:
-        return "Unknown move";
+        return "";
     }
 }

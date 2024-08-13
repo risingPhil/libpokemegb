@@ -432,7 +432,7 @@ bool gen2_isPokemonShiny(Gen2TrainerPokemon& poke)
     // based on https://bulbapedia.bulbagarden.net/wiki/Shiny_Pok%C3%A9mon#Determining_Shininess
     const PokeStat statsToCheckFor10[] = {PokeStat::SPEED, PokeStat::DEF, PokeStat::SPECIAL};
 
-    for(uint8_t i=0; i < sizeof(statsToCheckFor10); ++i)
+    for(uint8_t i=0; i < (sizeof(statsToCheckFor10) / sizeof(statsToCheckFor10[0])); ++i)
     {
         if(getStatIV(statsToCheckFor10[i], poke.iv_data) != 10)
         {
