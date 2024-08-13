@@ -4,6 +4,7 @@
 #include "common.h"
 
 class Gen1GameReader;
+typedef struct Gen1DistributionPokemon Gen1DistributionPokemon;
 
 enum class Gen1GameType
 {
@@ -117,5 +118,10 @@ uint16_t gen1_decodePokeText(const uint8_t* inputBuffer, uint16_t inputBufferLen
  * @brief The opposite of gen1_decodePokeText()
  */
 uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator);
+
+/**
+ * Prepares the gen 1 distribution pokemon for injection with Gen1GameReader::addPokemon()
+ */
+void gen1_prepareDistributionPokemon(Gen1GameReader& gameReader, const Gen1DistributionPokemon& distributionPoke, Gen1TrainerPokemon& poke, const char*& outTrainerName);
 
 #endif

@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include <cstring>
+#include <cstdlib>
 
 #define POKEMON_BLUE_CARTRIDGE_TITLE "POKEMON BLUE"
 #define POKEMON_RED_CARTRIDGE_TITLE "POKEMON RED"
@@ -160,6 +161,40 @@ uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength
 {
 	const uint16_t numEntries = sizeof(gen1TextCodes) / sizeof(struct TextCodePair);
 	return encodeText(gen1TextCodes, numEntries, inputBuffer, inputBufferLength, outputBuffer, outputBufferLength, terminator);
+}
+
+void gen1_prepareDistributionPokemon(Gen1GameReader& gameReader, const Gen1DistributionPokemon& distributionPoke, Gen1TrainerPokemon& poke, const char*& originalTrainerName)
+{
+    if(distributionPoke.setPlayerAsOriginalTrainer)
+    {
+        originalTrainerName = gameReader.getTrainerName();
+        poke.original_trainer_ID = gameReader.getTrainerID();
+    }
+    else
+    {
+        originalTrainerName = distributionPoke.originalTrainer;
+
+        if(distributionPoke.regenerateTrainerID)
+        {
+            if(distributionPoke.originalTrainerID)
+            {
+                // limit set, apply it
+                poke.original_trainer_ID = (uint16_t)(rand() % distributionPoke.originalTrainerID);
+            }
+            else
+            {
+                // no limit. The max is the max of the uint16_t type
+                poke.original_trainer_ID =(uint16_t)(rand() % UINT16_MAX);
+            }
+        }
+        else
+        {
+            poke.original_trainer_ID = distributionPoke.originalTrainerID;
+        }
+    }
+
+    poke.iv_data[0] = distributionPoke.iv_data[0];
+    poke.iv_data[1] = distributionPoke.iv_data[1];
 }
 
 Gen1Checksum::Gen1Checksum()

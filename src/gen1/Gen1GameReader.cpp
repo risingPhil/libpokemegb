@@ -462,39 +462,10 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
 uint8_t Gen1GameReader::addDistributionPokemon(const Gen1DistributionPokemon& distributionPoke, const char* nickname)
 {
     Gen1TrainerPokemon poke = distributionPoke.poke;
-
     const char* originalTrainerName;
 
-    if(distributionPoke.setPlayerAsOriginalTrainer)
-    {
-        originalTrainerName = getTrainerName();
-        poke.original_trainer_ID = getTrainerID();
-    }
-    else
-    {
-        originalTrainerName = distributionPoke.originalTrainer;
-    
-        if(distributionPoke.regenerateTrainerID)
-        {
-            if(distributionPoke.originalTrainerID)
-            {
-                // limit set, apply it
-                poke.original_trainer_ID = (uint16_t)(rand() % distributionPoke.originalTrainerID);
-            }
-            else
-            {
-                // no limit. The max is the max of the uint16_t type
-                poke.original_trainer_ID =(uint16_t)(rand() % UINT16_MAX);
-            }
-        }
-        else
-        {
-            poke.original_trainer_ID = distributionPoke.originalTrainerID;
-        }
-    }
-
-    poke.iv_data[0] = distributionPoke.iv_data[0];
-    poke.iv_data[1] = distributionPoke.iv_data[1];
+    // apply the attributes of Gen1DistributionPokemon to the actual Gen2TrainerPokemon instance
+    gen1_prepareDistributionPokemon((*this), distributionPoke, poke, originalTrainerName);
 
     return addPokemon(poke, originalTrainerName, nickname);
 }

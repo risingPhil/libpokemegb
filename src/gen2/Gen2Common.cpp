@@ -502,3 +502,51 @@ const char* gen2_getItemListTypeString(Gen2ItemListType type)
 			return "Invalid";
 	}
 }
+
+void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2DistributionPokemon& distributionPoke, Gen2TrainerPokemon& poke, const char*& originalTrainerName)
+{
+    if (distributionPoke.setPlayerAsOriginalTrainer)
+    {
+        originalTrainerName = gameReader.getTrainerName();
+        poke.original_trainer_ID = gameReader.getTrainerID();
+    }
+    else
+    {
+        originalTrainerName = distributionPoke.originalTrainer;
+
+        if (distributionPoke.regenerateTrainerID)
+        {
+            if (distributionPoke.originalTrainerID)
+            {
+                // limit set, apply it
+                poke.original_trainer_ID = (uint16_t)(rand() % distributionPoke.originalTrainerID);
+            }
+            else
+            {
+                // no limit. The max is the max of the uint16_t type
+                poke.original_trainer_ID = (uint16_t)(rand() % UINT16_MAX);
+            }
+        }
+        else
+        {
+            poke.original_trainer_ID = distributionPoke.originalTrainerID;
+        }
+    }
+
+    if (distributionPoke.shinyChance != 0xFF && (rand() % 100) <= distributionPoke.shinyChance)
+    {
+        // the pokemon will be shiny
+        gen2_makePokemonShiny(poke);
+    }
+    else if (distributionPoke.randomizeIVs)
+    {
+        const uint16_t randomVal = (uint16_t)rand();
+        poke.iv_data[0] = (uint8_t)(randomVal >> 8);
+        poke.iv_data[1] = (uint8_t)(randomVal & 0xFF);
+    }
+    else
+    {
+        poke.iv_data[0] = distributionPoke.iv_data[0];
+        poke.iv_data[1] = distributionPoke.iv_data[1];
+    }
+}

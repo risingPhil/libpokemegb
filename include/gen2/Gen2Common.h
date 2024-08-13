@@ -6,6 +6,8 @@
 class Gen2GameReader;
 class ISaveManager;
 
+typedef struct Gen2DistributionPokemon Gen2DistributionPokemon;
+
 // source: https://bulbapedia.bulbagarden.net/wiki/List_of_items_by_index_number_(Generation_II)
 #define CRYSTAL_ITEM_ID_GS_BALL 0x73
 
@@ -205,5 +207,10 @@ bool gen2_isPokemonShiny(Gen2TrainerPokemon &poke);
 void gen2_makePokemonShiny(Gen2TrainerPokemon& poke);
 
 const char* gen2_getItemListTypeString(Gen2ItemListType type);
+
+/**
+ * Prepares the gen 2 distribution pokemon for injection with Gen2GameReader::addPokemon()
+ */
+void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2DistributionPokemon& distributionPoke, Gen2TrainerPokemon& poke, const char*& outTrainerName);
 
 #endif

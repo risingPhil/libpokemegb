@@ -413,50 +413,8 @@ uint8_t Gen2GameReader::addDistributionPokemon(const Gen2DistributionPokemon &di
     Gen2TrainerPokemon poke = distributionPoke.poke;
     const char *originalTrainerName;
 
-    if (distributionPoke.setPlayerAsOriginalTrainer)
-    {
-        originalTrainerName = getTrainerName();
-        poke.original_trainer_ID = getTrainerID();
-    }
-    else
-    {
-        originalTrainerName = distributionPoke.originalTrainer;
-
-        if (distributionPoke.regenerateTrainerID)
-        {
-            if (distributionPoke.originalTrainerID)
-            {
-                // limit set, apply it
-                poke.original_trainer_ID = (uint16_t)(rand() % distributionPoke.originalTrainerID);
-            }
-            else
-            {
-                // no limit. The max is the max of the uint16_t type
-                poke.original_trainer_ID = (uint16_t)(rand() % UINT16_MAX);
-            }
-        }
-        else
-        {
-            poke.original_trainer_ID = distributionPoke.originalTrainerID;
-        }
-    }
-
-    if (distributionPoke.shinyChance != 0xFF && (rand() % 100) <= distributionPoke.shinyChance)
-    {
-        // the pokemon will be shiny
-        gen2_makePokemonShiny(poke);
-    }
-    else if (distributionPoke.randomizeIVs)
-    {
-        const uint16_t randomVal = (uint16_t)rand();
-        poke.iv_data[0] = (uint8_t)(randomVal >> 8);
-        poke.iv_data[1] = (uint8_t)(randomVal & 0xFF);
-    }
-    else
-    {
-        poke.iv_data[0] = distributionPoke.iv_data[0];
-        poke.iv_data[1] = distributionPoke.iv_data[1];
-    }
+    // apply the attributes of Gen2DistributionPokemon to the actual Gen2TrainerPokemon instance
+    gen2_prepareDistributionPokemon((*this), distributionPoke, poke, originalTrainerName);
 
     return addPokemon(poke, distributionPoke.isEgg, originalTrainerName, nickname);
 }
