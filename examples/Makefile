@@ -8,6 +8,7 @@ all:
 	$(MAKE) -C encodeText_gen2 $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C decodeSprite $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C addDistributionPoke $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C checkSave $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_gsball $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_addItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_removeItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
@@ -21,6 +22,7 @@ clean:
 	$(MAKE) -C encodeText_gen2 clean
 	$(MAKE) -C decodeSprite clean
 	$(MAKE) -C addDistributionPoke clean
+	$(MAKE) -C checkSave clean
 	$(MAKE) -C gen2_gsball clean
 	$(MAKE) -C gen2_addItem clean
 	$(MAKE) -C gen2_removeItem clean

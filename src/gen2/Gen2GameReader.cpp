@@ -12,6 +12,9 @@
 #define EVENT_FLAGS_OFFSET_GOLDSILVER 0x261F
 #define EVENT_FLAGS_OFFSET_CRYSTAL 0x2600
 
+#define SAVE_CORRUPTION_CHECK1_EXPECTED_VALUE 99
+#define SAVE_CORRUPTION_CHECK2_EXPECTED_VALUE 127
+
 static const uint8_t crystalPicsBanks[] = {
     CRYSTAL_BANK_PICS_1 + 0,
     CRYSTAL_BANK_PICS_1 + 1,
@@ -201,6 +204,80 @@ static void updateMainChecksum(ISaveManager &saveManager, bool isCrystal)
 {
     const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager, isCrystal);
     writeMainChecksum(saveManager, calculatedChecksum, isCrystal);
+}
+
+/**
+ * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
+ */
+static bool hasMainSave(ISaveManager& saveManager, bool isCrystal)
+{
+    // check first canary value
+    uint8_t saveCorruptionCheckValue1;
+    uint8_t saveCorruptionCheckValue2;
+
+    // this value is at the same offset for Gold/Silver/Crystal
+    saveManager.seekToBankOffset(1, 0x8);
+    saveManager.readByte(saveCorruptionCheckValue1);
+
+    // check second canary
+    // for this one the offset differs in crystal
+    if(isCrystal)
+    {
+        saveManager.seekToBankOffset(1, 0xD0F);
+    }
+    else
+    {
+        saveManager.seekToBankOffset(1, 0xD6B);
+    }
+    saveManager.readByte(saveCorruptionCheckValue2);
+
+    // for there to be an actual save, the canary values need to be set to these exact values.
+    // Taken from the PRET pokecrystal and pokegold projects
+    // https://github.com/pret/pokecrystal/blob/symbols/pokecrystal.sym
+    // https://github.com/pret/pokegold/blob/symbols/pokegold.sym
+    return (saveCorruptionCheckValue1 == SAVE_CORRUPTION_CHECK1_EXPECTED_VALUE) 
+        && (saveCorruptionCheckValue2 == SAVE_CORRUPTION_CHECK2_EXPECTED_VALUE);
+
+}
+
+/**
+ * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
+ */
+static bool hasBackupSave(ISaveManager& saveManager, bool isCrystal)
+{
+    // check first canary value
+    uint8_t saveCorruptionCheckValue1;
+    uint8_t saveCorruptionCheckValue2;
+
+    if(isCrystal)
+    {
+        saveManager.seekToBankOffset(0, 0x1208);
+    }
+    else
+    {
+        saveManager.seekToBankOffset(3, 0x1E38);
+    }
+    saveManager.readByte(saveCorruptionCheckValue1);
+
+    // check second canary
+    // for this one the offset differs in crystal
+    if(isCrystal)
+    {
+        saveManager.seekToBankOffset(0, 0x1F0F);
+    }
+    else
+    {
+        saveManager.seekToBankOffset(3, 0x1E6F);
+    }
+    saveManager.readByte(saveCorruptionCheckValue2);
+
+    // for there to be an actual save, the canary values need to be set to these exact values.
+    // Taken from the PRET pokecrystal and pokegold projects
+    // https://github.com/pret/pokecrystal/blob/symbols/pokecrystal.sym
+    // https://github.com/pret/pokegold/blob/symbols/pokegold.sym
+    return (saveCorruptionCheckValue1 == SAVE_CORRUPTION_CHECK1_EXPECTED_VALUE) 
+        && (saveCorruptionCheckValue2 == SAVE_CORRUPTION_CHECK2_EXPECTED_VALUE);
+
 }
 
 Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType)
@@ -592,9 +669,16 @@ uint8_t Gen2GameReader::getPokedexCounter(PokedexFlag dexFlag)
     return result;
 }
 
+
+#include <cstdio>
 bool Gen2GameReader::isMainChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
+
+    if(!hasMainSave(saveManager_, isCrystal))
+    {
+        return false;
+    }
 
     const uint16_t storedChecksum = readMainChecksum(saveManager_, isCrystal);
     const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager_, isCrystal);
@@ -605,6 +689,11 @@ bool Gen2GameReader::isMainChecksumValid()
 bool Gen2GameReader::isBackupChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
+
+    if(!hasBackupSave(saveManager_, isCrystal))
+    {
+        return false;
+    }
 
     const uint16_t storedChecksum = readBackupChecksum(saveManager_, isCrystal);
     const uint16_t calculatedChecksum = calculateBackupRegionChecksum(saveManager_, isCrystal);
@@ -692,8 +781,6 @@ bool Gen2GameReader::getEventFlag(uint16_t flagNumber)
     return (byteVal & flag);
 }
 
-#include <cstdio>
-
 void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
 {
     const uint16_t saveOffset = (isGameCrystal()) ? EVENT_FLAGS_OFFSET_CRYSTAL : EVENT_FLAGS_OFFSET_GOLDSILVER;
@@ -713,7 +800,6 @@ void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
     {
         resultVal |= flag;
     }
-    printf("%s: flagNumber %hu, enabled: %d, orig byte: 0x%02x, new byte 0x%02x\n", __FUNCTION__, flagNumber, enabled, byteVal, resultVal);
 
     saveManager_.writeByte(resultVal);
 }
