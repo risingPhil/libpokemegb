@@ -29,6 +29,11 @@ public:
     uint8_t getPokemonNumber(uint8_t index) const;
 
     /**
+     * @brief This function returns the Gen1PokemonIconType for a pokemon at the given index
+     */
+    Gen1PokemonIconType getPokemonIconType(uint8_t index) const;
+
+    /**
      * @brief With this function, you can check if the index is valid and not referring to missingno
      */
     bool isValidIndex(uint8_t index) const;
@@ -118,7 +123,7 @@ public:
      * @brief This function decodes the given pokemon icon and returns the internal buffer of the given SpriteRenderer instance
      * The size of the returned buffer is 16x16 pixels
      */
-    uint8_t* decodePokemonIcon(PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame = true);
+    uint8_t* decodePokemonIcon(Gen1PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame = true);
 
     /**
      * @brief Adds a pokemon to the save. Tries to add it to the party first. If there's no more room there, it tries to add it to the

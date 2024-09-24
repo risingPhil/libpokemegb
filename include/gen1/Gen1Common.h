@@ -87,7 +87,7 @@ enum Gen1PokeType
     GEN1_PT_DRAGON = 0x1A
 };
 
-enum PokemonIconType
+enum Gen1PokemonIconType
 {
     GEN1_ICONTYPE_MON = 0,
     GEN1_ICONTYPE_BALL,

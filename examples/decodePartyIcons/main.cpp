@@ -12,37 +12,30 @@
 using OutputFormat = SpriteRenderer::OutputFormat;
 using TileOrder = SpriteRenderer::TileOrder;
 
-void decodeGen1Icons(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type)
+void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type, Gen1PokemonIconType iconType, bool firstFrame)
 {
     Gen1GameReader gameReader(romReader, saveManager, gen1Type);
     SpriteRenderer renderer;
     char fileNameBuf[100];
-    PokemonIconType iconType;
     uint8_t *outputBuffer;
-    bool firstFrame;
 
+    outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
+    if(!outputBuffer)
+    {
+        fprintf(stderr, "ERROR: Could not decode icon for icon type %d and firstFrame %d!\n", (int)iconType, firstFrame);
+        return;
+    }
+    snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame%u.png", (int)iconType, (firstFrame) ? 1 : 2);
+    write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
+}
+
+
+void decodeGen1Icons(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type)
+{
     for(int i=0; i < GEN1_ICONTYPE_MAX; ++i)
     {
-        iconType = (PokemonIconType)i;
-        firstFrame = true;
-        outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
-        if(!outputBuffer)
-        {
-            fprintf(stderr, "ERROR: Could not decode icon for icon type %d and firstFrame %d!\n", (int)iconType, firstFrame);
-            continue;
-        }
-        snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame1.png", i);
-        write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
-
-        firstFrame = false;   
-        outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
-        if(!outputBuffer)
-        {
-            fprintf(stderr, "ERROR: Could not decode icon for type %d and firstFrame %d!\n", (int)iconType, firstFrame);
-            continue;
-        }
-        snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame2.png", i);
-        write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
+        decodeGen1Icon(romReader, saveManager, gen1Type, (Gen1PokemonIconType)i, true);
+        decodeGen1Icon(romReader, saveManager, gen1Type, (Gen1PokemonIconType)i, false);
     }
 }
 

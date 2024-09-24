@@ -99,6 +99,42 @@ uint8_t Gen1GameReader::getPokemonNumber(uint8_t index) const
     return result;
 }
 
+Gen1PokemonIconType Gen1GameReader::getPokemonIconType(uint8_t index) const
+{
+    //MonPartyData in pret/pokered and pret/pokeyellow
+    // strangely, this array is in pokemon _number_ order, not index
+    uint8_t number = getPokemonNumber(index);
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x719BA : 0x7190D;
+    uint8_t byteVal;
+    Gen1PokemonIconType result;
+
+    if(number == 0xFF)
+    {
+        // invalid number!
+        return Gen1PokemonIconType::GEN1_ICONTYPE_MAX;
+    }
+    // number is 1-based, but the array/offset is obviously 0-based. So subtract one
+    --number;
+
+    romReader_.seek(romOffset);
+
+    // MonPartyData is a nybble (4 bit) array.
+    romReader_.advance((number / 2));
+    romReader_.readByte(byteVal);
+
+    if((number & 0x1) == 0)
+    {
+        // if the number is even, the upper 4 bits need to be used
+        result = (Gen1PokemonIconType)(byteVal >> 4);
+    }
+    else
+    {
+        // if odd, the lower 4 bits need to be used
+        result = (Gen1PokemonIconType)(byteVal & 0x0F);
+    }
+    return result;
+}
+
 bool Gen1GameReader::isValidIndex(uint8_t index) const
 {
     switch(index)
@@ -432,7 +468,7 @@ uint8_t* Gen1GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
  * 
  * Anyway, we need to deal with this mess and that makes our code below a bit messy as well.
  */
-uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame)
+uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame)
 {
     const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x7184D : 0x717C0;
     const uint8_t MAX_NUM_TILES = 8;
@@ -518,7 +554,7 @@ uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRende
 
     if(entryIndex == 0xFF)
     {
-        if(iconType == PokemonIconType::GEN1_ICONTYPE_HELIX && firstFrame)
+        if(iconType == Gen1PokemonIconType::GEN1_ICONTYPE_HELIX && firstFrame)
         {
             // The helix sprite is not part of the MonPartySpritePointers table for some reason
             bankIndex = 4;
