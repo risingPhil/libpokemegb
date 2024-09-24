@@ -450,9 +450,6 @@ uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRende
     // this boolean indicates that the sprite only stores the left half, but it's symmetric
     bool isSymmetric;
 
-    // TODO: for some of these icons, only the left half is stored.
-    // they are supposed to be mirrored
-
     switch(iconType)
     {
     case GEN1_ICONTYPE_MON:
@@ -543,6 +540,10 @@ uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRende
         romReader_.readByte(bankIndex);
         romReader_.readUint16(vSpritesTileOffset);
 
+        // HACK: so, in the case that only the left half of the icon is stored, every tile (top left + bottom left)
+        // gets a separate entry in the table. But that's a bit annoying to work with. Since both tiles are stored
+        // contiguously on the cartridge, let's just manipulate the numTiles field because we're going to render the tiles
+        // separately anyway because we're aware that we're in this scenario.
         if(numTiles == 1 && isSymmetric)
         {
             numTiles = 2;
@@ -554,6 +555,7 @@ uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRende
 
     if(isSymmetric)
     {
+        // only the left half is stored. We're supposed to mirror it to get the right half.
         const uint8_t* srcTop = iconSrcBuffer;
         const uint8_t* srcBottom = iconSrcBuffer + BYTES_PER_TILE;
         // top left corner
@@ -567,6 +569,7 @@ uint8_t* Gen1GameReader::decodePokemonIcon(PokemonIconType iconType, SpriteRende
     }
     else
     {
+        // full sprite is stored in a horizontal tile order. So we can decode them this way.
         return renderer.draw(iconSrcBuffer, outputFormat, monochromeGBColorPalette, 2, 2, SpriteRenderer::TileOrder::HORIZONTAL);
     }
 }
