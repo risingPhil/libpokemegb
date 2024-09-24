@@ -87,6 +87,22 @@ enum Gen1PokeType
     GEN1_PT_DRAGON = 0x1A
 };
 
+enum PokemonIconType
+{
+    GEN1_ICONTYPE_MON = 0,
+    GEN1_ICONTYPE_BALL,
+    GEN1_ICONTYPE_HELIX,
+    GEN1_ICONTYPE_FAIRY,
+    GEN1_ICONTYPE_BIRD,
+    GEN1_ICONTYPE_WATER,
+    GEN1_ICONTYPE_BUG,
+    GEN1_ICONTYPE_GRASS,
+    GEN1_ICONTYPE_SNAKE,
+    GEN1_ICONTYPE_QUADRUPED,
+    GEN1_ICONTYPE_PIKACHU,
+    GEN1_ICONTYPE_MAX
+};
+
 /**
  * @brief Implementation based on https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_I)#Checksum
  */

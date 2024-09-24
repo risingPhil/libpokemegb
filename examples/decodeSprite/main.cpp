@@ -50,7 +50,11 @@ static void decodeGen1Sprite(Gen1GameReader &gameReader, uint8_t pokeIndex)
     }
 
     // convert it to the outputFormat
-    outputBuffer = renderer.draw(spriteBuffer, outputFormat, colorPalette, 7, 7, g_removeBackground);
+    outputBuffer = renderer.draw(spriteBuffer, outputFormat, colorPalette, 7, 7);
+    if(g_removeBackground)
+    {
+        renderer.removeWhiteBackground(7, 7);
+    }
     
     snprintf(fileNameBuf, sizeof(fileNameBuf), "%s.png", pokeName);
     write_png(fileNameBuf, outputBuffer, SPRITE_BUFFER_WIDTH_IN_PIXELS, SPRITE_BUFFER_HEIGHT_IN_PIXELS, g_removeBackground);
@@ -97,7 +101,11 @@ static void decodeGen2Sprite(Gen2GameReader &gameReader, uint8_t pokeIndex)
     }
 
     // convert it to the outputFormat
-    outputBuffer = renderer.draw(spriteBuffer, outputFormat, colorPalette, spriteWidthInTiles, spriteHeightInTiles, g_removeBackground);
+    outputBuffer = renderer.draw(spriteBuffer, outputFormat, colorPalette, spriteWidthInTiles, spriteHeightInTiles);
+    if(g_removeBackground)
+    {
+        renderer.removeWhiteBackground(spriteWidthInTiles, spriteHeightInTiles);
+    }
     
     snprintf(fileNameBuf, sizeof(fileNameBuf), "%s.png", pokeName);
     write_png(fileNameBuf, outputBuffer, spriteWidthInTiles * 8, spriteHeightInTiles * 8, g_removeBackground);

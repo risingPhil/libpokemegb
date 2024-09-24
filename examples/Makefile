@@ -14,6 +14,7 @@ all:
 	$(MAKE) -C gen2_removeItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_getEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_setEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C decodePartyIcons $(MAKECMDGOALS) $(MAKEOVERRIDES)
 
 clean:
 	$(MAKE) -C do_stuff_gen1 clean
@@ -28,3 +29,4 @@ clean:
 	$(MAKE) -C gen2_removeItem clean
 	$(MAKE) -C gen2_getEventFlag clean
 	$(MAKE) -C gen2_setEventFlag clean
+	$(MAKE) -C decodePartyIcons clean

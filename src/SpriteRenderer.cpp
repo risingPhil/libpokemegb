@@ -5,6 +5,11 @@
 
 using OutputFormat = SpriteRenderer::OutputFormat;
 
+static const uint8_t TILE_WIDTH = 8;
+static const uint8_t TILE_HEIGHT = 8;
+static const uint8_t BITS_PER_PIXEL = 2;
+static const uint8_t BYTES_PER_TILE = ((TILE_WIDTH * TILE_HEIGHT) / 8) * BITS_PER_PIXEL;
+
 // The next set of functions are defined to remove the white background from a decoded RGBA pokémon sprite by doing edge detection.
 // Both RGBA32 and RGBA16 formats are supported
 
@@ -438,116 +443,167 @@ static void removeBackground(uint8_t *buffer, OutputFormat format, int spriteWid
 
 // end of the removeBackground specific code
 
+SpriteRenderer::SpriteRenderer()
+    : buffer_()
+    , format_(OutputFormat::RGB)
+    , rgbPalette_(nullptr)
+    , rgba16Palette_(nullptr)
+    , numColorComponents_(0)
+{
+}
+
 uint32_t SpriteRenderer::getNumRGBBytesFor(uint8_t numHTiles, uint8_t numVTiles) const
 {
     const uint16_t numPixels = (numHTiles * 8) * (numVTiles * 8);
     return numPixels * 3;
 }
 
-uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, uint16_t palette[4], uint8_t numHTiles, uint8_t numVTiles, bool removeWhiteBackground)
+uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, uint16_t palette[4], uint8_t numHTiles, uint8_t numVTiles, TileOrder tileOrder)
 {
-    const uint8_t* rgbPalette;
-    const uint16_t* rgba16Palette;
-    uint8_t byte0;
-    uint8_t byte1;
-    uint16_t x;
-    uint16_t y;
-    uint8_t numColorComponents;
-
-    // convert -size 56x56 -depth 8 rgb:sprite.rgb output.png
-
-    // We're working with a gameboy specific format here:
-    // every 2 bytes contain the bits for 8 horizontal pixels
-    // the first of those 2 bytes contain the least significant bits for every of those 8 horizontal pixels
-    // the second of those 2 bytes contain the most significant bits for every of those 8 horizontal pixels.
-    // however, the data is stored in column first order: that means that we're walking through the sprite vertically.
-    // this is a bit confusing, but the gist of it is: you get 8 horizontal pixels (=2 bytes), then you move to the next vertical row.
-    // then you get another 8 horizontal pixels of that row. And then you move again to the next vertical row.
-    // you keep doing this until you reach the bottom of the sprite, after which the next column begins. And there you repeat the process
-
-    uint32_t i = 0;
-    uint32_t offset;
-    uint8_t paletteIndex;
-    uint8_t bit0;
-    uint8_t bit1;
-    // every tile is 8x8
     const uint16_t spriteBufferHeightInPixels = numVTiles * 8;
     const uint16_t spriteBufferWidthInPixels = numHTiles * 8;
-    const uint16_t spriteBufferSize = spriteBufferWidthInPixels * spriteBufferHeightInPixels / 8;
+    const uint32_t spriteBufferSize = (spriteBufferWidthInPixels / 8) * spriteBufferHeightInPixels * BITS_PER_PIXEL;
+    uint32_t i = 0;
+    uint16_t x = 0;
+    uint16_t y = 0;
 
-    switch(format)
-    {
-        case OutputFormat::RGB:
-            rgbPalette = convertGBColorPaletteToRGB24(palette);
-            rgba16Palette = nullptr;
-            numColorComponents = 3;
-            break;
-        case OutputFormat::RGBA32:
-            rgbPalette = convertGBColorPaletteToRGB24(palette);
-            rgba16Palette = nullptr;
-            numColorComponents = 4;
-            break;
-        case OutputFormat::RGBA16:
-            rgbPalette = nullptr;
-            rgba16Palette = convertGBColorPaletteToRGBA16(palette);
-            numColorComponents = 2;
-            break;
-        default:
-            return nullptr;
-    }
+    setFormatAndPalette(format, palette);
 
     while(i < spriteBufferSize)
     {
-        byte0 = spriteBuffer[i * 2];
-        byte1 = spriteBuffer[i * 2 + 1];
+        internalDrawTile(spriteBuffer + i, x, y, spriteBufferWidthInPixels, false);
 
-//      printf("0x%hhu 0x%hhu\n", byte0, byte1);
-
-        x = (i / (spriteBufferHeightInPixels)) * 8;
-        y = (i % (spriteBufferHeightInPixels));
-
-        for(uint8_t bitIndex = 0; bitIndex < 8; ++bitIndex)
+        if(tileOrder == TileOrder::VERTICAL)
         {
-            offset = (y * spriteBufferWidthInPixels + x + bitIndex) * numColorComponents;
+            y += 8;
+            if(y >= spriteBufferHeightInPixels)
+            {
+                x += 8;
+                y = 0;
+            }
+        }
+        else
+        {
+            x += 8;
+            if(x >= spriteBufferWidthInPixels)
+            {
+                x = 0;
+                y += 8;
+            }
+        }
 
-            bit0 = (byte0 >> (7 - bitIndex)) & 0x1;
-            bit1 = (byte1 >> (7 - bitIndex)) & 0x1;
+        i += BYTES_PER_TILE;
+    }
+
+    return buffer_;
+}
+
+uint8_t* SpriteRenderer::drawTile(const uint8_t* tileBuffer, OutputFormat format, uint16_t palette[4], uint16_t xOffset, uint16_t yOffset, uint8_t outputBufferHTiles, bool mirrorHorizontally)
+{
+    const uint16_t spriteBufferWidthInPixels = outputBufferHTiles * 8;
+
+    setFormatAndPalette(format, palette);
+    internalDrawTile(tileBuffer, xOffset, yOffset, spriteBufferWidthInPixels, mirrorHorizontally);
+
+    return buffer_;
+}
+
+uint8_t* SpriteRenderer::removeWhiteBackground(uint8_t numHTiles, uint8_t numVTiles)
+{
+    if(format_ == OutputFormat::RGB)
+    {
+        fprintf(stderr, "[SpriteRenderer]: %s: ERROR: removeBackground is not supported for OutputFormat::RGB!", __FUNCTION__);
+        return buffer_;
+    }
+
+    const uint16_t spriteBufferHeightInPixels = numVTiles * 8;
+    const uint16_t spriteBufferWidthInPixels = numHTiles * 8;
+
+    removeBackground(buffer_, format_, spriteBufferWidthInPixels, spriteBufferHeightInPixels);
+    return buffer_;
+}
+
+void SpriteRenderer::internalDrawTile(const uint8_t* tileBuffer, uint16_t xOffset, uint16_t yOffset, uint16_t spriteBufferWidthInPixels, bool mirrorHorizontally)
+{
+    uint32_t offset;
+    uint32_t i = 0;
+    uint16_t x;
+    uint16_t y = 0;
+    uint8_t byte0;
+    uint8_t byte1;
+    uint8_t bit0;
+    uint8_t bit1;
+    uint8_t paletteIndex;
+
+    while(i < BYTES_PER_TILE)
+    {
+        byte0 = tileBuffer[i];
+        byte1 = tileBuffer[i + 1];
+        
+        for(x = 0; x < 8; ++x)
+        {
+            offset = ((yOffset + y) * spriteBufferWidthInPixels + xOffset + x) * numColorComponents_;
+
+            if(!mirrorHorizontally)
+            {
+                bit0 = (byte0 >> (7 - x)) & 0x1;
+                bit1 = (byte1 >> (7 - x)) & 0x1;
+            }
+            else
+            {
+                bit0 = (byte0 >> x) & 0x1;
+                bit1 = (byte1 >> x) & 0x1;
+            }
 
             paletteIndex = (bit1 << 1) | bit0;
 
-            if(format == OutputFormat::RGBA16)
+            if(format_ == OutputFormat::RGBA16)
             {
-                (*((uint16_t*)(buffer_ + offset))) = rgba16Palette[paletteIndex];
+                (*((uint16_t*)(buffer_ + offset))) = rgba16Palette_[paletteIndex];
             }
             else
             {
                 // R
-                buffer_[offset] = rgbPalette[paletteIndex * 3 + 0];
+                buffer_[offset] = rgbPalette_[paletteIndex * 3 + 0];
                 // G
-                buffer_[offset + 1] = rgbPalette[paletteIndex * 3 + 1];
+                buffer_[offset + 1] = rgbPalette_[paletteIndex * 3 + 1];
                 // B
-                buffer_[offset + 2] = rgbPalette[paletteIndex * 3 + 2];
+                buffer_[offset + 2] = rgbPalette_[paletteIndex * 3 + 2];
 
-                if(format == OutputFormat::RGBA32)
+                if(format_ == OutputFormat::RGBA32)
                 {
                     // A
                     buffer_[offset + 3] = 0xFF;
                 }
             }
         }
-        ++i;
-    }
+        ++y;
 
-    if(removeWhiteBackground)
+        i += 2;
+    }
+}
+
+void SpriteRenderer::setFormatAndPalette(OutputFormat format, uint16_t palette[4])
+{
+    format_ = format;
+    switch(format)
     {
-        if(format == OutputFormat::RGB)
-        {
-            fprintf(stderr, "[SpriteRenderer]: %s: ERROR: removeBackground is not supported for OutputFormat::RGB!", __FUNCTION__);
-            return buffer_;
-        }
-
-        removeBackground(buffer_, format, spriteBufferWidthInPixels, spriteBufferHeightInPixels);
+        case OutputFormat::RGB:
+            rgbPalette_ = convertGBColorPaletteToRGB24(palette);
+            rgba16Palette_ = nullptr;
+            numColorComponents_ = 3;
+            break;
+        case OutputFormat::RGBA32:
+            rgbPalette_ = convertGBColorPaletteToRGB24(palette);
+            rgba16Palette_ = nullptr;
+            numColorComponents_ = 4;
+            break;
+        case OutputFormat::RGBA16:
+            rgbPalette_ = nullptr;
+            rgba16Palette_ = convertGBColorPaletteToRGBA16(palette);
+            numColorComponents_ = 2;
+            break;
+        default:
+            break;
     }
-
-    return buffer_;
 }

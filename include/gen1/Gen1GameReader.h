@@ -4,6 +4,7 @@
 #include "gen1/Gen1SpriteDecoder.h"
 #include "gen1/Gen1PlayerPokemonStorage.h"
 #include "gen1/Gen1DistributionPokemon.h"
+#include "SpriteRenderer.h"
 
 class IRomReader;
 class ISaveManager;
@@ -112,6 +113,12 @@ public:
      * If you want to keep the content around for longer, make a copy of this data.
      */
     uint8_t* decodeSprite(uint8_t bankIndex, uint16_t pointer);
+
+    /**
+     * @brief This function decodes the given pokemon icon and returns the internal buffer of the given SpriteRenderer instance
+     * The size of the returned buffer is 16x16 pixels
+     */
+    uint8_t* decodePokemonIcon(PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame = true);
 
     /**
      * @brief Adds a pokemon to the save. Tries to add it to the party first. If there's no more room there, it tries to add it to the
