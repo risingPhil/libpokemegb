@@ -304,6 +304,18 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
     return result;
 }
 
+Gen2PokemonIconType Gen2GameReader::getPokemonIconType(uint8_t index) const
+{
+    const uint32_t romOffset = (isGameCrystal()) ? 0x8EAC4 : 0x8E975;
+    uint8_t byteVal;
+
+    romReader_.seek(romOffset);
+    romReader_.advance((index - 1));
+    romReader_.readByte(byteVal);
+
+    return (Gen2PokemonIconType)byteVal;
+}
+
 bool Gen2GameReader::isValidIndex(uint8_t index) const
 {
     return (index != 0) && (index < 252);
@@ -448,6 +460,40 @@ bool Gen2GameReader::readColorPaletteForPokemon(uint8_t index, bool shiny, uint1
 uint8_t *Gen2GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 {
     return spriteDecoder_.decode(bankIndex, pointer);
+}
+
+uint8_t *Gen2GameReader::decodePokemonIcon(Gen2PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame)
+{
+    const uint32_t romOffset = (gameType_ == Gen2GameType::CRYSTAL) ? 0x8EBBF : 0x8EA70;
+    const uint8_t MAX_NUM_TILES = 4;
+    const uint8_t TILE_WIDTH = 8;
+    const uint8_t TILE_HEIGHT = 8;
+    const uint8_t BITS_PER_PIXEL = 2;
+    const uint8_t BYTES_PER_TILE = ((TILE_WIDTH * TILE_HEIGHT) / 8) * BITS_PER_PIXEL;
+    const uint8_t TILES_PER_ICON = 4;
+    const uint32_t ENTRY_SIZE = 2;
+    uint8_t iconSrcBuffer[MAX_NUM_TILES * BYTES_PER_TILE];
+    const uint8_t bankIndex = 0x23;
+    uint16_t pointer;
+
+    // read IconPointers table entry
+    romReader_.seek(romOffset);
+    romReader_.advance(((uint32_t)iconType) * ENTRY_SIZE);
+    romReader_.readUint16(pointer);
+
+    // now jump to the pointer to find the sprite
+    romReader_.seekToRomPointer(pointer, bankIndex);
+
+    // every sprite contains 2 frames.
+    // if we want the second one, we need to skip 1 16x16 sprite
+    if(!firstFrame)
+    {
+        romReader_.advance(TILES_PER_ICON * BYTES_PER_TILE);
+    }
+
+    romReader_.read(iconSrcBuffer, TILES_PER_ICON * BYTES_PER_TILE);
+
+    return renderer.draw(iconSrcBuffer, outputFormat, gen2_iconColorPalette, 2, 2, SpriteRenderer::TileOrder::HORIZONTAL);
 }
 
 uint8_t Gen2GameReader::addPokemon(Gen2TrainerPokemon &poke, bool isEgg, const char *originalTrainerID, const char *nickname)

@@ -1,5 +1,5 @@
 #include "gen1/Gen1GameReader.h"
-#include "gen1/Gen1SpriteDecoder.h"
+#include "gen2/Gen2GameReader.h"
 #include "SpriteRenderer.h"
 #include "RomReader.h"
 #include "SaveManager.h"
@@ -12,7 +12,7 @@
 using OutputFormat = SpriteRenderer::OutputFormat;
 using TileOrder = SpriteRenderer::TileOrder;
 
-void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type, Gen1PokemonIconType iconType, bool firstFrame)
+static void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type, Gen1PokemonIconType iconType, bool firstFrame)
 {
     Gen1GameReader gameReader(romReader, saveManager, gen1Type);
     SpriteRenderer renderer;
@@ -29,13 +29,38 @@ void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameTy
     write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
 }
 
+static void decodeGen2Icon(IRomReader& romReader, ISaveManager& saveManager, Gen2GameType gen2Type, Gen2PokemonIconType iconType, bool firstFrame)
+{
+    Gen2GameReader gameReader(romReader, saveManager, gen2Type);
+    SpriteRenderer renderer;
+    char fileNameBuf[100];
+    uint8_t *outputBuffer;
 
-void decodeGen1Icons(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type)
+    outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
+    if(!outputBuffer)
+    {
+        fprintf(stderr, "ERROR: Could not decode icon for icon type %d and firstFrame %d!\n", (int)iconType, firstFrame);
+        return;
+    }
+    snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame%u.png", (int)iconType, (firstFrame) ? 1 : 2);
+    write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
+}
+
+static void decodeGen1Icons(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type)
 {
     for(int i=0; i < GEN1_ICONTYPE_MAX; ++i)
     {
         decodeGen1Icon(romReader, saveManager, gen1Type, (Gen1PokemonIconType)i, true);
         decodeGen1Icon(romReader, saveManager, gen1Type, (Gen1PokemonIconType)i, false);
+    }
+}
+
+static void decodeGen2Icons(IRomReader& romReader, ISaveManager& saveManager, Gen2GameType gen2Type)
+{
+    for(int i=1; i < GEN2_ICONTYPE_MAX; ++i)
+    {
+        decodeGen2Icon(romReader, saveManager, gen2Type, (Gen2PokemonIconType)i, true);
+        decodeGen2Icon(romReader, saveManager, gen2Type, (Gen2PokemonIconType)i, false);
     }
 }
 
@@ -65,13 +90,19 @@ int main(int argc, char** argv)
 
     //check if we're dealing with gen 1
     const Gen1GameType gen1Type = gen1_determineGameType(cartridgeHeader);
-    if(gen1Type == Gen1GameType::INVALID)
+    const Gen2GameType gen2Type = gen2_determineGameType(cartridgeHeader);
+    if(gen1Type != Gen1GameType::INVALID)
     {
-        fprintf(stderr, "ERROR: sorry, this tool only supports gen 1!\n");
-        return 1;
+        decodeGen1Icons(romReader, saveManager, gen1Type);
     }
-
-    decodeGen1Icons(romReader, saveManager, gen1Type);
+    else if(gen2Type != Gen2GameType::INVALID)
+    {
+        decodeGen2Icons(romReader, saveManager, gen2Type);
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: The specified rom is not a gen 1 or gen 2 pokémon game!\n");
+    }
 
     free(romBuffer);
     romBuffer = 0;

@@ -4,6 +4,7 @@
 #include "gen2/Gen2SpriteDecoder.h"
 #include "gen2/Gen2PlayerPokemonStorage.h"
 #include "gen2/Gen2DistributionPokemon.h"
+#include "SpriteRenderer.h"
 
 class IRomReader;
 class ISaveManager;
@@ -27,6 +28,11 @@ public:
      * @return const char*
      */
     const char *getPokemonName(uint8_t index) const;
+
+    /**
+     * Returns the specific icon type for a given pokémon
+     */
+    Gen2PokemonIconType getPokemonIconType(uint8_t index) const;
 
     /**
      * @brief With this function, you can check if the index is valid and not referring to garbage data
@@ -67,6 +73,12 @@ public:
      * If you want to keep the content around for longer, make a copy of this data.
      */
     uint8_t *decodeSprite(uint8_t bankIndex, uint16_t pointer);
+
+    /**
+     * @brief This function decodes the given pokemon icon and returns the internal buffer of the given SpriteRenderer instance
+     * The size of the returned buffer is 16x16 pixels
+     */
+    uint8_t* decodePokemonIcon(Gen2PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame = true);
 
     /**
      * @brief Adds a pokemon to the save. Tries to add it to the party first. If there's no more room there, it tries to add it to the

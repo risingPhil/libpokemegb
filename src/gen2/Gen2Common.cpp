@@ -11,6 +11,13 @@
 #define POKEMON_SILVER_CARTRIDGE_TITLE "POKEMON_SLV"
 #define POKEMON_CRYSTAL_CARTRIDGE_TITLE "PM_CRYSTAL"
 
+uint16_t gen2_iconColorPalette[4] = {
+	0x7FFF,
+	0x2A5E,
+	0x10FE,
+	0x0
+};
+
 static TextCodePair gen2TextCodes[] = {
 	{0x56, "……"},
 	{0x5D, "TRAINER"},
