@@ -10,21 +10,22 @@
 #include <cstdlib>
 
 using OutputFormat = SpriteRenderer::OutputFormat;
-using TileOrder = SpriteRenderer::TileOrder;
 
 static void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type, Gen1PokemonIconType iconType, bool firstFrame)
 {
     Gen1GameReader gameReader(romReader, saveManager, gen1Type);
     SpriteRenderer renderer;
     char fileNameBuf[100];
-    uint8_t *outputBuffer;
+    uint8_t* spriteBuffer;
+    uint8_t* outputBuffer;
 
-    outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
-    if(!outputBuffer)
+    spriteBuffer = gameReader.decodePokemonIcon(iconType, firstFrame);
+    if(!spriteBuffer)
     {
         fprintf(stderr, "ERROR: Could not decode icon for icon type %d and firstFrame %d!\n", (int)iconType, firstFrame);
         return;
     }
+    outputBuffer = renderer.draw(spriteBuffer, OutputFormat::RGB, monochromeGBColorPalette, GEN1_ICON_WIDTH_IN_TILES, GEN1_ICON_HEIGHT_IN_TILES);
     snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame%u.png", (int)iconType, (firstFrame) ? 1 : 2);
     write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
 }
@@ -34,14 +35,16 @@ static void decodeGen2Icon(IRomReader& romReader, ISaveManager& saveManager, Gen
     Gen2GameReader gameReader(romReader, saveManager, gen2Type);
     SpriteRenderer renderer;
     char fileNameBuf[100];
-    uint8_t *outputBuffer;
+    uint8_t* spriteBuffer;
+    uint8_t* outputBuffer;
 
-    outputBuffer = gameReader.decodePokemonIcon(iconType, renderer, OutputFormat::RGB, firstFrame);
-    if(!outputBuffer)
+    spriteBuffer = gameReader.decodePokemonIcon(iconType, firstFrame);
+    if(!spriteBuffer)
     {
         fprintf(stderr, "ERROR: Could not decode icon for icon type %d and firstFrame %d!\n", (int)iconType, firstFrame);
         return;
     }
+    outputBuffer = renderer.draw(spriteBuffer, OutputFormat::RGB, gen2_iconColorPalette, GEN2_ICON_WIDTH_IN_TILES, GEN2_ICON_HEIGHT_IN_TILES);
     snprintf(fileNameBuf, sizeof(fileNameBuf), "%d_frame%u.png", (int)iconType, (firstFrame) ? 1 : 2);
     write_png(fileNameBuf, outputBuffer, 2 * 8, 2 * 8, false);
 }

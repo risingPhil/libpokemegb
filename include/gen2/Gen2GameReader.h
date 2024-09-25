@@ -2,9 +2,9 @@
 #define _GEN2GAMEREADER_H
 
 #include "gen2/Gen2SpriteDecoder.h"
+#include "gen2/Gen2IconDecoder.h"
 #include "gen2/Gen2PlayerPokemonStorage.h"
 #include "gen2/Gen2DistributionPokemon.h"
-#include "SpriteRenderer.h"
 
 class IRomReader;
 class ISaveManager;
@@ -75,10 +75,14 @@ public:
     uint8_t *decodeSprite(uint8_t bankIndex, uint16_t pointer);
 
     /**
-     * @brief This function decodes the given pokemon icon and returns the internal buffer of the given SpriteRenderer instance
-     * The size of the returned buffer is 16x16 pixels
+     * @brief This function decodes the given pokemon icon and returns an internal buffer
+     * Note that this returns a 16x16 buffer in gameboy format with tiles in vertical order.
+     * You need to feed it to an instance of SpriteRenderer to convert it to a useful format
+     * 
+     * WARNING: this function returns a buffer to an internal buffer of Gen2IconDecoder. That means it will get overwritten on the next call to this function.
+     * If you want to keep the content around for longer, make a copy of this data
      */
-    uint8_t* decodePokemonIcon(Gen2PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame = true);
+    uint8_t* decodePokemonIcon(Gen2PokemonIconType iconType, bool firstFrame = true);
 
     /**
      * @brief Adds a pokemon to the save. Tries to add it to the party first. If there's no more room there, it tries to add it to the
@@ -227,6 +231,7 @@ private:
     IRomReader &romReader_;
     ISaveManager &saveManager_;
     Gen2SpriteDecoder spriteDecoder_;
+    Gen2IconDecoder iconDecoder_;
     Gen2GameType gameType_;
 };
 

@@ -458,7 +458,7 @@ uint32_t SpriteRenderer::getNumRGBBytesFor(uint8_t numHTiles, uint8_t numVTiles)
     return numPixels * 3;
 }
 
-uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, uint16_t palette[4], uint8_t numHTiles, uint8_t numVTiles, TileOrder tileOrder)
+uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, uint16_t palette[4], uint8_t numHTiles, uint8_t numVTiles)
 {
     const uint16_t spriteBufferHeightInPixels = numVTiles * 8;
     const uint16_t spriteBufferWidthInPixels = numHTiles * 8;
@@ -471,39 +471,17 @@ uint8_t* SpriteRenderer::draw(const uint8_t* spriteBuffer, OutputFormat format, 
 
     while(i < spriteBufferSize)
     {
-        internalDrawTile(spriteBuffer + i, x, y, spriteBufferWidthInPixels, false);
+        internalDrawTile(spriteBuffer + i, x, y, spriteBufferWidthInPixels);
 
-        if(tileOrder == TileOrder::VERTICAL)
-        {
-            y += 8;
-            if(y >= spriteBufferHeightInPixels)
-            {
-                x += 8;
-                y = 0;
-            }
-        }
-        else
+        y += 8;
+        if(y >= spriteBufferHeightInPixels)
         {
             x += 8;
-            if(x >= spriteBufferWidthInPixels)
-            {
-                x = 0;
-                y += 8;
-            }
+            y = 0;
         }
 
         i += BYTES_PER_TILE;
     }
-
-    return buffer_;
-}
-
-uint8_t* SpriteRenderer::drawTile(const uint8_t* tileBuffer, OutputFormat format, uint16_t palette[4], uint16_t xOffset, uint16_t yOffset, uint8_t outputBufferHTiles, bool mirrorHorizontally)
-{
-    const uint16_t spriteBufferWidthInPixels = outputBufferHTiles * 8;
-
-    setFormatAndPalette(format, palette);
-    internalDrawTile(tileBuffer, xOffset, yOffset, spriteBufferWidthInPixels, mirrorHorizontally);
 
     return buffer_;
 }
@@ -523,7 +501,7 @@ uint8_t* SpriteRenderer::removeWhiteBackground(uint8_t numHTiles, uint8_t numVTi
     return buffer_;
 }
 
-void SpriteRenderer::internalDrawTile(const uint8_t* tileBuffer, uint16_t xOffset, uint16_t yOffset, uint16_t spriteBufferWidthInPixels, bool mirrorHorizontally)
+void SpriteRenderer::internalDrawTile(const uint8_t* tileBuffer, uint16_t xOffset, uint16_t yOffset, uint16_t spriteBufferWidthInPixels)
 {
     uint32_t offset;
     uint32_t i = 0;
@@ -544,16 +522,8 @@ void SpriteRenderer::internalDrawTile(const uint8_t* tileBuffer, uint16_t xOffse
         {
             offset = ((yOffset + y) * spriteBufferWidthInPixels + xOffset + x) * numColorComponents_;
 
-            if(!mirrorHorizontally)
-            {
-                bit0 = (byte0 >> (7 - x)) & 0x1;
-                bit1 = (byte1 >> (7 - x)) & 0x1;
-            }
-            else
-            {
-                bit0 = (byte0 >> x) & 0x1;
-                bit1 = (byte1 >> x) & 0x1;
-            }
+            bit0 = (byte0 >> (7 - x)) & 0x1;
+            bit1 = (byte1 >> (7 - x)) & 0x1;
 
             paletteIndex = (bit1 << 1) | bit0;
 

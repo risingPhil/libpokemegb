@@ -51,6 +51,7 @@ Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager,
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader_)
+    , iconDecoder_(romReader, gameType)
     , gameType_(gameType)
 {
 }
@@ -455,159 +456,9 @@ uint8_t* Gen1GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
     return spriteDecoder_.decode(bankIndex, pointer);
 }
 
-/*
- * In gen 1, the behaviour of the party icons is a bit messy.
- * There's the MonPartySpritePointers of the various icon sprites. But while some of these sprites are stored fully,
- * for some only the left half is stored. (and the code is supposed to mirror this half while rendering)
- * In fact, for the latter, the top and bottom left tiles are separate entries in the table. This is not the case for the icons that are
- * stored fully.
- * 
- * There's also no real flag to indicate this.
- * 
- * 2 icons don't even have a second frame stored. As a matter of fact, the HELIX icon doesn't even have an entry in the table at all!
- * 
- * Anyway, we need to deal with this mess and that makes our code below a bit messy as well.
- */
-uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, SpriteRenderer& renderer, SpriteRenderer::OutputFormat outputFormat, bool firstFrame)
+uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, bool firstFrame)
 {
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x7184D : 0x717C0;
-    const uint8_t MAX_NUM_TILES = 8;
-    const uint8_t TILE_WIDTH = 8;
-    const uint8_t TILE_HEIGHT = 8;
-    const uint8_t BITS_PER_PIXEL = 2;
-    const uint8_t BYTES_PER_TILE = ((TILE_WIDTH * TILE_HEIGHT) / 8) * BITS_PER_PIXEL;
-    const uint32_t ENTRY_SIZE = 6;
-    uint8_t iconSrcBuffer[MAX_NUM_TILES * BYTES_PER_TILE];
-    uint16_t pointer;
-    uint8_t numTiles; // total number of tiles of the sprite (to indicate byte size)
-    uint8_t bankIndex;
-    uint16_t vSpritesTileOffset;
-    uint8_t entryIndex;
-    // this boolean indicates that the sprite only stores the left half, but it's symmetric
-    bool isSymmetric;
-
-    switch(iconType)
-    {
-    case GEN1_ICONTYPE_MON:
-        entryIndex = (firstFrame) ? 14 : 0;
-        isSymmetric = false;
-        break;
-    case GEN1_ICONTYPE_BALL:
-        entryIndex = (firstFrame) ? 1 : 0xFF;
-        isSymmetric = false;
-        break;
-    case GEN1_ICONTYPE_FAIRY:
-        entryIndex = (firstFrame) ? 16 : 2;
-        isSymmetric = false;
-        break;
-    case GEN1_ICONTYPE_BIRD:
-        entryIndex = (firstFrame) ? 17 : 3;
-        isSymmetric = false;
-        break;
-    case GEN1_ICONTYPE_WATER:
-        entryIndex = (firstFrame) ? 4 : 18;
-        isSymmetric = false;
-        break;
-    case GEN1_ICONTYPE_BUG:
-        entryIndex = (firstFrame) ? 19 : 5;
-        isSymmetric = true;
-        break;
-    case GEN1_ICONTYPE_GRASS:
-        entryIndex = (firstFrame) ? 21 : 7;
-        isSymmetric = true;
-        break;
-    case GEN1_ICONTYPE_SNAKE:
-        entryIndex = (firstFrame) ? 23 : 9;
-        isSymmetric = true;
-        break;
-    case GEN1_ICONTYPE_QUADRUPED:
-        entryIndex = (firstFrame) ? 25 : 11;
-        isSymmetric = true;
-        break;
-    case GEN1_ICONTYPE_PIKACHU:
-    {
-        if(gameType_ != Gen1GameType::YELLOW)
-        {
-            entryIndex = 0xFF;
-        }
-        else
-        {
-            entryIndex = (firstFrame) ? 13 : 27;
-        }
-        isSymmetric = false;
-        break;
-    }
-    default:
-        entryIndex = 0xFF;
-        isSymmetric = false;
-        break;
-    }
-
-    // HACK: In pokemon yellow, there's an additional PIKACHU entry in the MonPartySpritePointers table.
-    // This shifts every entryIndex by 1 after this new entry.
-    // In practice, this means that mostly the second frame of icons are affected.
-    // so we need to increase the entryIndex by one in this case.
-    if(gameType_ == Gen1GameType::YELLOW && entryIndex != 0xFF && entryIndex > 13)
-    {
-        ++entryIndex;
-    }
-
-    if(entryIndex == 0xFF)
-    {
-        if(iconType == Gen1PokemonIconType::GEN1_ICONTYPE_HELIX && firstFrame)
-        {
-            // The helix sprite is not part of the MonPartySpritePointers table for some reason
-            bankIndex = 4;
-            pointer = (gameType_ == Gen1GameType::YELLOW) ? 0x7525 : 0x5180;
-            numTiles = 4;
-        }
-        else
-        {
-            return nullptr;
-        }
-    }
-    else
-    {
-        romReader_.seek(romOffset);
-        romReader_.advance(ENTRY_SIZE * entryIndex);
-
-        romReader_.readUint16(pointer);
-        romReader_.readByte(numTiles);
-        romReader_.readByte(bankIndex);
-        romReader_.readUint16(vSpritesTileOffset);
-
-        // HACK: so, in the case that only the left half of the icon is stored, every tile (top left + bottom left)
-        // gets a separate entry in the table. But that's a bit annoying to work with. Since both tiles are stored
-        // contiguously on the cartridge, let's just manipulate the numTiles field because we're going to render the tiles
-        // separately anyway because we're aware that we're in this scenario.
-        if(numTiles == 1 && isSymmetric)
-        {
-            numTiles = 2;
-        }
-    }
-
-    romReader_.seekToRomPointer(pointer, bankIndex);
-    romReader_.read(iconSrcBuffer, BYTES_PER_TILE * numTiles);
-
-    if(isSymmetric)
-    {
-        // only the left half is stored. We're supposed to mirror it to get the right half.
-        const uint8_t* srcTop = iconSrcBuffer;
-        const uint8_t* srcBottom = iconSrcBuffer + BYTES_PER_TILE;
-        // top left corner
-        renderer.drawTile(srcTop, outputFormat, monochromeGBColorPalette, 0, 0, 2, false);
-        // top right corner (mirrored)
-        renderer.drawTile(srcTop, outputFormat, monochromeGBColorPalette, TILE_WIDTH, 0, 2, true);
-        // bottom left corner
-        renderer.drawTile(srcBottom, outputFormat, monochromeGBColorPalette, 0, TILE_HEIGHT, 2, false);
-        // bottom right corner (mirrored)
-        return renderer.drawTile(srcBottom, outputFormat, monochromeGBColorPalette, TILE_WIDTH, TILE_HEIGHT, 2, true);
-    }
-    else
-    {
-        // full sprite is stored in a horizontal tile order. So we can decode them this way.
-        return renderer.draw(iconSrcBuffer, outputFormat, monochromeGBColorPalette, 2, 2, SpriteRenderer::TileOrder::HORIZONTAL);
-    }
+    return iconDecoder_.decode(iconType, firstFrame);
 }
 
 uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
