@@ -2639,7 +2639,7 @@ const Gen2DistributionPokemon g2_pcny_biteLapras = {
 };
 
 const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
-    .name = "Bite Lapras",
+    .name = "Future Sight Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
