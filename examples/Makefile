@@ -15,6 +15,7 @@ all:
 	$(MAKE) -C gen2_getEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_setEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C decodePartyIcons $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C extractReproSave $(MAKECMDGOALS) $(MAKEOVERRIDES)
 
 clean:
 	$(MAKE) -C do_stuff_gen1 clean
@@ -30,3 +31,5 @@ clean:
 	$(MAKE) -C gen2_getEventFlag clean
 	$(MAKE) -C gen2_setEventFlag clean
 	$(MAKE) -C decodePartyIcons clean
+	$(MAKE) -C extractReproSave clean
+
