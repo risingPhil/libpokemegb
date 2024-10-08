@@ -310,8 +310,23 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
 
 Gen2PokemonIconType Gen2GameReader::getPokemonIconType(uint8_t index) const
 {
-    const uint32_t romOffset = (isGameCrystal()) ? 0x8EAC4 : 0x8E975;
+    uint32_t romOffset = (isGameCrystal()) ? 0x8EAC4 : 0x8E975;
     uint8_t byteVal;
+
+    switch(gameType_)
+    {
+        case Gen2GameType::GOLD:
+            romOffset = 0x8E975;
+            break;
+        case Gen2GameType::SILVER:
+            romOffset = 0x8E95B;
+            break;
+        case Gen2GameType::CRYSTAL:
+            romOffset = 0x8EAC4;
+            break;
+        default:
+            return Gen2PokemonIconType::GEN2_ICONTYPE_MAX;
+    }
 
     romReader_.seek(romOffset);
     romReader_.advance((index - 1));
