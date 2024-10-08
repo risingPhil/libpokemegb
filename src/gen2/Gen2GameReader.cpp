@@ -310,7 +310,7 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
 
 Gen2PokemonIconType Gen2GameReader::getPokemonIconType(uint8_t index) const
 {
-    uint32_t romOffset = (isGameCrystal()) ? 0x8EAC4 : 0x8E975;
+    uint32_t romOffset;
     uint8_t byteVal;
 
     switch(gameType_)
