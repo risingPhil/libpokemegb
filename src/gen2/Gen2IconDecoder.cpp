@@ -12,7 +12,7 @@ Gen2IconDecoder::Gen2IconDecoder(IRomReader& romReader, Gen2GameType gameType)
 
 uint8_t* Gen2IconDecoder::decode(Gen2PokemonIconType iconType, bool firstFrame)
 {
-    uint32_t romOffset = (gameType_ == Gen2GameType::CRYSTAL) ? 0x8EBBF : 0x8EA70;
+    uint32_t romOffset;
     const uint8_t MAX_NUM_TILES = 4;
     const uint8_t TILE_WIDTH = 8;
     const uint8_t TILE_HEIGHT = 8;
