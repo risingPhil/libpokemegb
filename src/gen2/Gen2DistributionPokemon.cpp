@@ -2639,7 +2639,7 @@ const Gen2DistributionPokemon g2_pcny_biteLapras = {
 };
 
 const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
-    .name = "Bite Lapras",
+    .name = "Future Sight Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -6330,7 +6330,7 @@ const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     .iv_data = {0, 0},
     .randomizeIVs = true,
     .poke = {
-        .poke_index = 249,
+        .poke_index = 250,
         .held_item_index = 0,
         .index_move1 = 221, // Sacred Fire
         .index_move2 = 219, // Safeguard
