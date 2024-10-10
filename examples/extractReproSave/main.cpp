@@ -1,5 +1,6 @@
 #include "gen1/Gen1GameReader.h"
 #include "gen2/Gen2GameReader.h"
+#include "gen2/Gen2ReproSaveManager.h"
 #include "RomReader.h"
 #include "SaveManager.h"
 #include "utils.h"
@@ -39,6 +40,7 @@ int main(int argc, char** argv)
 
     GameboyCartridgeHeader cartridgeHeader;
     BufferBasedRomReader romReader(romBuffer, romFileSize);
+    Gen2ReproSaveManager saveManager(romReader, Gen2ReproType::ALIEXPRESS_TYPE1, false);
 
     readGameboyCartridgeHeader(romReader, cartridgeHeader);
 
@@ -63,11 +65,19 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    uint8_t savBankBuffer[GB_SRAM_BANK_SIZE];
+
+    for(uint8_t i=0; i < 4; ++i)
+    {
+        saveManager.read(savBankBuffer, GB_SRAM_BANK_SIZE);
+        fwrite(savBankBuffer, sizeof(uint8_t), GB_SRAM_BANK_SIZE, outFile);
+    }
+#if 0
+
     // So, turns out that these reproductions dedicate an entire rom bank
     // for every SRAM bank.
     // As a matter of fact, each SRAM bank is located at an offset of 0x2000 within
     // said rom bank.
-    uint8_t savBankBuffer[GB_SRAM_BANK_SIZE];
     const uint8_t* cur = romBuffer + GEN2_REPRO_SAVE_OFFSET_IN_ROM;
     const uint8_t* const end = cur + (GB_ROM_BANK_SIZE * 4);
     while(cur < end)
@@ -76,6 +86,7 @@ int main(int argc, char** argv)
         fwrite(savBankBuffer, sizeof(uint8_t), GB_SRAM_BANK_SIZE, outFile);
         cur += GB_ROM_BANK_SIZE;
     }
+#endif
 
     fclose(outFile);
 
