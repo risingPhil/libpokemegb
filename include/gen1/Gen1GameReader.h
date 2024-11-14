@@ -5,6 +5,7 @@
 #include "gen1/Gen1IconDecoder.h"
 #include "gen1/Gen1PlayerPokemonStorage.h"
 #include "gen1/Gen1DistributionPokemon.h"
+#include "gen1/Gen1Localization.h"
 
 class IRomReader;
 class ISaveManager;
@@ -12,7 +13,7 @@ class ISaveManager;
 class Gen1GameReader
 {
 public:
-    Gen1GameReader(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gameType);
+    Gen1GameReader(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gameType, LocalizationLanguage language = LocalizationLanguage::ENGLISH);
 
     /**
      * @brief get the name of a pokémon based on an index number
@@ -186,6 +187,7 @@ private:
     Gen1SpriteDecoder spriteDecoder_;
     Gen1IconDecoder iconDecoder_;
     Gen1GameType gameType_;
+    uint8_t localization_;
 };
 
 #endif

@@ -15,12 +15,12 @@ const uint8_t* memSearch(const uint8_t* haystack, uint32_t hayStackLength, const
  * @brief This function decodes a text (This could be a name or something else) found in the rom based on the textCodes list you pass in.
  * @return the number of characters copied to the output buffer
  */
-uint16_t decodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength);
+uint16_t decodeText(const struct TextCodePair* textCodes, uint16_t numTextCodes, const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength);
 
 /**
  * @brief The opposite of decodeText()
  */
-uint16_t encodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator);
+uint16_t encodeText(const struct TextCodePair* textCodes, uint16_t numTextCodes, const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator);
 
 bool isCurrentCPULittleEndian();
 

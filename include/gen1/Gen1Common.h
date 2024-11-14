@@ -2,6 +2,7 @@
 #define _GEN1COMMON_H
 
 #include "common.h"
+#include "Gen1Localization.h"
 
 class Gen1GameReader;
 typedef struct Gen1DistributionPokemon Gen1DistributionPokemon;
@@ -129,11 +130,11 @@ void gen1_recalculatePokeStats(Gen1GameReader& gameReader, Gen1TrainerPokemon& p
  * @brief This function decodes a text (This could be a name or something else) found in the rom.
  * @return the number of characters copied to the output buffer
  */
-uint16_t gen1_decodePokeText(const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength);
+uint16_t gen1_decodePokeText(const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength, LocalizationLanguage language);
 /**
  * @brief The opposite of gen1_decodePokeText()
  */
-uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator);
+uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator, LocalizationLanguage language);
 
 /**
  * Prepares the gen 1 distribution pokemon for injection with Gen1GameReader::addPokemon()

@@ -20,10 +20,11 @@ static uint8_t reverseByte(uint8_t incoming)
     return result;
 }
 
-Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType)
+Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, LocalizationLanguage language)
     : buffer_()
     , romReader_(romReader)
     , gameType_(gameType)
+    , localization_((uint8_t)language)
 {
 
 }
@@ -43,7 +44,7 @@ Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType)
  */
 uint8_t* Gen1IconDecoder::decode(Gen1PokemonIconType iconType, bool firstFrame)
 {
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x7184D : 0x717C0;
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].icons : g1_localizationOffsetsRB[localization_].icons;
     const uint32_t ENTRY_SIZE = 6;
     const uint8_t MAX_NUM_TILES = 8;
 

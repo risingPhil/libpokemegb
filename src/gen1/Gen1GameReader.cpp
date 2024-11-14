@@ -47,12 +47,13 @@ uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankInd
     return checksum.get();
 }
 
-Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType)
+Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType, LocalizationLanguage language)
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader_)
-    , iconDecoder_(romReader, gameType)
+    , iconDecoder_(romReader, gameType, language)
     , gameType_(gameType)
+    , localization_((uint8_t)language)
 {
 }
 
@@ -62,23 +63,15 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
-    uint16_t pointer;
 
     if(gameType_ == Gen1GameType::BLUE || gameType_ == Gen1GameType::RED)
     {
-        romReader_.seek(0x2FA3);
-        const uint8_t bankByte = romReader_.peek();
-
-        romReader_.seek(0x2FAE);
-        romReader_.readUint16(pointer);
-
-        // seek to the right location
-        romReader_.seekToRomPointer(pointer, bankByte);
+        romReader_.seek(g1_localizationOffsetsRB[localization_].names);
     }
     else
     {   
         // Pkmn Yellow
-        romReader_.seek(0xE8000);
+        romReader_.seek(g1_localizationOffsetsY[localization_].names);
     }
 
     romReader_.advance((index - 1) * 0xA);
@@ -86,7 +79,7 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     // max 10 bytes
     numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
 
-    gen1_decodePokeText(encodedText, numRead, result, sizeof(result));
+    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), (LocalizationLanguage)localization_);
     return result;
 }
 
@@ -94,7 +87,7 @@ uint8_t Gen1GameReader::getPokemonNumber(uint8_t index) const
 {
     // Based on https://github.com/seanmorris/pokemon-parser/blob/master/source/PokemonRom.js#L509
     uint8_t result = 0xFF;
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x410B1 : 0x41024;
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].numbers : g1_localizationOffsetsRB[localization_].numbers;
     romReader_.seek(romOffset + (index - 1));
     romReader_.readByte(result);
     return result;
@@ -105,7 +98,7 @@ Gen1PokemonIconType Gen1GameReader::getPokemonIconType(uint8_t index) const
     //MonPartyData in pret/pokered and pret/pokeyellow
     // strangely, this array is in pokemon _number_ order, not index
     uint8_t number = getPokemonNumber(index);
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x719BA : 0x7190D;
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].iconTypes : g1_localizationOffsetsRB[localization_].iconTypes;
     uint8_t byteVal;
     Gen1PokemonIconType result;
 
@@ -198,8 +191,6 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
     const uint8_t pokeNumber = getPokemonNumber(index);
 
     uint8_t spriteBank;
-    uint8_t statsBank;
-    uint16_t statsPointer;
 
     if (gameType_ != Gen1GameType::YELLOW && index == 0x15)
     {
@@ -235,23 +226,14 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
         // Mew (of which the pokenumber is 151) stats are stored at a completely different location in the rom than the rest
         if (pokeNumber != 151)
         {
-            romReader_.seek(0x153B);
-            romReader_.readByte(statsBank);
-
-            romReader_.seek(0x1578);
-            romReader_.readUint16(statsPointer);
+            romReader_.seek(g1_localizationOffsetsRB[localization_].stats);
         }
         else
         {
             // mew stats
-            romReader_.seek(0x159C);
-            romReader_.readByte(statsBank);
-
-            romReader_.seek(0x1593);
-            romReader_.readUint16(statsPointer);
+            romReader_.seek(g1_localizationOffsetsRB[localization_].statsMew);
         }
 
-        romReader_.seekToRomPointer(statsPointer, statsBank);
         if (pokeNumber != 151)
         {
             // the number is 1-based.
@@ -261,7 +243,7 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
     else
     {
         // Dealing with Pokemon yellow
-        romReader_.seek(0x383DE);
+        romReader_.seek(g1_localizationOffsetsY[localization_].stats);
         // the number is 1-based.
         romReader_.advance(statsStructSize * (pokeNumber - 1));
     }
@@ -290,7 +272,7 @@ uint8_t Gen1GameReader::getColorPaletteIndexByPokemonNumber(uint8_t pokeNumber)
 {
     uint8_t result;
     // pokeyellow.map from https://github.com/pret/pokeyellow (after compilation)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ?  0x72922 : 0x725C9;
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ?  g1_localizationOffsetsY[localization_].paletteIndices : g1_localizationOffsetsRB[localization_].paletteIndices;
     if(!romReader_.seek(romOffset + (pokeNumber - 1)))
     {
         return 0xFF;
@@ -311,7 +293,7 @@ void Gen1GameReader::readColorPalette(uint8_t paletteId, uint16_t* outColorPalet
 
     // based on https://datacrystal.romhacking.net/wiki/Pok%C3%A9mon_Red_and_Blue/ROM_map
     // and https://bulbapedia.bulbagarden.net/wiki/List_of_color_palettes_by_index_number_(Generation_I)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x72AF9 : 0x72660;
+    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].palettes : g1_localizationOffsetsRB[localization_].palettes;
     romReader_.seek(romOffset + (paletteId * 8));
     while(cur < end)
     {
@@ -328,7 +310,7 @@ const char *Gen1GameReader::getTrainerName() const
     saveManager_.seek(0x2598);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), (LocalizationLanguage)localization_);
     return result;
 }
 
@@ -339,7 +321,7 @@ const char *Gen1GameReader::getRivalName() const
     saveManager_.seek(0x25F6);
 
     saveManager_.readUntil(encodedRivalName, 0x50, sizeof(encodedRivalName));
-    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result));
+    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), (LocalizationLanguage)localization_);
     return result;
 }
 
@@ -355,12 +337,12 @@ uint16_t Gen1GameReader::getTrainerID() const
 
 Gen1Party Gen1GameReader::getParty()
 {
-    return Gen1Party((*this), saveManager_);
+    return Gen1Party((*this), saveManager_, (LocalizationLanguage)localization_);
 }
 
 Gen1Box Gen1GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen1Box((*this), saveManager_, boxIndex);
+    return Gen1Box((*this), saveManager_, boxIndex, (LocalizationLanguage)localization_);
 }
 
 uint8_t Gen1GameReader::getCurrentBoxIndex()

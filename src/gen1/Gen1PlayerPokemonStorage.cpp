@@ -188,9 +188,10 @@ static uint8_t calculateBoxChecksum(ISaveManager& saveManager, uint8_t boxIndex,
     return checksum.get();
 }
 
-Gen1Party::Gen1Party(Gen1GameReader& gameReader, ISaveManager& savManager)
+Gen1Party::Gen1Party(Gen1GameReader& gameReader, ISaveManager& savManager, LocalizationLanguage language)
     : gameReader_(gameReader)
     , saveManager_(savManager)
+    , localization_(language)
 {   
 }
 
@@ -310,7 +311,7 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
     saveManager_.seek(0x2F2C + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
     saveManager_.readUntil(encodedNickName, 0x50, NICKNAME_SIZE);
 
-    gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result));
+    gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), (LocalizationLanguage)localization_);
 
     return result;
 }
@@ -326,7 +327,7 @@ void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
         name = gameReader_.getPokemonName(poke.poke_index);
     }
     
-    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50);
+    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50, (LocalizationLanguage)localization_);
     saveManager_.seek(0x2F2C + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
     saveManager_.write(encodedNickName, encodedLength);
 }
@@ -340,7 +341,7 @@ const char* Gen1Party::getOriginalTrainerOfPokemon(uint8_t partyIndex)
     saveManager_.seek(0x2F2C + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
     saveManager_.readUntil(encodedOTName, 0x50, OT_NAME_SIZE);
 
-    gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result));
+    gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), (LocalizationLanguage)localization_);
 
     return result;
 }
@@ -350,7 +351,7 @@ void Gen1Party::setOriginalTrainerOfPokemon(uint8_t partyIndex, const char* orig
     uint8_t encodedOTName[OT_NAME_SIZE];
     const uint16_t FIRST_OT_NAME_OFFSET = 0x110;
 
-    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50);
+    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50, (LocalizationLanguage)localization_);
 
     saveManager_.seek(0x2F2C + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
     saveManager_.write(encodedOTName, encodedLength);
@@ -388,10 +389,11 @@ bool Gen1Party::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, con
     return true;
 }
 
-Gen1Box::Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex)
+Gen1Box::Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex, LocalizationLanguage language)
     : gameReader_(gameReader)
     , saveManager_(saveManager)
     , boxIndex_(boxIndex)
+    , localization_(language)
 {
 }
 
@@ -505,7 +507,7 @@ const char* Gen1Box::getPokemonNickname(uint8_t index)
     saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * NICKNAME_SIZE));
     saveManager_.readUntil(encodedNickName, 0x50, NICKNAME_SIZE);
 
-    gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result));
+    gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), (LocalizationLanguage)localization_);
 
     return result;
 }
@@ -524,7 +526,7 @@ void Gen1Box::setPokemonNickname(uint8_t index, const char* name)
         name = gameReader_.getPokemonName(poke.poke_index);
     }
     
-    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50);
+    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50, (LocalizationLanguage)localization_);
     saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * NICKNAME_SIZE));
     saveManager_.write(encodedNickName, encodedLength);
 }
@@ -542,7 +544,7 @@ const char* Gen1Box::getOriginalTrainerOfPokemon(uint8_t index)
     saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * OT_NAME_SIZE));
     saveManager_.readUntil(encodedOTName, 0x50, OT_NAME_SIZE);
 
-    gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result));
+    gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), (LocalizationLanguage)localization_);
 
     return result;
 }
@@ -556,7 +558,7 @@ void Gen1Box::setOriginalTrainerOfPokemon(uint8_t index, const char* originalTra
     const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
 
 
-    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50);
+    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50, (LocalizationLanguage)localization_);
     
     saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * OT_NAME_SIZE));
     saveManager_.write(encodedOTName, encodedLength);

@@ -11,9 +11,11 @@
 
 using OutputFormat = SpriteRenderer::OutputFormat;
 
+static const LocalizationLanguage g_localization = LocalizationLanguage::ENGLISH;
+
 static void decodeGen1Icon(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gen1Type, Gen1PokemonIconType iconType, bool firstFrame)
 {
-    Gen1GameReader gameReader(romReader, saveManager, gen1Type);
+    Gen1GameReader gameReader(romReader, saveManager, gen1Type, g_localization);
     SpriteRenderer renderer;
     char fileNameBuf[100];
     uint8_t* spriteBuffer;

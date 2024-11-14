@@ -2,6 +2,7 @@
 #define _GEN1POKEMONICONDECODER_H
 
 #include "gen1/Gen1Common.h"
+#include "gen1/Gen1Localization.h"
 
 #define GEN1_TILE_BITS_PER_PIXEL 2
 #define GEN1_BYTES_PER_TILE 16
@@ -17,7 +18,7 @@ class IRomReader;
 class Gen1IconDecoder
 {
 public:
-    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType);
+    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, LocalizationLanguage language);
 
     /**
      * @brief Decodes the specified icon type. either frame 1 or frame 2.
@@ -33,6 +34,7 @@ private:
     uint8_t buffer_[GEN1_ICON_NUM_BYTES];
     IRomReader& romReader_;
     Gen1GameType gameType_;
+    uint8_t localization_;
 };
 
 #endif
