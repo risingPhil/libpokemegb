@@ -55,6 +55,10 @@ Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager,
     , gameType_(gameType)
     , localization_((uint8_t)language)
 {
+    if(language == LocalizationLanguage::MAX)
+    {
+        localization_ = static_cast<uint8_t>(gen1_determineGameLanguage(romReader, gameType));
+    }
 }
 
 const char *Gen1GameReader::getPokemonName(uint8_t index) const

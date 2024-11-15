@@ -5,6 +5,7 @@
 #include "Gen1Localization.h"
 
 class Gen1GameReader;
+class IRomReader;
 typedef struct Gen1DistributionPokemon Gen1DistributionPokemon;
 
 enum class Gen1GameType
@@ -123,6 +124,11 @@ private:
  * @brief Determines a Gen1GameType based on the given GameboyCartridgeHeader struct
  */
 Gen1GameType gen1_determineGameType(const GameboyCartridgeHeader& cartridgeHeader);
+
+/**
+ * @brief this function determines the games' language
+ */
+LocalizationLanguage gen1_determineGameLanguage(IRomReader& romReader, Gen1GameType gameType);
 
 void gen1_recalculatePokeStats(Gen1GameReader& gameReader, Gen1TrainerPokemon& poke);
 

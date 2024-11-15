@@ -1,5 +1,6 @@
 #include "gen1/Gen1Common.h"
 #include "gen1/Gen1GameReader.h"
+#include "RomReader.h"
 #include "utils.h"
 #include "common.h"
 
@@ -10,6 +11,10 @@
 #define POKEMON_RED_CARTRIDGE_TITLE "POKEMON RED"
 #define POKEMON_YELLOW_CARTRIDGE_TITLE "POKEMON YELLOW"
 
+static const uint8_t g1_indexNumberMapFingerprint[] = {
+	0x70, 0x73, 0x20, 0x23, 0x15, 0x64, 0x22, 0x50,
+	0x02, 0x67, 0x6C, 0x66, 0x58, 0x5E, 0x1D, 0x1F,
+};
 
 static const TextCodePair gen1TextCodesMain[] = {
 	{0x4F, " "},
@@ -377,6 +382,29 @@ Gen1GameType gen1_determineGameType(const GameboyCartridgeHeader& cartridgeHeade
 		result = Gen1GameType::INVALID;
 	}
 	return result;
+}
+
+LocalizationLanguage gen1_determineGameLanguage(IRomReader& romReader, Gen1GameType gameType)
+{
+	// The pokemon index-to-pokedex-number map has a unique rom offset in each of the game localizations.
+	// It also should have the exact same data in all gen 1 games and all of their localizations.
+	// Therefore we can use a fingerprint byte pattern to check these locations to figure out which localization we have.
+	const Gen1LocalizationRomOffsets* romOffsetList = (gameType != Gen1GameType::YELLOW) ? g1_localizationOffsetsRB : g1_localizationOffsetsY;
+	uint8_t buffer[sizeof(g1_indexNumberMapFingerprint)];
+
+	for(uint8_t i=0; i < static_cast<uint8_t>(LocalizationLanguage::MAX); ++i)
+	{
+		romReader.seek(romOffsetList[i].numbers);
+		romReader.read(buffer, sizeof(g1_indexNumberMapFingerprint));
+		if(memcmp(buffer, g1_indexNumberMapFingerprint, sizeof(g1_indexNumberMapFingerprint)) == 0)
+		{
+			// we found the fingerprint at the "numbers" offset of the current localization!
+			// Therefore we know which game language we're dealing with!
+			return (LocalizationLanguage)i;
+		}
+	}
+
+	return LocalizationLanguage::MAX;
 }
 
 void gen1_recalculatePokeStats(Gen1GameReader& reader, Gen1TrainerPokemon& poke)

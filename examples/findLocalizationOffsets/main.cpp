@@ -68,6 +68,23 @@ static uint32_t findNames(uint8_t* buffer, size_t bufferSize, const char** nameL
     return 0xFFFFFFFF;
 }
 
+#if 0
+static void dumpHex(const uint8_t* buffer, uint16_t numBytes, const char* prefix)
+{
+    uint16_t i = 0;
+    while(i < numBytes)
+    {
+        if(i % 8 == 0)
+        {
+            printf("\n%s", prefix);
+        }
+        printf("%02hhX ", buffer[i]);
+        ++i;
+    }
+    printf("\n");
+}
+#endif
+
 int main(int argc, char** argv)
 {
     if(argc != 3)
@@ -127,7 +144,7 @@ int main(int argc, char** argv)
     findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->statsMew, 11);
     printf("Numbers:\n");
     findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->numbers, 11);
-    const char* pokeNames[] = {"サイドン"};
+    const char* pokeNames[] = {"RHYDON"};
     printf("Names: 0x%08x\n", findNames(localizedRomBuffer, localizedRomBufferSize, pokeNames, 1));
     printf("IconTypes:\n");
     findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->iconTypes, 11);
