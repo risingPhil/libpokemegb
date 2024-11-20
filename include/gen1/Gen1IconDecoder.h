@@ -18,7 +18,7 @@ class IRomReader;
 class Gen1IconDecoder
 {
 public:
-    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, LocalizationLanguage language);
+    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, Gen1LocalizationLanguage language);
 
     /**
      * @brief Decodes the specified icon type. either frame 1 or frame 2.

@@ -20,7 +20,7 @@ static uint8_t reverseByte(uint8_t incoming)
     return result;
 }
 
-Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, LocalizationLanguage language)
+Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, Gen1LocalizationLanguage language)
     : buffer_()
     , romReader_(romReader)
     , gameType_(gameType)

@@ -22,6 +22,6 @@ int main(int argc, char** argv)
 
     uint8_t outputBuffer[4096];
 
-    const uint16_t size = gen2_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50);
+    const uint16_t size = gen2_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50, Gen2LocalizationLanguage::ENGLISH);
     print_hex(outputBuffer, size);
 }

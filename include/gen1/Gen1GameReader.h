@@ -13,7 +13,7 @@ class ISaveManager;
 class Gen1GameReader
 {
 public:
-    Gen1GameReader(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gameType, LocalizationLanguage language = LocalizationLanguage::MAX);
+    Gen1GameReader(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gameType, Gen1LocalizationLanguage language = Gen1LocalizationLanguage::MAX);
 
     /**
      * @brief get the name of a pokémon based on an index number

@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstring>
 
-static const LocalizationLanguage g_localization = LocalizationLanguage::ENGLISH;
+static const Gen1LocalizationLanguage g1_localization = Gen1LocalizationLanguage::ENGLISH;
 
 static void print_hex(const unsigned char* buffer, size_t length)
 {
@@ -24,6 +24,6 @@ int main(int argc, char** argv)
 
     uint8_t outputBuffer[4096];
 
-    const uint16_t size = gen1_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50, g_localization);
+    const uint16_t size = gen1_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50, g1_localization);
     print_hex(outputBuffer, size);
 }

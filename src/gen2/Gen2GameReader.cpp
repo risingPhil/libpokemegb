@@ -4,6 +4,7 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <cstdio>
 
 // needed for crystal_fixPicBank() below
 #define CRYSTAL_PICS_FIX 0x36
@@ -280,13 +281,19 @@ static bool hasBackupSave(ISaveManager& saveManager, bool isCrystal)
 
 }
 
-Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType)
+Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage language)
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader)
     , iconDecoder_(romReader, gameType)
     , gameType_(gameType)
+    , localization_(language)
 {
+    if(language == Gen2LocalizationLanguage::MAX)
+    {
+        localization_ = gen2_determineGameLanguage(romReader, gameType);
+      printf("Detected localization=%d\n", (int)localization_);
+    }
 }
 
 Gen2GameReader::~Gen2GameReader()
@@ -299,33 +306,31 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
     uint8_t encodedText[0xA];
     uint32_t numRead;
 
-    const uint32_t romOffset = (isGameCrystal()) ? 0x53384 : 0x1B0B74;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).names;
+    if(!romOffset)
+    {
+        snprintf(result, sizeof(result) - 1, "poke-%hhu", index);
+        return result;
+    }
 
     romReader_.seek(romOffset + (0xA * (index - 1)));
-    numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
 
-    gen2_decodePokeText(encodedText, numRead, result, sizeof(result) - 1);
+    // based on what I encountered so far. 0x50 is default, however it turns out 0x75 (…) is used too!
+    const uint8_t nameTerminators[] = {0x50, 0x75};
+    numRead = romReader_.readUntil(encodedText, nameTerminators, sizeof(nameTerminators), 0xA);
+
+    gen2_decodePokeText(encodedText, numRead, result, sizeof(result) - 1, localization_);
     return result;
 }
 
 Gen2PokemonIconType Gen2GameReader::getPokemonIconType(uint8_t index) const
 {
-    uint32_t romOffset;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).iconTypes;
     uint8_t byteVal;
 
-    switch(gameType_)
+    if(!romOffset)
     {
-        case Gen2GameType::GOLD:
-            romOffset = 0x8E975;
-            break;
-        case Gen2GameType::SILVER:
-            romOffset = 0x8E95B;
-            break;
-        case Gen2GameType::CRYSTAL:
-            romOffset = 0x8EAC4;
-            break;
-        default:
-            return Gen2PokemonIconType::GEN2_ICONTYPE_MAX;
+        return Gen2PokemonIconType::GEN2_ICONTYPE_MAX;
     }
 
     romReader_.seek(romOffset);
@@ -343,7 +348,7 @@ bool Gen2GameReader::isValidIndex(uint8_t index) const
 bool Gen2GameReader::readPokemonStatsForIndex(uint8_t index, Gen2PokeStats &outStats) const
 {
     const uint8_t statsStructSize = 32;
-    const uint32_t romOffset = (isGameCrystal()) ? 0x051424 : 0x51B0B;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).stats;
 
     romReader_.seek(romOffset);
 
@@ -389,7 +394,7 @@ bool Gen2GameReader::readFrontSpritePointer(uint8_t index, uint8_t &outBankIndex
     // https://raw.githubusercontent.com/pret/pokecrystal/symbols/pokecrystal.map
     // https://github.com/pret/pokecrystal/blob/master/data/pokemon/pic_pointers.asm
     //
-    const uint32_t romOffset = (isGameCrystal()) ? 0x120000 : 0x48000;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).spritePointers;
 
     // I don't support Unown sprite decoding right now, because unown is stored separately based on the variant.
     if (index == 201)
@@ -445,7 +450,7 @@ bool Gen2GameReader::readColorPaletteForPokemon(uint8_t index, bool shiny, uint1
     // that's because for every color palette, the first color is white and the last color is black.
     // so the rom only stores the 2nd and 3rd colors
     // each of these colors is an uint16_t
-    const uint32_t romOffset = (isGameCrystal()) ? 0xA8D6 : 0xAD45;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).spritePalettes;
 
     if (!romReader_.seek(romOffset + ((index - 1) * 8)))
     {
@@ -483,7 +488,7 @@ uint8_t *Gen2GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 
 uint8_t *Gen2GameReader::decodePokemonIcon(Gen2PokemonIconType iconType, bool firstFrame)
 {
-    return iconDecoder_.decode(iconType, firstFrame);
+    return iconDecoder_.decode(localization_, iconType, firstFrame);
 }
 
 uint8_t Gen2GameReader::addPokemon(Gen2TrainerPokemon &poke, bool isEgg, const char *originalTrainerID, const char *nickname)
@@ -551,7 +556,7 @@ const char *Gen2GameReader::getTrainerName() const
     saveManager_.seek(0x200B);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), localization_);
     return result;
 }
 
@@ -562,7 +567,7 @@ const char *Gen2GameReader::getRivalName() const
     saveManager_.seek(0x2021);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), localization_);
     return result;
 }
 
@@ -582,12 +587,12 @@ uint8_t Gen2GameReader::getCurrentBoxIndex()
 
 Gen2Party Gen2GameReader::getParty()
 {
-    return Gen2Party((*this), saveManager_);
+    return Gen2Party((*this), saveManager_, localization_);
 }
 
 Gen2Box Gen2GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen2Box((*this), saveManager_, boxIndex);
+    return Gen2Box((*this), saveManager_, boxIndex, localization_);
 }
 
 Gen2ItemList Gen2GameReader::getItemList(Gen2ItemListType type)
@@ -705,8 +710,6 @@ uint8_t Gen2GameReader::getPokedexCounter(PokedexFlag dexFlag)
     return result;
 }
 
-
-#include <cstdio>
 bool Gen2GameReader::isMainChecksumValid()
 {
     const bool isCrystal = isGameCrystal();

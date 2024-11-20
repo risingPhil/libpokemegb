@@ -5,6 +5,8 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <cstdio>
+
 /**
  * @brief This function calculates the main data checksum
  */
@@ -47,7 +49,7 @@ uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankInd
     return checksum.get();
 }
 
-Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType, LocalizationLanguage language)
+Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType, Gen1LocalizationLanguage language)
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader_)
@@ -55,7 +57,7 @@ Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager,
     , gameType_(gameType)
     , localization_((uint8_t)language)
 {
-    if(language == LocalizationLanguage::MAX)
+    if(language == Gen1LocalizationLanguage::MAX)
     {
         localization_ = static_cast<uint8_t>(gen1_determineGameLanguage(romReader, gameType));
     }
@@ -67,23 +69,31 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
+    uint32_t romOffset;
 
     if(gameType_ == Gen1GameType::BLUE || gameType_ == Gen1GameType::RED)
     {
-        romReader_.seek(g1_localizationOffsetsRB[localization_].names);
+        romOffset = g1_localizationOffsetsRB[localization_].names;
     }
     else
     {   
         // Pkmn Yellow
-        romReader_.seek(g1_localizationOffsetsY[localization_].names);
+        romOffset = g1_localizationOffsetsY[localization_].names;
     }
 
+    if(!romOffset)
+    {
+        snprintf(result, sizeof(result) - 1, "poke-%hhu", index);
+        return result;
+    }
+
+    romReader_.seek(romOffset);
     romReader_.advance((index - 1) * 0xA);
 
     // max 10 bytes
     numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
 
-    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), (LocalizationLanguage)localization_);
+    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), (Gen1LocalizationLanguage)localization_);
     return result;
 }
 
@@ -314,7 +324,7 @@ const char *Gen1GameReader::getTrainerName() const
     saveManager_.seek(0x2598);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), (LocalizationLanguage)localization_);
+    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
     return result;
 }
 
@@ -325,7 +335,7 @@ const char *Gen1GameReader::getRivalName() const
     saveManager_.seek(0x25F6);
 
     saveManager_.readUntil(encodedRivalName, 0x50, sizeof(encodedRivalName));
-    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), (LocalizationLanguage)localization_);
+    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
     return result;
 }
 
@@ -341,12 +351,12 @@ uint16_t Gen1GameReader::getTrainerID() const
 
 Gen1Party Gen1GameReader::getParty()
 {
-    return Gen1Party((*this), saveManager_, (LocalizationLanguage)localization_);
+    return Gen1Party((*this), saveManager_, (Gen1LocalizationLanguage)localization_);
 }
 
 Gen1Box Gen1GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen1Box((*this), saveManager_, boxIndex, (LocalizationLanguage)localization_);
+    return Gen1Box((*this), saveManager_, boxIndex, (Gen1LocalizationLanguage)localization_);
 }
 
 uint8_t Gen1GameReader::getCurrentBoxIndex()

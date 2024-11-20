@@ -9,7 +9,7 @@
  * It can also be used as an invalid value to force Gen1GameReader to identify
  * the localization language
  */
-enum class LocalizationLanguage
+enum class Gen1LocalizationLanguage
 {
     ENGLISH,
     FRENCH,

@@ -10,9 +10,9 @@ Gen2IconDecoder::Gen2IconDecoder(IRomReader& romReader, Gen2GameType gameType)
 {
 }
 
-uint8_t* Gen2IconDecoder::decode(Gen2PokemonIconType iconType, bool firstFrame)
+uint8_t* Gen2IconDecoder::decode(Gen2LocalizationLanguage language, Gen2PokemonIconType iconType, bool firstFrame)
 {
-    uint32_t romOffset;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, language).icons;
     const uint8_t MAX_NUM_TILES = 4;
     const uint8_t TILE_WIDTH = 8;
     const uint8_t TILE_HEIGHT = 8;
@@ -24,19 +24,9 @@ uint8_t* Gen2IconDecoder::decode(Gen2PokemonIconType iconType, bool firstFrame)
     const uint8_t bankIndex = 0x23;
     uint16_t pointer;
 
-    switch(gameType_)
+    if(!romOffset)
     {
-        case Gen2GameType::GOLD:
-            romOffset = 0x8EA70;
-            break;
-        case Gen2GameType::SILVER:
-            romOffset = 0x8EA56;
-            break;
-        case Gen2GameType::CRYSTAL:
-            romOffset = 0x8EBBF;
-            break;
-        default:
-            return buffer_;
+        return buffer_;
     }
 
     // read IconPointers table entry
