@@ -20,11 +20,10 @@ static uint8_t reverseByte(uint8_t incoming)
     return result;
 }
 
-Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, Gen1LocalizationLanguage language)
+Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType)
     : buffer_()
     , romReader_(romReader)
     , gameType_(gameType)
-    , localization_((uint8_t)language)
 {
 
 }
@@ -42,9 +41,9 @@ Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, G
  * 
  * Anyway, we need to deal with this mess and that makes our code below a bit messy as well.
  */
-uint8_t* Gen1IconDecoder::decode(Gen1PokemonIconType iconType, bool firstFrame)
+uint8_t* Gen1IconDecoder::decode(Gen1LocalizationLanguage language, Gen1PokemonIconType iconType, bool firstFrame)
 {
-    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).icons;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, language).icons;
     const uint32_t ENTRY_SIZE = 6;
     const uint8_t MAX_NUM_TILES = 8;
 

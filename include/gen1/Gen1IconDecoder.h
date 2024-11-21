@@ -18,7 +18,7 @@ class IRomReader;
 class Gen1IconDecoder
 {
 public:
-    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType, Gen1LocalizationLanguage language);
+    Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType);
 
     /**
      * @brief Decodes the specified icon type. either frame 1 or frame 2.
@@ -28,13 +28,12 @@ public:
      * 
      * @return Internal buffer containing the icon tiles in vertical tile order.
      */
-    uint8_t* decode(Gen1PokemonIconType iconType, bool firstFrame);
+    uint8_t* decode(Gen1LocalizationLanguage language, Gen1PokemonIconType iconType, bool firstFrame);
 protected:
 private:
     uint8_t buffer_[GEN1_ICON_NUM_BYTES];
     IRomReader& romReader_;
     Gen1GameType gameType_;
-    uint8_t localization_;
 };
 
 #endif

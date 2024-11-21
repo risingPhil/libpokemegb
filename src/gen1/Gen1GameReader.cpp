@@ -53,7 +53,7 @@ Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager,
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader_)
-    , iconDecoder_(romReader, gameType, language)
+    , iconDecoder_(romReader, gameType)
     , gameType_(gameType)
     , localization_((uint8_t)language)
 {
@@ -444,7 +444,7 @@ uint8_t* Gen1GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 
 uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, bool firstFrame)
 {
-    return iconDecoder_.decode(iconType, firstFrame);
+    return iconDecoder_.decode((Gen1LocalizationLanguage)localization_, iconType, firstFrame);
 }
 
 uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
