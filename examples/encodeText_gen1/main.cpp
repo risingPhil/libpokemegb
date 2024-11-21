@@ -1,4 +1,4 @@
-#include "gen1/Gen1Common.h"
+#include "gen1/Gen1Localization.h"
 
 #include <cstdio>
 #include <cstring>

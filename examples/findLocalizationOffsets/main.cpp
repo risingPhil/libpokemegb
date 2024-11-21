@@ -128,26 +128,26 @@ static void dumpHex(const uint8_t* buffer, uint16_t numBytes, const char* prefix
 static void processGen1(Gen1GameType gameType, uint8_t* romBuffer, uint8_t* localizedRomBuffer, size_t localizedRomBufferSize)
 {
     // compare with the english/international release
-    const Gen1LocalizationRomOffsets* eng = (gameType != Gen1GameType::YELLOW) ? g1_localizationOffsetsRB : g1_localizationOffsetsY;
+    const Gen1LocalizationRomOffsets& eng = gen1_getRomOffsets(gameType, Gen1LocalizationLanguage::ENGLISH);
 
     printf("Stats:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->stats, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.stats, 11);
     printf("Stats Mew:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->statsMew, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.statsMew, 11);
     printf("Numbers:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->numbers, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.numbers, 11);
 
     // WARNING: Modify this variable with the localized name of the pokémon we're trying to look up. (RHYDON, because it's index 1)
     const char* pokeNames[] = {"RHYDON"};
     printf("Names: 0x%08x\n", findNames(localizedRomBuffer, localizedRomBufferSize, pokeNames, 1, 1));
     printf("IconTypes:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->iconTypes, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.iconTypes, 11);
     printf("Icons:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->icons, 6);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.icons, 6);
     printf("PaletteIndices:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->paletteIndices, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.paletteIndices, 11);
     printf("Palettes:\n");
-    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng->palettes, 11);
+    findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.palettes, 11);
 }
 
 static void processGen2(Gen2GameType gameType, uint8_t* romBuffer, uint8_t* localizedRomBuffer, size_t localizedRomBufferSize)

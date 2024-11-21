@@ -2,11 +2,12 @@
 #define _GEN1COMMON_H
 
 #include "common.h"
-#include "gen1/Gen1Localization.h"
 
 class Gen1GameReader;
 class IRomReader;
 typedef struct Gen1DistributionPokemon Gen1DistributionPokemon;
+
+enum class Gen1LocalizationLanguage;
 
 enum class Gen1GameType
 {

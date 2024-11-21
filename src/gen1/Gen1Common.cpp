@@ -389,12 +389,12 @@ Gen1LocalizationLanguage gen1_determineGameLanguage(IRomReader& romReader, Gen1G
 	// The pokemon index-to-pokedex-number map has a unique rom offset in each of the game localizations.
 	// It also should have the exact same data in all gen 1 games and all of their localizations.
 	// Therefore we can use a fingerprint byte pattern to check these locations to figure out which localization we have.
-	const Gen1LocalizationRomOffsets* romOffsetList = (gameType != Gen1GameType::YELLOW) ? g1_localizationOffsetsRB : g1_localizationOffsetsY;
 	uint8_t buffer[sizeof(g1_indexNumberMapFingerprint)];
 
 	for(uint8_t i=0; i < static_cast<uint8_t>(Gen1LocalizationLanguage::MAX); ++i)
 	{
-		romReader.seek(romOffsetList[i].numbers);
+		const Gen1LocalizationRomOffsets& romOffsets = gen1_getRomOffsets(gameType, (Gen1LocalizationLanguage)i);
+		romReader.seek(romOffsets.numbers);
 		romReader.read(buffer, sizeof(g1_indexNumberMapFingerprint));
 		if(memcmp(buffer, g1_indexNumberMapFingerprint, sizeof(g1_indexNumberMapFingerprint)) == 0)
 		{

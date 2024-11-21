@@ -69,17 +69,7 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
-    uint32_t romOffset;
-
-    if(gameType_ == Gen1GameType::BLUE || gameType_ == Gen1GameType::RED)
-    {
-        romOffset = g1_localizationOffsetsRB[localization_].names;
-    }
-    else
-    {   
-        // Pkmn Yellow
-        romOffset = g1_localizationOffsetsY[localization_].names;
-    }
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).names;
 
     if(!romOffset)
     {
@@ -101,7 +91,7 @@ uint8_t Gen1GameReader::getPokemonNumber(uint8_t index) const
 {
     // Based on https://github.com/seanmorris/pokemon-parser/blob/master/source/PokemonRom.js#L509
     uint8_t result = 0xFF;
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].numbers : g1_localizationOffsetsRB[localization_].numbers;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).numbers;
     romReader_.seek(romOffset + (index - 1));
     romReader_.readByte(result);
     return result;
@@ -112,7 +102,7 @@ Gen1PokemonIconType Gen1GameReader::getPokemonIconType(uint8_t index) const
     //MonPartyData in pret/pokered and pret/pokeyellow
     // strangely, this array is in pokemon _number_ order, not index
     uint8_t number = getPokemonNumber(index);
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].iconTypes : g1_localizationOffsetsRB[localization_].iconTypes;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).iconTypes;
     uint8_t byteVal;
     Gen1PokemonIconType result;
 
@@ -240,12 +230,12 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
         // Mew (of which the pokenumber is 151) stats are stored at a completely different location in the rom than the rest
         if (pokeNumber != 151)
         {
-            romReader_.seek(g1_localizationOffsetsRB[localization_].stats);
+            romReader_.seek(gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).stats);
         }
         else
         {
             // mew stats
-            romReader_.seek(g1_localizationOffsetsRB[localization_].statsMew);
+            romReader_.seek(gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).statsMew);
         }
 
         if (pokeNumber != 151)
@@ -257,7 +247,7 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
     else
     {
         // Dealing with Pokemon yellow
-        romReader_.seek(g1_localizationOffsetsY[localization_].stats);
+        romReader_.seek(gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).stats);
         // the number is 1-based.
         romReader_.advance(statsStructSize * (pokeNumber - 1));
     }
@@ -286,7 +276,7 @@ uint8_t Gen1GameReader::getColorPaletteIndexByPokemonNumber(uint8_t pokeNumber)
 {
     uint8_t result;
     // pokeyellow.map from https://github.com/pret/pokeyellow (after compilation)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ?  g1_localizationOffsetsY[localization_].paletteIndices : g1_localizationOffsetsRB[localization_].paletteIndices;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).paletteIndices;
     if(!romReader_.seek(romOffset + (pokeNumber - 1)))
     {
         return 0xFF;
@@ -307,7 +297,7 @@ void Gen1GameReader::readColorPalette(uint8_t paletteId, uint16_t* outColorPalet
 
     // based on https://datacrystal.romhacking.net/wiki/Pok%C3%A9mon_Red_and_Blue/ROM_map
     // and https://bulbapedia.bulbagarden.net/wiki/List_of_color_palettes_by_index_number_(Generation_I)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? g1_localizationOffsetsY[localization_].palettes : g1_localizationOffsetsRB[localization_].palettes;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).palettes;
     romReader_.seek(romOffset + (paletteId * 8));
     while(cur < end)
     {

@@ -292,7 +292,7 @@ Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager,
     if(language == Gen2LocalizationLanguage::MAX)
     {
         localization_ = gen2_determineGameLanguage(romReader, gameType);
-      printf("Detected localization=%d\n", (int)localization_);
+//      printf("Detected localization=%d\n", (int)localization_);
     }
 }
 

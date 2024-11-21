@@ -1,7 +1,7 @@
 #ifndef _GEN1LOCALIZATION_H
 #define _GEN1LOCALIZATION_H
 
-#include <cstdint>
+#include "gen1/Gen1Common.h"
 
 /**
  * @brief This enum defines the supported localization languages for gen 1.
@@ -73,7 +73,6 @@ typedef struct Gen1LocalizationRomOffsets
     uint32_t palettes;
 } Gen1Localization;
 
-extern const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[];
-extern const Gen1LocalizationRomOffsets g1_localizationOffsetsY[];
+const Gen1LocalizationRomOffsets& gen1_getRomOffsets(Gen1GameType gameType, Gen1LocalizationLanguage language);
 
 #endif

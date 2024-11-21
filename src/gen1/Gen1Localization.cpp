@@ -1,6 +1,6 @@
 #include "gen1/Gen1Localization.h"
 
-const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
+static const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
     // English
     {
         .stats = 0x383DE,
@@ -69,7 +69,7 @@ const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
     }
 };
 
-const Gen1LocalizationRomOffsets g1_localizationOffsetsY[] = {
+static const Gen1LocalizationRomOffsets g1_localizationOffsetsY[] = {
     // English
     {
         .stats = 0x383DE,
@@ -137,3 +137,15 @@ const Gen1LocalizationRomOffsets g1_localizationOffsetsY[] = {
         .palettes = 0x726E7
     }
 };
+
+const Gen1LocalizationRomOffsets& gen1_getRomOffsets(Gen1GameType gameType, Gen1LocalizationLanguage language)
+{
+    if(gameType == Gen1GameType::YELLOW)
+    {
+        return g1_localizationOffsetsY[(uint8_t)language];
+    }
+    else
+    {
+        return g1_localizationOffsetsRB[(uint8_t)language];
+    }
+}
