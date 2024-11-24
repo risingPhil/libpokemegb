@@ -305,6 +305,7 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
+    uint8_t maxNumBytesPerName;
 
     const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).names;
     if(!romOffset)
@@ -313,11 +314,22 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
         return result;
     }
 
-    romReader_.seek(romOffset + (0xA * (index - 1)));
+    // The max name length is only 5 chars in Korean or Japanese roms.
+    // But it's 10 for every other language
+    if(localization_ == Gen2LocalizationLanguage::JAPANESE || localization_ == Gen2LocalizationLanguage::KOREAN)
+    {
+        maxNumBytesPerName = 5;
+    }
+    else
+    {
+        maxNumBytesPerName = 10;
+    }
+
+    romReader_.seek(romOffset + (maxNumBytesPerName * (index - 1)));
 
     // based on what I encountered so far. 0x50 is default, however it turns out 0x75 (…) is used too!
     const uint8_t nameTerminators[] = {0x50, 0x75};
-    numRead = romReader_.readUntil(encodedText, nameTerminators, sizeof(nameTerminators), 0xA);
+    numRead = romReader_.readUntil(encodedText, nameTerminators, sizeof(nameTerminators), maxNumBytesPerName);
 
     gen2_decodePokeText(encodedText, numRead, result, sizeof(result) - 1, localization_);
     return result;

@@ -26,7 +26,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsG[] = {
     // FRENCH
     {
         .stats = 0x51B10,
-        .names = 0x13C456,
+        .names = 0x1B0BC5,
         .iconTypes = 0x8E977,
         .icons = 0x8EA72,
         .spritePointers = 0x48000,
@@ -35,7 +35,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsG[] = {
     // ITALIAN
     {
         .stats = 0x51B19,
-        .names = 0x13C4DB,
+        .names = 0x1B0BD2,
         .iconTypes = 0x8E973,
         .icons = 0x8EA6E,
         .spritePointers = 0x48000,
@@ -44,7 +44,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsG[] = {
     // SPANISH
     {
         .stats = 0x51B19,
-        .names = 0x13C4C0,
+        .names = 0x1B0BB8,
         .iconTypes = 0x8E973,
         .icons = 0x8EA6E,
         .spritePointers = 0x48000,
@@ -53,7 +53,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsG[] = {
     // GERMAN
     {
         .stats = 0x51B00,
-        .names = 0x13C562,
+        .names = 0x1b0b6b,
         .iconTypes = 0x8E977,
         .icons = 0x8EA72,
         .spritePointers = 0x48000,
@@ -96,7 +96,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsS[] = {
     // FRENCH
     {
         .stats = 0x51B10,
-        .names = 0x13c456,
+        .names = 0x1B0BC5,
         .iconTypes = 0x8E95D,
         .icons = 0x8EA58,
         .spritePointers = 0x48000,
@@ -105,7 +105,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsS[] = {
     // ITALIAN
     {
         .stats = 0x51B19,
-        .names = 0x13C4DB,
+        .names = 0x1B0BD2,
         .iconTypes = 0x8E959,
         .icons = 0x8EA54,
         .spritePointers = 0x48000,
@@ -114,7 +114,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsS[] = {
     // SPANISH
     {
         .stats = 0x51B19,
-        .names = 0x13C4C0,
+        .names = 0x1B0BB8,
         .iconTypes = 0x8E959,
         .icons = 0x8EA54,
         .spritePointers = 0x48000,
@@ -123,7 +123,7 @@ static const Gen2LocalizationRomOffsets g2_localizationOffsetsS[] = {
     // GERMAN
     {
         .stats = 0x51B00,
-        .names = 0x13C562,
+        .names = 0x1B0B6B,
         .iconTypes = 0x8E95D,
         .icons = 0x8EA58,
         .spritePointers = 0x48000,
