@@ -851,4 +851,5 @@ void Gen2GameReader::resetRTC()
     const uint8_t rtcStatusFieldValue = 0xC0;
 
     saveManager_.seekToBankOffset(0, 0xC60);
+    saveManager_.writeByte(rtcStatusFieldValue);
 }
