@@ -16,6 +16,11 @@ public:
     Gen1GameReader(IRomReader& romReader, ISaveManager& saveManager, Gen1GameType gameType, Gen1LocalizationLanguage language = Gen1LocalizationLanguage::MAX);
 
     /**
+     * @brief Retrieves the current game cartridges'/roms' language
+     */
+    Gen1LocalizationLanguage getGameLanguage() const;
+
+    /**
      * @brief get the name of a pokémon based on an index number
      * Note: you don't own the returned pointer. The data will get overwritten on the next call to this function,
      * so make sure to strdup() it if you need to store it for later
