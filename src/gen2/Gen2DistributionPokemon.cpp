@@ -196,6 +196,241 @@ static const Gen2DistributionPokemon g2_celebiSweepstakes = {
     .poke = commonCelebiDefinition
 };
 
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggBulbasaur = {
+    .name = "PC Mystery Egg #3 Bulbasaur (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 1,
+        .held_item_index = 0,
+        .index_move1 = 33,  // TACKLE,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 246, // ANCIENTPOWER
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 5,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggCharmander = {
+    .name = "PC Mystery Egg #3 Charmander (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 4,
+        .held_item_index = 0,
+        .index_move1 = 10,  // SCRATCH,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 242, // CRUNCH
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggTotodile = {
+    .name = "PC Mystery Egg #3 Totodile (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 158,
+        .held_item_index = 0,
+        .index_move1 = 10,  // SCRATCH,
+        .index_move2 = 43,  // LEER
+        .index_move3 = 66, // SUBMISSION
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 30,
+        .pp_move3 = 20,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggHoothoot = {
+    .name = "PC Mystery Egg #3 Hoothoot (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 163,
+        .held_item_index = 0,
+        .index_move1 = 33,  // TACKLE,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 101, // NIGHT SHADE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggPichu = {
+    .name = "PC Mystery Egg #3 Pichu (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 172,
+        .held_item_index = 0,
+        .index_move1 = 84,  // THUNDERSHOCK,
+        .index_move2 = 204, // CHARM
+        .index_move3 = 47,  // SING
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 30,
+        .pp_move2 = 20,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
 static const Gen2DistributionPokemon* mainList[] = {
     &g2_clubNintendoMexico_Mew,
     &g2_clubNintendoMexico_Celebi,
@@ -204,7 +439,12 @@ static const Gen2DistributionPokemon* mainList[] = {
     &g2_celebiTour,
     &g2_pokemonFunFestCelebi,
     &g2_nintendoPowerCelebi,
-    &g2_celebiSweepstakes
+    &g2_celebiSweepstakes,
+    &g2_jpn_pcMysteryEggBulbasaur,
+    &g2_jpn_pcMysteryEggCharmander,
+    &g2_jpn_pcMysteryEggTotodile,
+    &g2_jpn_pcMysteryEggHoothoot,
+    &g2_jpn_pcMysteryEggPichu
 };
 
 // PCNY (Pokemon Center New York) Gotta Catch 'em all! station distribution pokémon below
