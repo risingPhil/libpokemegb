@@ -21,6 +21,8 @@ public:
 
     Gen2GameType getGameType() const;
 
+    Gen2LocalizationLanguage getGameLanguage() const;
+
     /**
      * @brief get the name of a pokémon based on an index number
      * Note: you don't own the returned pointer. The data will get overwritten on the next call to this function,

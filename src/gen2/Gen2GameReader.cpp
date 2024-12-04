@@ -300,6 +300,16 @@ Gen2GameReader::~Gen2GameReader()
 {
 }
 
+Gen2GameType Gen2GameReader::getGameType() const
+{
+    return gameType_;
+}
+
+Gen2LocalizationLanguage Gen2GameReader::getGameLanguage() const
+{
+    return localization_;
+}
+
 const char *Gen2GameReader::getPokemonName(uint8_t index) const
 {
     static char result[20];

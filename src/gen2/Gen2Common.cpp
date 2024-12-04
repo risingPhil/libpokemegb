@@ -842,7 +842,28 @@ void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2Distr
     }
     else
     {
-        originalTrainerName = distributionPoke.originalTrainer;
+		const Gen2LocalizationLanguage gameLang = gameReader.getGameLanguage();
+
+		if(gameLang == Gen2LocalizationLanguage::JAPANESE && !distributionPoke.isJapanese)
+		{
+			// The Japanese games don't have all the latin characters in their character set.
+			// So if transferring a non-japanese distribution event pokémon to a japanese cartridge,
+			// we need to replace the OT.
+			// If Google Translate is any reliable, ポケメ64 should translate to "Pokeme 64".
+			originalTrainerName = "ポケメ64";
+		}
+		else if(gameLang != Gen2LocalizationLanguage::JAPANESE && distributionPoke.isJapanese)
+		{
+			// Obviously non-japanese cartridges/roms don't have the japanese characters in their character set.
+			// So if transferring a japanese distribution event pokémon to a non-japanese cartridge,
+			// we need to replace the OT.
+			// We'll replace it with PokeMe64
+			originalTrainerName = "PokeMe64";
+		}
+		else
+		{
+			originalTrainerName = distributionPoke.originalTrainer;
+		}
 
         if (distributionPoke.regenerateTrainerID)
         {
