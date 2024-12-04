@@ -73,7 +73,7 @@ static const Gen2TrainerPokemon commonCelebiDefinition = {
     .special_def = 0    
 };
 
-const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
+static const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
     .name = "Club Nintendo Mexico Mew",
     .originalTrainer = "ASH",
     .originalTrainerID = 45515,
@@ -90,7 +90,7 @@ const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
     .poke = commonMewDefinition
 };
 
-const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
+static const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
     .name = "Club Nintendo Mexico Celebi",
     .originalTrainer = "HIRO",
     .originalTrainerID = 42534,
@@ -104,7 +104,7 @@ const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_swedenCelebi = {
+static const Gen2DistributionPokemon g2_swedenCelebi = {
     .name = "Sweden Celebi Tour Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -118,7 +118,7 @@ const Gen2DistributionPokemon g2_swedenCelebi = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_westfieldShopping = {
+static const Gen2DistributionPokemon g2_westfieldShopping = {
     .name = "Westfield Shopping Centre Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -132,7 +132,7 @@ const Gen2DistributionPokemon g2_westfieldShopping = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_celebiTour = {
+static const Gen2DistributionPokemon g2_celebiTour = {
     .name = "Celebi Tour Celebi",
     .originalTrainer = "CTOUR",
     .originalTrainerID = 0,
@@ -146,7 +146,7 @@ const Gen2DistributionPokemon g2_celebiTour = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
+static const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
     .name = "Pokémon Fun Fest Celebi",
     .originalTrainer = "FLAGSA",
     .originalTrainerID = 1000,
@@ -160,7 +160,7 @@ const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
+static const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
     .name = "Nintendo Power Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -174,7 +174,7 @@ const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_celebiSweepstakes = {
+static const Gen2DistributionPokemon g2_celebiSweepstakes = {
     .name = "Celebi Sweepstakes Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -200,7 +200,7 @@ static const Gen2DistributionPokemon* mainList[] = {
 };
 
 // PCNY (Pokemon Center New York) Gotta Catch 'em all! station distribution pokémon below
-const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
+static const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
     .name = "AncientPower Bulbasaur",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -246,7 +246,7 @@ const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
+static const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
     .name = "Shiny Venusaur",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -292,7 +292,7 @@ const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
+static const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
     .name = "Crunch Charmander",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -338,7 +338,7 @@ const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
+static const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
     .name = "Shiny Charizard",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -384,7 +384,7 @@ const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
+static const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
     .name = "Zap Cannon Squirtle",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -430,7 +430,7 @@ const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
+static const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
     .name = "Shiny Blastoise",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -476,7 +476,7 @@ const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
+static const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
     .name = "SonicBoom Spearow",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -522,7 +522,7 @@ const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
     .name = "Lovely Kiss Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -568,7 +568,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
     .name = "Moonlight Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -614,7 +614,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
     .name = "Sweet Kiss Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -660,7 +660,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
     .name = "Lovely Kiss Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -706,7 +706,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
     .name = "Morning Sun Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -752,7 +752,7 @@ const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
     .name = "Sweet Kiss Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -798,7 +798,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_flailZubat = {
+static const Gen2DistributionPokemon g2_pcny_flailZubat = {
     .name = "Flail Zubat",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -844,7 +844,7 @@ const Gen2DistributionPokemon g2_pcny_flailZubat = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
+static const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
     .name = "Leech Seed Oddish",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -890,7 +890,7 @@ const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_synthesisParas = {
+static const Gen2DistributionPokemon g2_pcny_synthesisParas = {
     .name = "Synthesis Paras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -936,7 +936,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisParas = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
+static const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
     .name = "Petal Dance Psyduck",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -982,7 +982,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
+static const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
     .name = "Tri Attach Psyduck",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1028,7 +1028,7 @@ const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
     .name = "Growth Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1074,7 +1074,7 @@ const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
     .name = "Lovely Kiss Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1120,7 +1120,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
     .name = "Sweet Kiss Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1166,7 +1166,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_foresightAbra = {
+static const Gen2DistributionPokemon g2_pcny_foresightAbra = {
     .name = "Foresight Abra",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1212,7 +1212,7 @@ const Gen2DistributionPokemon g2_pcny_foresightAbra = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
+static const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
     .name = "False Swipe Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1258,7 +1258,7 @@ const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_thrashMachop = {
+static const Gen2DistributionPokemon g2_pcny_thrashMachop = {
     .name = "Thrash Swipe Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1304,7 +1304,7 @@ const Gen2DistributionPokemon g2_pcny_thrashMachop = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
     .name = "Lovely Kiss Bellsprout",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1350,7 +1350,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
     .name = "Sweet Kiss Bellsprout",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1396,7 +1396,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
+static const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
     .name = "Confuse Ray Tentacool",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1442,7 +1442,7 @@ const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
+static const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
     .name = "Rapid Spin Geodude",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1488,7 +1488,7 @@ const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
+static const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
     .name = "Low Kick Ponyta",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1534,7 +1534,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
+static const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
     .name = "Agility Magnemite",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1580,7 +1580,7 @@ const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
+static const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
     .name = "Fury Cutter Farfetch'd",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1626,7 +1626,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
+static const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
     .name = "Low Kick Doduo",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1672,7 +1672,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_flailSeel = {
+static const Gen2DistributionPokemon g2_pcny_flailSeel = {
     .name = "Flail Seel",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1718,7 +1718,7 @@ const Gen2DistributionPokemon g2_pcny_flailSeel = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
+static const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
     .name = "Sharpen Onix",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1764,7 +1764,7 @@ const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
+static const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
     .name = "Amnesia Drowsee",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1810,7 +1810,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
+static const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
     .name = "Metal Claw Crabby",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1856,7 +1856,7 @@ const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
+static const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
     .name = "Agility Voltorb",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1902,7 +1902,7 @@ const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
     .name = "Sweet Scent Exeggcute",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1948,7 +1948,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
+static const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
     .name = "Fury Attack Cubone",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1994,7 +1994,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
+static const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
     .name = "DoubleSlap Lickitung",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2040,7 +2040,7 @@ const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
     .name = "Sweet Scent Chansey",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2086,7 +2086,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
+static const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
     .name = "Synthesis Tangela",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2132,7 +2132,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
+static const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
     .name = "Faint Attack Kangaskhan",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2178,7 +2178,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
+static const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
     .name = "Haze Horsea",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2224,7 +2224,7 @@ const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
+static const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
     .name = "Swords Dance Goldeen",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2270,7 +2270,7 @@ const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
+static const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
     .name = "Twister Staryu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2316,7 +2316,7 @@ const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
+static const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
     .name = "Mind Reader Mr. Mime",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2362,7 +2362,7 @@ const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
+static const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
     .name = "SonicBoom Scyther",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2408,7 +2408,7 @@ const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
     .name = "Rock Throw Pinsir",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2454,7 +2454,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
+static const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
     .name = "Quick Attack Tauros",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2500,7 +2500,7 @@ const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
+static const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
     .name = "Bubble Magikarp",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2546,7 +2546,7 @@ const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
+static const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
     .name = "Reversal Magikarp",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2592,7 +2592,7 @@ const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_biteLapras = {
+static const Gen2DistributionPokemon g2_pcny_biteLapras = {
     .name = "Bite Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2638,7 +2638,7 @@ const Gen2DistributionPokemon g2_pcny_biteLapras = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
+static const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
     .name = "Future Sight Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2684,7 +2684,7 @@ const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthEevee = {
+static const Gen2DistributionPokemon g2_pcny_growthEevee = {
     .name = "Growth Eevee",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2730,7 +2730,7 @@ const Gen2DistributionPokemon g2_pcny_growthEevee = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
+static const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
     .name = "Barrier Porygon",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2776,7 +2776,7 @@ const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
     .name = "Rock Throw Omanyte",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2822,7 +2822,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
     .name = "Rock Throw Kabuto",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2868,7 +2868,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
     .name = "Rock Throw Aerodactyl",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2914,7 +2914,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
     .name = "Lovely Kiss Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2960,7 +2960,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
     .name = "Splash Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3006,7 +3006,7 @@ const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
     .name = "Sweet Kiss Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3052,7 +3052,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
+static const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
     .name = "Shiny Articuno",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -3098,7 +3098,7 @@ const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
+static const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
     .name = "Shiny Zapdos",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -3144,7 +3144,7 @@ const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
+static const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
     .name = "Shiny Moltres",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -3190,7 +3190,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
+static const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
     .name = "Hydro Pump Dratini",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3236,7 +3236,7 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
+static const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
     .name = "Shiny Mewtwo",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -3282,7 +3282,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMew = {
+static const Gen2DistributionPokemon g2_pcny_shinyMew = {
     .name = "Shiny Mew",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -3328,7 +3328,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMew = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
     .name = "Petal Dance Chikorita",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3374,7 +3374,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
+static const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
     .name = "Shiny Meganium",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -3420,7 +3420,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
+static const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
     .name = "Double-Edge Cyndaquil",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3466,7 +3466,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
+static const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
     .name = "Shiny Typhlosion",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -3512,7 +3512,7 @@ const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
+static const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
     .name = "Submission Totodile",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3558,7 +3558,7 @@ const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
+static const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
     .name = "Shiny Feraligatr",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -3604,7 +3604,7 @@ const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
     .name = "Dizzy Punch Sentret",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3650,7 +3650,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
+static const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
     .name = "Night Shade Hoothoot",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3696,7 +3696,7 @@ const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
+static const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
     .name = "Barrier Ledyba",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3742,7 +3742,7 @@ const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
+static const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
     .name = "Growth Spinarak",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3788,7 +3788,7 @@ const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
+static const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
     .name = "Light Screen Chinchou",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3834,7 +3834,7 @@ const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
     .name = "Dizzy Punch Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3880,7 +3880,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
+static const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
     .name = "Petal Dance Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3926,7 +3926,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
+static const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
     .name = "Scary Face Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3972,7 +3972,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_singPichu = {
+static const Gen2DistributionPokemon g2_pcny_singPichu = {
     .name = "Sing Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4018,7 +4018,7 @@ const Gen2DistributionPokemon g2_pcny_singPichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
     .name = "Petal Dance Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4064,7 +4064,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
+static const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
     .name = "Petal Dance Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4110,7 +4110,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
+static const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
     .name = "Swift Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4156,7 +4156,7 @@ const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
+static const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
     .name = "Mimic Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4202,7 +4202,7 @@ const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
     .name = "Petal Dance Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4248,7 +4248,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
+static const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
     .name = "Petal Dance Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4294,7 +4294,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
+static const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
     .name = "Safeguard Natu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4340,7 +4340,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
     .name = "Dizzy Punch Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4386,7 +4386,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
+static const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
     .name = "Hydro Pump Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4432,7 +4432,7 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
+static const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
     .name = "Hydro Pump Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4478,7 +4478,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
+static const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
     .name = "Substitute Sudowoodo",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4524,7 +4524,7 @@ const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
+static const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
     .name = "Agility Hoppip",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4570,7 +4570,7 @@ const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicAipom = {
+static const Gen2DistributionPokemon g2_pcny_mimicAipom = {
     .name = "Mimic Aipom",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4616,7 +4616,7 @@ const Gen2DistributionPokemon g2_pcny_mimicAipom = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_splashSunkern = {
+static const Gen2DistributionPokemon g2_pcny_splashSunkern = {
     .name = "Splash Sunkern",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4662,7 +4662,7 @@ const Gen2DistributionPokemon g2_pcny_splashSunkern = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
+static const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
     .name = "Steel Wing Yanma",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4708,7 +4708,7 @@ const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
     .name = "Steel Wing Yanma",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4754,7 +4754,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
+static const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
     .name = "Belly Drum Wooper",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4800,7 +4800,7 @@ const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
+static const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
     .name = "Scary Face Wooper",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4846,7 +4846,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
+static const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
     .name = "Beat Up Murkrow",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4892,7 +4892,7 @@ const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
+static const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
     .name = "Hypnosis Misdreavus",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4938,7 +4938,7 @@ const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
+static const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
     .name = "Mimic Wobbuffet",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4984,7 +4984,7 @@ const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_substitutePineco = {
+static const Gen2DistributionPokemon g2_pcny_substitutePineco = {
     .name = "Substitute Pineco",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5030,7 +5030,7 @@ const Gen2DistributionPokemon g2_pcny_substitutePineco = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
+static const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
     .name = "Fury Attack Dunsparce",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5076,7 +5076,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
+static const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
     .name = "Horn Drill Dunsparce",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5122,7 +5122,7 @@ const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
     .name = "Lovely Kiss Snubbull",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5168,7 +5168,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
+static const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
     .name = "Double-Edge Qwilfish",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5214,7 +5214,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
+static const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
     .name = "Seismic Toss Heracross",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5260,7 +5260,7 @@ const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
+static const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
     .name = "Moonlight Sneasel",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5306,7 +5306,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
     .name = "Sweet Scent Teddiursa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5352,7 +5352,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
+static const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
     .name = "Whirlwind Swinub",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5398,7 +5398,7 @@ const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
+static const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
     .name = "Amnesia Remoraid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5444,7 +5444,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
+static const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
     .name = "Mist Remoraid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5490,7 +5490,7 @@ const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
+static const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
     .name = "Pay Day Delibird",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5536,7 +5536,7 @@ const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
+static const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
     .name = "Spikes Delibird",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5582,7 +5582,7 @@ const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_gustMantine = {
+static const Gen2DistributionPokemon g2_pcny_gustMantine = {
     .name = "Gust Mantine",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5628,7 +5628,7 @@ const Gen2DistributionPokemon g2_pcny_gustMantine = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
+static const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
     .name = "Fury Cutter Skarmory",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5674,7 +5674,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
+static const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
     .name = "Absorb Phanpy",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5720,7 +5720,7 @@ const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
+static const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
     .name = "Safeguard Stantler",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5766,7 +5766,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
+static const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
     .name = "Rage Tyrogue",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5812,7 +5812,7 @@ const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
+static const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
     .name = "Metronome Smoochum",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5858,7 +5858,7 @@ const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
     .name = "Petal Dance Smoochum",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5904,7 +5904,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
     .name = "Dizzy Punch Elekid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5950,7 +5950,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
+static const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
     .name = "Pursuit Elekid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5996,7 +5996,7 @@ const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
+static const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
     .name = "Feint Attack Magby",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6042,7 +6042,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
+static const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
     .name = "Mega Kick Miltank",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6088,7 +6088,7 @@ const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
+static const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
     .name = "Shiny Raikou",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -6134,7 +6134,7 @@ const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyEntei = {
+static const Gen2DistributionPokemon g2_pcny_shinyEntei = {
     .name = "Shiny Entei",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -6180,7 +6180,7 @@ const Gen2DistributionPokemon g2_pcny_shinyEntei = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinySuicune = {
+static const Gen2DistributionPokemon g2_pcny_shinySuicune = {
     .name = "Shiny Suicune",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -6226,7 +6226,7 @@ const Gen2DistributionPokemon g2_pcny_shinySuicune = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
+static const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
     .name = "Rage Larvitar",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6272,7 +6272,7 @@ const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyLugia = {
+static const Gen2DistributionPokemon g2_pcny_shinyLugia = {
     .name = "Shiny Lugia",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -6318,7 +6318,7 @@ const Gen2DistributionPokemon g2_pcny_shinyLugia = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
+static const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     .name = "Shiny Ho-Oh",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -6364,7 +6364,7 @@ const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_Celebi = {
+static const Gen2DistributionPokemon g2_pcny_Celebi = {
     .name = "Celebi",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
