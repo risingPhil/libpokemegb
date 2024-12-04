@@ -36,6 +36,11 @@ typedef struct Gen2DistributionPokemon
     // or whether the IVs need to be randomized instead
     // shinyChance still applies here if set to a value != 0xFF
     bool randomizeIVs;
+    // indicates whether this is a Japanese distribution event pokémon.
+    // This is important because we can't support the Trainer OT characters of a Japanese one in other
+    // localizations. When injecting a Japanese pokémon into a different localization, we replace the OT with POKEME64.
+    // when injecting a US/EU pokémon into a japanese cartridge, we'll replace the OT with ポケ64
+    bool isJapanese;
     // definition of the pokemon
     Gen2TrainerPokemon poke;
 } Gen2DistributionPokemon;
