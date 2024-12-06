@@ -839,3 +839,17 @@ void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
 
     saveManager_.writeByte(resultVal);
 }
+
+void Gen2GameReader::resetRTC()
+{
+    // The game checks bit 7 on the sRTCStatusFlags field in SRAM
+    // this is set when the game detects wrong RTC register values.
+    // In order to let the game prompt to reconfigure the RTC clock, we just have to set this bit
+    // Based on sRTCStatusFlags, RecordRTCStatus, .set_bit_7 in
+    // https://github.com/pret/pokecrystal
+    // https://github.com/pret/pokegold
+    const uint8_t rtcStatusFieldValue = 0xC0;
+
+    saveManager_.seekToBankOffset(0, 0xC60);
+    saveManager_.writeByte(rtcStatusFieldValue);
+}
