@@ -227,6 +227,12 @@ public:
      * Don't forget to call finishSave() after using this function!
      */
     void setEventFlag(uint16_t flagNumber, bool enabled);
+
+    /**
+     * @brief This function will change an SRAM field to let gen 2 games prompt you
+     * to reconfigure the game clock
+     */
+    void resetRTC();
 protected:
 private:
     IRomReader &romReader_;
