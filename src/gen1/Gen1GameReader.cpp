@@ -10,11 +10,11 @@
 /**
  * @brief This function calculates the main data checksum
  */
-uint8_t calculateMainDataChecksum(ISaveManager& saveManager)
+uint8_t calculateMainDataChecksum(ISaveManager& saveManager, uint8_t localization)
 {
     Gen1Checksum checksum;
     const uint16_t checksummedDataStart = 0x598;
-    const uint16_t checksummedDataEnd = 0x1523;
+    const uint16_t checksummedDataEnd = (localization != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x1523: 0x1594;
     const uint16_t numBytes = checksummedDataEnd - checksummedDataStart;
     uint16_t i;
     uint8_t byte;
@@ -322,7 +322,9 @@ const char *Gen1GameReader::getRivalName() const
 {
     static char result[20];
     uint8_t encodedRivalName[0xB];
-    saveManager_.seek(0x25F6);
+    const uint16_t savOffset = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x25F6 : 0x25F1;
+
+    saveManager_.seek(savOffset);
 
     saveManager_.readUntil(encodedRivalName, 0x50, sizeof(encodedRivalName));
     gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
@@ -332,8 +334,8 @@ const char *Gen1GameReader::getRivalName() const
 uint16_t Gen1GameReader::getTrainerID() const
 {
     uint16_t result;
-
-    saveManager_.seek(0x2605);
+    const uint16_t savOffset = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x2605 : 0x25FB;
+    saveManager_.seek(savOffset);
     saveManager_.readUint16(result);
 
     return result;
@@ -352,8 +354,9 @@ Gen1Box Gen1GameReader::getBox(uint8_t boxIndex)
 uint8_t Gen1GameReader::getCurrentBoxIndex()
 {
     uint8_t byte;
+    const uint16_t savOffset = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x284C : 0x2842;
 
-    saveManager_.seek(0x284C);
+    saveManager_.seek(savOffset);
     saveManager_.readByte(byte);
 
     return byte & 0x3F;   
@@ -361,8 +364,18 @@ uint8_t Gen1GameReader::getCurrentBoxIndex()
 
 bool Gen1GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    uint16_t saveOffset;
     uint8_t byte;
+
+    if(localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE)
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    }
+    else
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B1 : 0x259E;
+    }
+
     if(pokedexNumber < 1 || pokedexNumber > 151)
     {
         return false;
@@ -380,8 +393,18 @@ bool Gen1GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) 
 
 void Gen1GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    uint16_t saveOffset;
     uint8_t byte;
+    
+    if(localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE)
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    }
+    else
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B1 : 0x259E;
+    }
+    
     if(pokedexNumber < 1 || pokedexNumber > 151)
     {
         return;
@@ -400,9 +423,18 @@ void Gen1GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) 
 
 uint8_t Gen1GameReader::getPokedexCounter(PokedexFlag dexFlag) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    uint16_t saveOffset;
     uint8_t bytes[19];
     uint8_t result = 0;
+
+    if(localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE)
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    }
+    else
+    {
+        saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B1 : 0x259E;
+    }
 
     saveManager_.seek(saveOffset);
     saveManager_.read(bytes, sizeof(bytes));
@@ -500,22 +532,22 @@ uint8_t Gen1GameReader::addDistributionPokemon(const Gen1DistributionPokemon& di
 
 bool Gen1GameReader::isMainChecksumValid()
 {
-    const uint16_t mainDataChecksumOffset = 0x3523;
+    const uint16_t mainDataChecksumOffset = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x3523 : 0x3594;
     uint8_t storedChecksum;
     uint8_t calculatedChecksum;
 
     saveManager_.seek(mainDataChecksumOffset);
     saveManager_.readByte(storedChecksum);
 
-    calculatedChecksum = calculateMainDataChecksum(saveManager_);
+    calculatedChecksum = calculateMainDataChecksum(saveManager_, localization_);
 
     return (storedChecksum == calculatedChecksum);
 }
 
 void Gen1GameReader::updateMainChecksum()
 {
-    const uint16_t mainDataChecksumOffset = 0x3523;
-    const uint8_t calculatedChecksum = calculateMainDataChecksum(saveManager_);
+    const uint16_t mainDataChecksumOffset = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0x3523 : 0x3594;
+    const uint8_t calculatedChecksum = calculateMainDataChecksum(saveManager_, localization_);
 
     saveManager_.seek(mainDataChecksumOffset);
     saveManager_.writeByte(calculatedChecksum);
