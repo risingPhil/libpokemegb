@@ -58,14 +58,14 @@ static const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
     },
     // Japanese
     {
-        .stats = 0x383DE,
-        .statsMew = 0x425B,
-        .numbers = 0x42784,
-        .names = 0x39446,
-        .iconTypes = 0x71DC1,
-        .icons = 0x71C74,
-        .paletteIndices = 0x72A0E,
-        .palettes = 0x72AA5
+        .stats = 0x38000,
+        .statsMew = 0x4200,
+        .numbers = 0x4279A,
+        .names = 0x39068,
+        .iconTypes = 0x71DD1,
+        .icons = 0x71C84,
+        .paletteIndices = 0x72A1F,
+        .palettes = 0x72AB6
     }
 };
 

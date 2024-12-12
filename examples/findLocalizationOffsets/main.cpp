@@ -22,7 +22,7 @@
  * Yes, I'm aware this is a bit unclean, but once the relevant rom offsets are found once, you don't typically need this tool anymore.
  * Still, I'm leaving this application in the codebase in case I need more rom offsets later (or in case Korean localization support would get implemented at some point)
 */
-static const Gen1LocalizationLanguage g1_localization = Gen1LocalizationLanguage::ENGLISH;
+static const Gen1LocalizationLanguage g1_localization = Gen1LocalizationLanguage::JAPANESE;
 static const Gen2LocalizationLanguage g2_localization = Gen2LocalizationLanguage::ENGLISH;
 
 static uint32_t findBinaryPattern(uint8_t* buffer, size_t bufferSize, uint8_t* pattern, size_t patternSize)
@@ -138,7 +138,7 @@ static void processGen1(Gen1GameType gameType, uint8_t* romBuffer, uint8_t* loca
     findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.numbers, 11);
 
     // WARNING: Modify this variable with the localized name of the pokémon we're trying to look up. (RHYDON, because it's index 1)
-    const char* pokeNames[] = {"RHYDON"};
+    const char* pokeNames[] = {"サイドン"};
     printf("Names: 0x%08x\n", findNames(localizedRomBuffer, localizedRomBufferSize, pokeNames, 1, 1));
     printf("IconTypes:\n");
     findBinaryPattern(localizedRomBuffer, localizedRomBufferSize, romBuffer + eng.iconTypes, 11);

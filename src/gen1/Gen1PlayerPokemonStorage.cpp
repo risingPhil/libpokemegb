@@ -25,18 +25,20 @@ static const uint8_t OT_NAME_SIZE = 0xB;
  * @brief This function will load the metadata of the trainer party into the specified outPartyMeta variable.
  * Note that it won't contain the detailed data about the pokemon in the party.
  */
-static bool getPartyMetadata(ISaveManager& saveManager, Gen1TrainerPartyMeta &outPartyMeta)
+static bool getPartyMetadata(ISaveManager& saveManager, Gen1TrainerPartyMeta &outPartyMeta, Gen1LocalizationLanguage localization)
 {
-    saveManager.seek(0x2F2C);
+    const uint16_t savOffset = (localization != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    saveManager.seek(savOffset);
     saveManager.readByte(outPartyMeta.number_of_pokemon);
     saveManager.read(outPartyMeta.species_index_list, 6);
     outPartyMeta.species_index_list[6] = 0xFF;
     return true;
 }
 
-static void writePartyMetadata(ISaveManager& saveManager, Gen1TrainerPartyMeta& partyMeta)
+static void writePartyMetadata(ISaveManager& saveManager, Gen1TrainerPartyMeta& partyMeta, Gen1LocalizationLanguage localization)
 {
-    saveManager.seek(0x2F2C);
+    const uint16_t savOffset = (localization != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    saveManager.seek(savOffset);
     saveManager.writeByte(partyMeta.number_of_pokemon);
     saveManager.write(partyMeta.species_index_list, 6);
     saveManager.writeByte(0xFF);
@@ -202,7 +204,7 @@ Gen1Party::~Gen1Party()
 uint8_t Gen1Party::getSpeciesAtIndex(uint8_t partyIndex)
 {
     Gen1TrainerPartyMeta partyMeta;
-    getPartyMetadata(saveManager_, partyMeta);
+    getPartyMetadata(saveManager_, partyMeta, localization_);
 
     if(partyIndex >= partyMeta.number_of_pokemon)
     {
@@ -247,7 +249,7 @@ bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
     const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
     const uint8_t FIRST_POKE_STRUCT_OFFSET = 8;
     Gen1TrainerPartyMeta partyMeta;
-    getPartyMetadata(saveManager_, partyMeta);
+    getPartyMetadata(saveManager_, partyMeta, localization_);
 
     if(partyIndex >= partyMeta.number_of_pokemon)
     {
@@ -263,7 +265,7 @@ bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
         partyMeta.species_index_list[partyMeta.number_of_pokemon] = 0xFF;
     }
 
-    writePartyMetadata(saveManager_, partyMeta);
+    writePartyMetadata(saveManager_, partyMeta, localization_);
 
     // make sure the stat fields are filled in by recalculating them.
     // this is the same as what happens when withdrawing them from an ingame PC box
@@ -289,7 +291,7 @@ bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
 uint8_t Gen1Party::getNumberOfPokemon()
 {
     Gen1TrainerPartyMeta partyMeta;
-    if(!getPartyMetadata(saveManager_, partyMeta))
+    if(!getPartyMetadata(saveManager_, partyMeta, localization_))
     {
         return 0;
     }
@@ -360,7 +362,7 @@ void Gen1Party::setOriginalTrainerOfPokemon(uint8_t partyIndex, const char* orig
 bool Gen1Party::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
 {
     Gen1TrainerPartyMeta partyMeta;
-    getPartyMetadata(saveManager_, partyMeta);
+    getPartyMetadata(saveManager_, partyMeta, localization_);
     const uint8_t partyIndex = partyMeta.number_of_pokemon;
 
     if(partyIndex >= getMaxNumberOfPokemon())
@@ -376,7 +378,7 @@ bool Gen1Party::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, con
         partyMeta.species_index_list[partyMeta.number_of_pokemon] = 0xFF;
     }
 
-    writePartyMetadata(saveManager_, partyMeta);
+    writePartyMetadata(saveManager_, partyMeta, localization_);
     if(!setPokemon(partyIndex, poke))
     {
         return false;
