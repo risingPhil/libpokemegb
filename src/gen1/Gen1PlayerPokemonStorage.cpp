@@ -312,7 +312,7 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
     static char result[20];
 
     uint8_t encodedNickName[NICKNAME_SIZE];
-    const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
+    const uint16_t FIRST_NICKNAME_NAME_OFFSET = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x152 : 0x134;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
@@ -327,7 +327,7 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
 void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
 {
     uint8_t encodedNickName[NICKNAME_SIZE];
-    const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
+    const uint16_t FIRST_NICKNAME_NAME_OFFSET = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x152 : 0x134;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
     if(!name)
