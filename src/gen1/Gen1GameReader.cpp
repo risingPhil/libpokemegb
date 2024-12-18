@@ -74,6 +74,7 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
+    const uint16_t entrySize = (localization_ != (uint8_t)Gen1LocalizationLanguage::JAPANESE) ? 0xA : 0x6;
     const uint32_t romOffset = gen1_getRomOffsets(gameType_, (Gen1LocalizationLanguage)localization_).names;
 
     if(!romOffset)
@@ -83,10 +84,10 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     }
 
     romReader_.seek(romOffset);
-    romReader_.advance((index - 1) * 0xA);
+    romReader_.advance((index - 1) * entrySize);
 
     // max 10 bytes
-    numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
+    numRead = romReader_.readUntil(encodedText, 0x50, entrySize);
 
     gen1_decodePokeText(encodedText, numRead, result, sizeof(result), (Gen1LocalizationLanguage)localization_);
     return result;
