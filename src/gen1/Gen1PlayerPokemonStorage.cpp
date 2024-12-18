@@ -218,8 +218,9 @@ bool Gen1Party::getPokemon(uint8_t partyIndex, Gen1TrainerPokemon& outTrainerPok
     Gen1PokeStats stats;
     const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
     const uint8_t FIRST_POKE_STRUCT_OFFSET = 8;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
 
-    saveManager_.seek(0x2F2C + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
+    saveManager_.seek(savOffset + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
 
     readCommonPokeData(saveManager_, outTrainerPokemon);
 
@@ -248,6 +249,7 @@ bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
 {
     const uint8_t PARTY_POKEMON_NUM_BYTES = 44;
     const uint8_t FIRST_POKE_STRUCT_OFFSET = 8;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
     Gen1TrainerPartyMeta partyMeta;
     getPartyMetadata(saveManager_, partyMeta, localization_);
 
@@ -272,7 +274,7 @@ bool Gen1Party::setPokemon(uint8_t partyIndex, Gen1TrainerPokemon& poke)
     gen1_recalculatePokeStats(gameReader_, poke);
     poke.current_hp = poke.max_hp;
 
-    saveManager_.seek(0x2F2C + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
+    saveManager_.seek(savOffset + FIRST_POKE_STRUCT_OFFSET + ((partyIndex)*PARTY_POKEMON_NUM_BYTES));
     writeCommonPokeData(saveManager_, poke);
 
     // according to https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_data_structure_(Generation_I)
@@ -309,8 +311,9 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
 
     uint8_t encodedNickName[NICKNAME_SIZE];
     const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
 
-    saveManager_.seek(0x2F2C + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
+    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
     saveManager_.readUntil(encodedNickName, 0x50, NICKNAME_SIZE);
 
     gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
@@ -320,8 +323,9 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
 
 void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
 {
-    const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
     uint8_t encodedNickName[NICKNAME_SIZE];
+    const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
     if(!name)
     {
         Gen1TrainerPokemon poke;
@@ -330,7 +334,7 @@ void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
     }
     
     const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
-    saveManager_.seek(0x2F2C + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
+    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
     saveManager_.write(encodedNickName, encodedLength);
 }
 
@@ -339,8 +343,9 @@ const char* Gen1Party::getOriginalTrainerOfPokemon(uint8_t partyIndex)
     static char result[20];
     uint8_t encodedOTName[OT_NAME_SIZE];
     const uint16_t FIRST_OT_NAME_OFFSET = 0x110;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
 
-    saveManager_.seek(0x2F2C + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
+    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
     saveManager_.readUntil(encodedOTName, 0x50, OT_NAME_SIZE);
 
     gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
@@ -352,10 +357,11 @@ void Gen1Party::setOriginalTrainerOfPokemon(uint8_t partyIndex, const char* orig
 {
     uint8_t encodedOTName[OT_NAME_SIZE];
     const uint16_t FIRST_OT_NAME_OFFSET = 0x110;
+    const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
 
     const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
 
-    saveManager_.seek(0x2F2C + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
+    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
     saveManager_.write(encodedOTName, encodedLength);
 }
 
