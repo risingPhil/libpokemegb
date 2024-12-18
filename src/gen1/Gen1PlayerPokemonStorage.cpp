@@ -19,7 +19,9 @@ typedef struct Gen1TrainerBoxMeta
 } Gen1TrainerBoxMeta;
 
 static const uint8_t NICKNAME_SIZE = 0xB;
+static const uint8_t NICKNAME_SIZE_JPN = 0x6;
 static const uint8_t OT_NAME_SIZE = 0xB;
+static const uint8_t OT_NAME_SIZE_JPN = 0x6;
 
 /**
  * @brief This function will load the metadata of the trainer party into the specified outPartyMeta variable.
@@ -312,9 +314,10 @@ const char* Gen1Party::getPokemonNickname(uint8_t partyIndex)
     uint8_t encodedNickName[NICKNAME_SIZE];
     const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
-    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
-    saveManager_.readUntil(encodedNickName, 0x50, NICKNAME_SIZE);
+    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * entrySize));
+    saveManager_.readUntil(encodedNickName, 0x50, entrySize);
 
     gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
 
@@ -326,6 +329,7 @@ void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
     uint8_t encodedNickName[NICKNAME_SIZE];
     const uint16_t FIRST_NICKNAME_NAME_OFFSET = 0x152;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
     if(!name)
     {
         Gen1TrainerPokemon poke;
@@ -333,8 +337,8 @@ void Gen1Party::setPokemonNickname(uint8_t partyIndex, const char* name)
         name = gameReader_.getPokemonName(poke.poke_index);
     }
     
-    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
-    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * NICKNAME_SIZE));
+    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, entrySize, 0x50, (Gen1LocalizationLanguage)localization_);
+    saveManager_.seek(savOffset + FIRST_NICKNAME_NAME_OFFSET + (partyIndex * entrySize));
     saveManager_.write(encodedNickName, encodedLength);
 }
 
@@ -344,9 +348,10 @@ const char* Gen1Party::getOriginalTrainerOfPokemon(uint8_t partyIndex)
     uint8_t encodedOTName[OT_NAME_SIZE];
     const uint16_t FIRST_OT_NAME_OFFSET = 0x110;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
-    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
-    saveManager_.readUntil(encodedOTName, 0x50, OT_NAME_SIZE);
+    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * entrySize));
+    saveManager_.readUntil(encodedOTName, 0x50, entrySize);
 
     gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
 
@@ -358,10 +363,11 @@ void Gen1Party::setOriginalTrainerOfPokemon(uint8_t partyIndex, const char* orig
     uint8_t encodedOTName[OT_NAME_SIZE];
     const uint16_t FIRST_OT_NAME_OFFSET = 0x110;
     const uint16_t savOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2F2C : 0x2ED5;
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
-    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
+    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, entrySize, 0x50, (Gen1LocalizationLanguage)localization_);
 
-    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * OT_NAME_SIZE));
+    saveManager_.seek(savOffset + FIRST_OT_NAME_OFFSET + (partyIndex * entrySize));
     saveManager_.write(encodedOTName, encodedLength);
 }
 
