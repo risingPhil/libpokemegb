@@ -517,9 +517,10 @@ const char* Gen1Box::getPokemonNickname(uint8_t index)
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
     const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
-    saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * NICKNAME_SIZE));
-    saveManager_.readUntil(encodedNickName, 0x50, NICKNAME_SIZE);
+    saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * entrySize));
+    saveManager_.readUntil(encodedNickName, 0x50, entrySize);
 
     gen1_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
 
@@ -533,6 +534,8 @@ void Gen1Box::setPokemonNickname(uint8_t index, const char* name)
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
     const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
+
     if(!name)
     {
         Gen1TrainerPokemon poke;
@@ -540,8 +543,8 @@ void Gen1Box::setPokemonNickname(uint8_t index, const char* name)
         name = gameReader_.getPokemonName(poke.poke_index);
     }
     
-    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, NICKNAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
-    saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * NICKNAME_SIZE));
+    const uint16_t encodedLength = gen1_encodePokeText(name, strlen(name), encodedNickName, entrySize, 0x50, (Gen1LocalizationLanguage)localization_);
+    saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * entrySize));
     saveManager_.write(encodedNickName, encodedLength);
 }
 
@@ -554,9 +557,10 @@ const char* Gen1Box::getOriginalTrainerOfPokemon(uint8_t index)
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
     const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
-    saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * OT_NAME_SIZE));
-    saveManager_.readUntil(encodedOTName, 0x50, OT_NAME_SIZE);
+    saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * entrySize));
+    saveManager_.readUntil(encodedOTName, 0x50, entrySize);
 
     gen1_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
 
@@ -570,11 +574,11 @@ void Gen1Box::setOriginalTrainerOfPokemon(uint8_t index, const char* originalTra
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
     const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
-
-    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, OT_NAME_SIZE, 0x50, (Gen1LocalizationLanguage)localization_);
+    const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, entrySize, 0x50, (Gen1LocalizationLanguage)localization_);
     
-    saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * OT_NAME_SIZE));
+    saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * entrySize));
     saveManager_.write(encodedOTName, encodedLength);
 }
 
