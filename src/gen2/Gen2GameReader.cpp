@@ -252,11 +252,19 @@ static void copyMainSaveRegionToBackupSaveRegion(ISaveManager& saveManager, Gen2
 /**
  * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
  */
-static bool hasMainSave(ISaveManager& saveManager, bool isCrystal)
+static bool hasMainSave(ISaveManager& saveManager, Gen2LocalizationLanguage localization, bool isCrystal)
 {
     // check first canary value
     uint8_t saveCorruptionCheckValue1;
     uint8_t saveCorruptionCheckValue2;
+
+    if(localization == Gen2LocalizationLanguage::JAPANESE || localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        // I can't check for the canary values in a japanese or Korean save because I don't know the save offset nor the expected value.
+        // I can't rely on the decompilation projects (Pret's pokegold/pokecrystal) because they only do the international version.
+        // I also can't rely on PkHex's source code because they're not checking this.
+        return true;
+    }
 
     // this value is at the same offset for Gold/Silver/Crystal
     saveManager.seekToBankOffset(1, 0x8);
@@ -286,11 +294,19 @@ static bool hasMainSave(ISaveManager& saveManager, bool isCrystal)
 /**
  * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
  */
-static bool hasBackupSave(ISaveManager& saveManager, bool isCrystal)
+static bool hasBackupSave(ISaveManager& saveManager, Gen2LocalizationLanguage localization, bool isCrystal)
 {
     // check first canary value
     uint8_t saveCorruptionCheckValue1;
     uint8_t saveCorruptionCheckValue2;
+
+    if(localization == Gen2LocalizationLanguage::JAPANESE || localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        // I can't check for the canary values in a japanese or Korean save because I don't know the save offset nor the expected value.
+        // I can't rely on the decompilation projects (Pret's pokegold/pokecrystal) because they only do the international version.
+        // I also can't rely on PkHex's source code because they're not checking this.
+        return true;
+    }
 
     if(isCrystal)
     {
@@ -780,7 +796,7 @@ bool Gen2GameReader::isMainChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
 
-    if(!hasMainSave(saveManager_, isCrystal))
+    if(!hasMainSave(saveManager_, localization_, isCrystal))
     {
         return false;
     }
@@ -795,7 +811,7 @@ bool Gen2GameReader::isBackupChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
 
-    if(!hasBackupSave(saveManager_, isCrystal))
+    if(!hasBackupSave(saveManager_, localization_, isCrystal))
     {
         return false;
     }
