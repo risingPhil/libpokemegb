@@ -63,6 +63,29 @@ typedef struct Gen2LocalizationRomOffsets
     uint32_t spritePalettes;
 } Gen2LocalizationRomOffsets;
 
+typedef struct Gen2LocalizationSRAMOffsets
+{
+    uint32_t currentBoxIndex;
+    uint32_t currentBox;
+    uint32_t dexSeen;
+    uint32_t dexOwned;
+    uint32_t party;
+    uint32_t eventFlags;
+    uint32_t mainChecksum;
+    uint32_t mainChecksumDataEndPos;
+    uint32_t backupChecksum;
+    uint32_t rivalName;
+    uint32_t gsBallMain;
+    uint32_t gsBallBackup;
+    uint32_t itemPocketTMHM;
+    uint32_t itemPocketItem;
+    uint32_t itemPocketKey;
+    uint32_t itemPocketBall;
+    uint32_t itemPocketPC;
+    uint32_t rtcFlags;
+} Gen2LocalizationSRAMOffsets;
+
 const Gen2LocalizationRomOffsets& gen2_getRomOffsets(Gen2GameType gameType, Gen2LocalizationLanguage language);
+const Gen2LocalizationSRAMOffsets& gen2_getSRAMOffsets(Gen2GameType gameType, Gen2LocalizationLanguage language);
 
 #endif

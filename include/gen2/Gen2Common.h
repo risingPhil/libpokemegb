@@ -19,6 +19,7 @@ typedef struct Gen2DistributionPokemon Gen2DistributionPokemon;
 #define CRYSTAL_EVENTFLAG_KURT_READY_TO_RETURN_GSBALL 191
 #define CRYSTAL_EVENTFLAG_GSBALL_USABLE_IN_ILEX_FOREST_SHRINE 192
 #define CRYSTAL_EVENTFLAG_RECEIVED_GSBALL 832
+#define CRYSTAL_GS_BALL_ENABLE_VALUE 0xB
 
 enum class Gen2GameType
 {
@@ -89,6 +90,7 @@ enum Gen2GrowthRate
 enum Gen2ItemListType
 {
     GEN2_ITEMLISTTYPE_INVALID,
+    GEN2_ITEMLISTTYPE_TMHM,
     GEN2_ITEMLISTTYPE_ITEMPOCKET,
     GEN2_ITEMLISTTYPE_KEYITEMPOCKET,
     GEN2_ITEMLISTTYPE_BALLPOCKET,
@@ -180,7 +182,7 @@ extern uint16_t gen2_iconColorPalette[4];
 class Gen2ItemList
 {
 public:
-    Gen2ItemList(ISaveManager& saveManager, Gen2ItemListType type, bool isCrystal);
+    Gen2ItemList(ISaveManager& saveManager, Gen2ItemListType type, Gen2GameType gameType, Gen2LocalizationLanguage localization);
 
     uint8_t getCount();
     uint8_t getCapacity();
@@ -212,7 +214,8 @@ private:
 
     ISaveManager& saveManager_;
     const Gen2ItemListType type_;
-    const bool isCrystal_;
+    const Gen2GameType gameType_;
+    const Gen2LocalizationLanguage localization_;
 };
 
 class Gen2Checksum
