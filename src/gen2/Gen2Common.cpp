@@ -388,10 +388,11 @@ static const TextCodePair gen2TextCodesJpn[] = {
 	{0xFF, u8"9"}
 };
 
-Gen2ItemList::Gen2ItemList(ISaveManager &saveManager, Gen2ItemListType type, bool isCrystal)
+Gen2ItemList::Gen2ItemList(ISaveManager &saveManager, Gen2ItemListType type, Gen2GameType gameType, Gen2LocalizationLanguage localization)
 	: saveManager_(saveManager)
 	, type_(type)
-	, isCrystal_(isCrystal)
+	, gameType_(gameType)
+	, localization_(localization)
 {
 }
 
@@ -601,19 +602,23 @@ bool Gen2ItemList::remove(uint8_t itemId)
 bool Gen2ItemList::seekToBasePos()
 {
 	uint32_t offset;
+	const Gen2LocalizationSRAMOffsets& sramOffsets = gen2_getSRAMOffsets(gameType_, localization_);
 	switch (type_)
 	{
+	case GEN2_ITEMLISTTYPE_TMHM:
+		offset = sramOffsets.itemPocketTMHM;
+		break;
 	case GEN2_ITEMLISTTYPE_ITEMPOCKET:
-		offset = (isCrystal_) ? 0x2420 : 0x241F;
+		offset = sramOffsets.itemPocketItem;
 		break;
 	case GEN2_ITEMLISTTYPE_KEYITEMPOCKET:
-		offset = (isCrystal_) ? 0x244A : 0x2449;
+		offset = sramOffsets.itemPocketKey;
 		break;
 	case GEN2_ITEMLISTTYPE_BALLPOCKET:
-		offset = (isCrystal_) ? 0x2465 : 0x2464;
+		offset = sramOffsets.itemPocketBall;
 		break;
 	case GEN2_ITEMLISTTYPE_PC:
-		offset = (isCrystal_) ? 0x247F : 0x247E;
+		offset = sramOffsets.itemPocketPC;
 		break;
 	default:
 		return false;
@@ -820,6 +825,8 @@ const char* gen2_getItemListTypeString(Gen2ItemListType type)
 {
 	switch(type)
 	{
+		case Gen2ItemListType::GEN2_ITEMLISTTYPE_TMHM:
+			return "TM/HM Pocket";
 		case Gen2ItemListType::GEN2_ITEMLISTTYPE_ITEMPOCKET:
 			return "Item Pocket";
 		case Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET:
