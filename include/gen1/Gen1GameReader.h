@@ -192,7 +192,7 @@ private:
     Gen1SpriteDecoder spriteDecoder_;
     Gen1IconDecoder iconDecoder_;
     Gen1GameType gameType_;
-    uint8_t localization_;
+    Gen1LocalizationLanguage localization_;
 };
 
 #endif
