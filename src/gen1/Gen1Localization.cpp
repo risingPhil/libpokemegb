@@ -1,6 +1,6 @@
 #include "gen1/Gen1Localization.h"
 
-static const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
+static const Gen1LocalizationRomOffsets g1_localizationROMOffsetsRB[] = {
     // English
     {
         .stats = 0x383DE,
@@ -69,7 +69,7 @@ static const Gen1LocalizationRomOffsets g1_localizationOffsetsRB[] = {
     }
 };
 
-static const Gen1LocalizationRomOffsets g1_localizationOffsetsY[] = {
+static const Gen1LocalizationRomOffsets g1_localizationROMOffsetsY[] = {
     // English
     {
         .stats = 0x383DE,
@@ -138,14 +138,39 @@ static const Gen1LocalizationRomOffsets g1_localizationOffsetsY[] = {
     }
 };
 
+static const Gen1LocalizationSRAMOffsets g1_sRAMOffsetsInternational = {
+    .trainerID = 0x2605,
+    .dexSeen = 0x25B6,
+    .dexOwned = 0x25A3,
+    .rivalName = 0x25F6,
+    .party = 0x2F2C,
+    .currentBoxIndex = 0x284C,
+    .checksum = 0x3523
+};
+
+static const Gen1LocalizationSRAMOffsets g1_sRAMOffsetsJapan = {
+    .trainerID = 0x25FB,
+    .dexSeen = 0x25B1,
+    .dexOwned = 0x259E,
+    .rivalName = 0x25F1,
+    .party = 0x2ED5,
+    .currentBoxIndex = 0x2842,
+    .checksum = 0x3594
+};
+
 const Gen1LocalizationRomOffsets& gen1_getRomOffsets(Gen1GameType gameType, Gen1LocalizationLanguage language)
 {
     if(gameType == Gen1GameType::YELLOW)
     {
-        return g1_localizationOffsetsY[(uint8_t)language];
+        return g1_localizationROMOffsetsY[(uint8_t)language];
     }
     else
     {
-        return g1_localizationOffsetsRB[(uint8_t)language];
+        return g1_localizationROMOffsetsRB[(uint8_t)language];
     }
+}
+
+const Gen1LocalizationSRAMOffsets& gen1_getSRAMOffsets(Gen1LocalizationLanguage language)
+{
+    return (language != Gen1LocalizationLanguage::JAPANESE) ? g1_sRAMOffsetsInternational : g1_sRAMOffsetsJapan;
 }

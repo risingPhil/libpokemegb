@@ -71,8 +71,19 @@ typedef struct Gen1LocalizationRomOffsets
      * @brief This is the rom offset at which each pokémon sprite color palette is stored in palette index order
      */
     uint32_t palettes;
-} Gen1Localization;
+} Gen1LocalizationRomOffsets;
+
+typedef struct Gen1LocalizationSRAMOffsets
+{
+    uint32_t trainerID;
+    uint32_t dexSeen;
+    uint32_t dexOwned;
+    uint32_t rivalName;
+    uint32_t party;
+    uint32_t currentBoxIndex;
+    uint32_t checksum;
+} Gen1LocalizationSRAMOffsets;
 
 const Gen1LocalizationRomOffsets& gen1_getRomOffsets(Gen1GameType gameType, Gen1LocalizationLanguage language);
-
+const Gen1LocalizationSRAMOffsets& gen1_getSRAMOffsets(Gen1LocalizationLanguage language);
 #endif
