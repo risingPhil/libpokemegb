@@ -89,7 +89,7 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     // max 10 bytes
     numRead = romReader_.readUntil(encodedText, 0x50, entrySize);
 
-    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), (Gen1LocalizationLanguage)localization_);
+    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), localization_);
     return result;
 }
 
@@ -333,7 +333,7 @@ const char *Gen1GameReader::getRivalName() const
     saveManager_.seek(savOffset);
 
     saveManager_.readUntil(encodedRivalName, 0x50, sizeof(encodedRivalName));
-    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), (Gen1LocalizationLanguage)localization_);
+    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), localization_);
     return result;
 }
 
@@ -349,12 +349,12 @@ uint16_t Gen1GameReader::getTrainerID() const
 
 Gen1Party Gen1GameReader::getParty()
 {
-    return Gen1Party((*this), saveManager_, (Gen1LocalizationLanguage)localization_);
+    return Gen1Party((*this), saveManager_, localization_);
 }
 
 Gen1Box Gen1GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen1Box((*this), saveManager_, boxIndex, (Gen1LocalizationLanguage)localization_);
+    return Gen1Box((*this), saveManager_, boxIndex, localization_);
 }
 
 uint8_t Gen1GameReader::getCurrentBoxIndex()
@@ -458,7 +458,7 @@ uint8_t* Gen1GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 
 uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, bool firstFrame)
 {
-    return iconDecoder_.decode((Gen1LocalizationLanguage)localization_, iconType, firstFrame);
+    return iconDecoder_.decode(localization_, iconType, firstFrame);
 }
 
 uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
