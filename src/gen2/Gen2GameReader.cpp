@@ -628,6 +628,12 @@ const char *Gen2GameReader::getTrainerName() const
 {
     static char result[20];
     uint8_t encodedPlayerName[0xB];
+
+    if(localization_ == Gen2LocalizationLanguage::KOREAN)
+    {
+        return "player";
+    }
+
     saveManager_.seek(0x200B);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
@@ -640,6 +646,11 @@ const char *Gen2GameReader::getRivalName() const
     static char result[20];
     uint8_t encodedPlayerName[0xB];
     const uint32_t savOffset = gen2_getSRAMOffsets(gameType_, localization_).rivalName;
+
+    if(localization_ == Gen2LocalizationLanguage::KOREAN)
+    {
+        return "rival";
+    }
 
     saveManager_.seek(savOffset);
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
