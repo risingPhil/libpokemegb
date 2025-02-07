@@ -11,7 +11,7 @@
 #include <png.h>
 #endif
 
-static const char* findCharsByTextCode(const TextCodePair* textCodes, uint16_t numEntries, uint8_t code)
+const char* findCharsByTextCode(const TextCodePair* textCodes, uint16_t numEntries, uint8_t code)
 {
 	const TextCodePair* const end = textCodes + numEntries;
 	const TextCodePair* cur = textCodes;
@@ -27,7 +27,7 @@ static const char* findCharsByTextCode(const TextCodePair* textCodes, uint16_t n
 	return nullptr;
 }
 
-static void findTextcodeByString(const TextCodePair* textCodes, uint16_t numEntries, const char* input, uint16_t inputLength, uint8_t& outCode, uint16_t& needleLength)
+bool findTextcodeByString(const TextCodePair* textCodes, uint16_t numEntries, const char* input, uint16_t inputLength, uint8_t& outCode, uint16_t& needleLength)
 {
 	const TextCodePair* const end = textCodes + numEntries;
 	const TextCodePair* cur = textCodes;
@@ -45,13 +45,14 @@ static void findTextcodeByString(const TextCodePair* textCodes, uint16_t numEntr
 		if(strncmp(input, cur->chars, needleLength) == 0)
 		{
 			outCode = cur->code;
-			return;
+			return true;
 		}
 		++cur;
 	}
 
 	needleLength = 0;
 	outCode = 0;
+    return false;
 }
 
 const uint8_t* memSearch(const uint8_t* haystack, uint32_t haystackLength, const uint8_t* needle, uint32_t needleLength)

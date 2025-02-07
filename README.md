@@ -13,9 +13,6 @@ I'm happy to accept pull requests if the community wants to do them.
 - Inject other pokémon into your Gen 1/Gen 2 game save
 - Supports all localizations (some limitations on the Korean Gold/Silver games apply though, see below)
 
-# Limitations
-- Can't decode pokemon species names in Korean Gold/Silver games. They will be shown as "poke-<number\>" instead
-- For Korean Gold/Silver games, pokémon OTs, nicknames, trainer name and rival name won't be decoded correctly.
 
 The reason is that the Korean games have a character set that works way differently and more complex than all other localizations. (2-byte character codes, for instance). I don't personally care enough to implement that behaviour, but feel free to contribute to fix this.
 

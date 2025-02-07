@@ -62,8 +62,7 @@ static const Gen2LocalizationRomOffsets g2_localizationROMOffsetsG[] = {
     // KOREAN
     {
         .stats = 0x51BDF,
-        // names NOT SUPPORTED! (because of difficult character set). We will instead show poke-<number> for each pokémon
-        .names = 0x0,
+        .names = 0x1B0C4A,
         .iconTypes = 0x8E96D,
         .icons = 0x8EA68,
         .spritePointers = 0x48000,
@@ -132,8 +131,7 @@ static const Gen2LocalizationRomOffsets g2_localizationROMOffsetsS[] = {
     // KOREAN
     {
         .stats = 0x51BDF,
-        // names NOT SUPPORTED! (because of difficult character set). We will instead show poke-<number> for each pokémon
-        .names = 0x0,
+        .names = 0x1B0C4A,
         .iconTypes = 0x8E953,
         .icons = 0x8EA4E,
         .spritePointers = 0x48000,
