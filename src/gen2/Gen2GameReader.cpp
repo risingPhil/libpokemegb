@@ -382,15 +382,16 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
         return result;
     }
 
-    // The max name length is only 5 chars in Korean or Japanese roms.
+    // The max name length is only 5 chars (and therefore bytes) in Japanese roms.
     // But it's 10 for every other language
-    if(localization_ == Gen2LocalizationLanguage::JAPANESE || localization_ == Gen2LocalizationLanguage::KOREAN)
+    switch(localization_)
     {
+    case Gen2LocalizationLanguage::JAPANESE:
         maxNumBytesPerName = 5;
-    }
-    else
-    {
+        break;
+    default:
         maxNumBytesPerName = 10;
+        break;
     }
 
     romReader_.seek(romOffset + (maxNumBytesPerName * (index - 1)));
@@ -634,11 +635,6 @@ const char *Gen2GameReader::getTrainerName() const
     static char result[20];
     uint8_t encodedPlayerName[0xB];
 
-    if(localization_ == Gen2LocalizationLanguage::KOREAN)
-    {
-        return "player";
-    }
-
     saveManager_.seek(0x200B);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
@@ -651,11 +647,6 @@ const char *Gen2GameReader::getRivalName() const
     static char result[20];
     uint8_t encodedPlayerName[0xB];
     const uint32_t savOffset = gen2_getSRAMOffsets(gameType_, localization_).rivalName;
-
-    if(localization_ == Gen2LocalizationLanguage::KOREAN)
-    {
-        return "rival";
-    }
 
     saveManager_.seek(savOffset);
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
