@@ -1,18 +1,20 @@
 # Introduction
 
-This project implements functionality to read stats, front sprites, Trainers' party/PC boxes and other various properties either from the ROM or from a save file of Gen 1 and Gen 2 Pokémon games.
+This project implements functionality to read stats, front sprites, Trainers' party/PC boxes and other various properties either directly from the ROM/cartridge or from a save file of Gen 1 and Gen 2 Pokémon games.
 It also has support and data to inject the Distribution event pokémon into gen 1 and gen 2 pokémon save files.
 
 I'm happy to accept pull requests if the community wants to do them.
 
 # Features
 - Decode front sprites from Gen 1 and Gen 2 Pokémon games
+- Decode party icons in Gen 1 and 2 games
 - Read Trainers' party and PC boxes from Gen 1 and 2
 - Inject Pokémon from past distribution events into your Gen 1/Gen 2 game save
 - Inject other pokémon into your Gen 1/Gen 2 game save
+- Supports all localizations (some limitations on the Korean Gold/Silver games apply though, see below)
 
-# Limitations
-- Right now, this library only supports the international versions of the games.
+
+The reason is that the Korean games have a character set that works way differently and more complex than all other localizations. (2-byte character codes, for instance). I don't personally care enough to implement that behaviour, but feel free to contribute to fix this.
 
 # Dependencies
 This library only depends on libc. I specifically wanted to avoid the bloat of libstdc++ or any other library. This choice is to keep this library small and portable.

@@ -73,7 +73,7 @@ static const Gen2TrainerPokemon commonCelebiDefinition = {
     .special_def = 0    
 };
 
-const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
+static const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
     .name = "Club Nintendo Mexico Mew",
     .originalTrainer = "ASH",
     .originalTrainerID = 45515,
@@ -87,10 +87,11 @@ const Gen2DistributionPokemon g2_clubNintendoMexico_Mew = {
     // it only makes sense that the same common IVs were used here.
     .iv_data = {0xA1, 0xC5},
     .randomizeIVs = false,
+    .isJapanese = false,
     .poke = commonMewDefinition
 };
 
-const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
+static const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
     .name = "Club Nintendo Mexico Celebi",
     .originalTrainer = "HIRO",
     .originalTrainerID = 42534,
@@ -101,10 +102,11 @@ const Gen2DistributionPokemon g2_clubNintendoMexico_Celebi = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_swedenCelebi = {
+static const Gen2DistributionPokemon g2_swedenCelebi = {
     .name = "Sweden Celebi Tour Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -115,10 +117,11 @@ const Gen2DistributionPokemon g2_swedenCelebi = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_westfieldShopping = {
+static const Gen2DistributionPokemon g2_westfieldShopping = {
     .name = "Westfield Shopping Centre Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -129,10 +132,11 @@ const Gen2DistributionPokemon g2_westfieldShopping = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_celebiTour = {
+static const Gen2DistributionPokemon g2_celebiTour = {
     .name = "Celebi Tour Celebi",
     .originalTrainer = "CTOUR",
     .originalTrainerID = 0,
@@ -143,10 +147,11 @@ const Gen2DistributionPokemon g2_celebiTour = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
+static const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
     .name = "Pokémon Fun Fest Celebi",
     .originalTrainer = "FLAGSA",
     .originalTrainerID = 1000,
@@ -157,10 +162,11 @@ const Gen2DistributionPokemon g2_pokemonFunFestCelebi = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
+static const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
     .name = "Nintendo Power Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -171,10 +177,11 @@ const Gen2DistributionPokemon g2_nintendoPowerCelebi = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = commonCelebiDefinition
 };
 
-const Gen2DistributionPokemon g2_celebiSweepstakes = {
+static const Gen2DistributionPokemon g2_celebiSweepstakes = {
     .name = "Celebi Sweepstakes Celebi",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -185,6 +192,760 @@ const Gen2DistributionPokemon g2_celebiSweepstakes = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
+    .poke = commonCelebiDefinition
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggBulbasaur = {
+    .name = "PC Mystery Egg #3 Bulbasaur (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 1,
+        .held_item_index = 0,
+        .index_move1 = 33,  // TACKLE,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 246, // ANCIENTPOWER
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 5,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggCharmander = {
+    .name = "PC Mystery Egg #3 Charmander (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 4,
+        .held_item_index = 0,
+        .index_move1 = 10,  // SCRATCH,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 242, // CRUNCH
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggTotodile = {
+    .name = "PC Mystery Egg #3 Totodile (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 158,
+        .held_item_index = 0,
+        .index_move1 = 10,  // SCRATCH,
+        .index_move2 = 43,  // LEER
+        .index_move3 = 66, // SUBMISSION
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 30,
+        .pp_move3 = 20,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggHoothoot = {
+    .name = "PC Mystery Egg #3 Hoothoot (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 163,
+        .held_item_index = 0,
+        .index_move1 = 33,  // TACKLE,
+        .index_move2 = 45,  // GROWL
+        .index_move3 = 101, // NIGHT SHADE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg13Pichu = {
+    .name = "PC Mystery Egg #1|#3 Pichu (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 172,
+        .held_item_index = 0,
+        .index_move1 = 84,  // THUNDERSHOCK,
+        .index_move2 = 204, // CHARM
+        .index_move3 = 47,  // SING
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 30,
+        .pp_move2 = 20,
+        .pp_move3 = 15,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggPsyduck = {
+    .name = "PC Mystery Egg #2 Psyduck (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 54,
+        .held_item_index = 0,
+        .index_move1 = 10,  // SCRATCH,
+        .index_move2 = 39,  // TAIL WHIP
+        .index_move3 = 80,  // PETAL DANCE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 30,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggChikorita = {
+    .name = "PC Mystery Egg #1|#2 Chikorita (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 152,
+        .held_item_index = 0,
+        .index_move1 = 33,  // TACKLE,
+        .index_move2 = 45, // GROWL
+        .index_move3 = 80,  // PETAL DANCE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg2Pichu = {
+    .name = "PC Mystery Egg #2 Pichu (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 172,
+        .held_item_index = 0,
+        .index_move1 = 84,  // THUNDERSHOCK,
+        .index_move2 = 204, // CHARM
+        .index_move3 = 80,  // PETAL DANCE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 30,
+        .pp_move2 = 20,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg2Cleffa = {
+    .name = "PC Mystery Egg #2 Cleffa (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 173,
+        .held_item_index = 0,
+        .index_move1 = 1,  // POUND,
+        .index_move2 = 204, // CHARM
+        .index_move3 = 227,  // ENCORE
+        .index_move4 = 80,  // PETAL DANCE
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 20,
+        .pp_move3 = 5,
+        .pp_move4 = 10,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggIgglybuff = {
+    .name = "PC Mystery Egg #2 Igglybuff (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 174,
+        .held_item_index = 0,
+        .index_move1 = 47,  // SING,
+        .index_move2 = 204, // CHARM
+        .index_move3 = 111,  // DEFENSE CURL
+        .index_move4 = 80,  // PETAL DANCE
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 15,
+        .pp_move2 = 20,
+        .pp_move3 = 40,
+        .pp_move4 = 10,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg2Smoochum = {
+    .name = "PC Mystery Egg #2 Smoochum (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 238,
+        .held_item_index = 0,
+        .index_move1 = 1,  // POUND,
+        .index_move2 = 122, // LICK
+        .index_move3 = 80,  // PETAL DANCE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 30,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg1Cleffa = {
+    .name = "PC Mystery Egg #1 Cleffa (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 173,
+        .held_item_index = 0,
+        .index_move1 = 1,    // POUND,
+        .index_move2 = 204,  // CHARM
+        .index_move3 = 227,  // ENCORE
+        .index_move4 = 129,  // SWIFT
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 20,
+        .pp_move3 = 5,
+        .pp_move4 = 20,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggWooper = {
+    .name = "PC Mystery Egg #1 Wooper (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 194,
+        .held_item_index = 0,
+        .index_move1 = 55,   // WATER GUN,
+        .index_move2 = 39,   // TAIL WHIP
+        .index_move3 = 187,  // BELLY DRUM
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 25,
+        .pp_move2 = 30,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEggPhanpy = {
+    .name = "PC Mystery Egg #1 Phanpy (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 231,
+        .held_item_index = 0,
+        .index_move1 = 33,   // TACKLE,
+        .index_move2 = 45,   // GROWL
+        .index_move3 = 227,  // ENCORE
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 40,
+        .pp_move3 = 5,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_pcMysteryEgg1Smoochum = {
+    .name = "PC Mystery Egg #1 Smoochum (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 15,
+    .overrideLevel = 0,
+    .isEgg = true,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = {
+        .poke_index = 238,
+        .held_item_index = 0,
+        .index_move1 = 1,   // POUND,
+        .index_move2 = 122, // LICK
+        .index_move3 = 118, // METRONOME
+        .index_move4 = 0,
+        .original_trainer_ID = 0,
+        .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_FAST),
+        .hp_effort_value = 0,
+        .atk_effort_value = 0,
+        .def_effort_value = 0,
+        .speed_effort_value = 0,
+        .special_effort_value = 0,
+        .iv_data = {0, 0},
+        .pp_move1 = 35,
+        .pp_move2 = 30,
+        .pp_move3 = 10,
+        .pp_move4 = 0,
+        .friendship_or_remaining_egg_cycles = 0,
+        .pokerus = 0,
+        .caught_data = 0,
+        .level = 5,
+        .status_condition = 0,
+        .unused_byte = 0,
+        .current_hp = 0,
+        .max_hp = 0,
+        .atk = 0,
+        .def = 0,
+        .speed = 0,
+        .special_atk = 0,
+        .special_def = 0
+    }
+};
+
+static const Gen2DistributionPokemon g2_jpn_worldHobbyFairCelebi = {
+    .name = "World Hobby Fair Celebi (JPN)",
+    .originalTrainer = "トウキョー",
+    .originalTrainerID = 12006,
+    .setPlayerAsOriginalTrainer = false,
+    .regenerateTrainerID = true,
+    .shinyChance = 0,
+    .overrideLevel = 2,
+    .isEgg = false,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = commonCelebiDefinition
+};
+
+static const Gen2DistributionPokemon g2_jpn_shogakukanAnnualEventCelebi = {
+    .name = "Shogakukan Annual Event Celebi (JPN)",
+    .originalTrainer = "",
+    .originalTrainerID = 0,
+    .setPlayerAsOriginalTrainer = true,
+    .regenerateTrainerID = false,
+    .shinyChance = 0,
+    .overrideLevel = 2,
+    .isEgg = false,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
+    .poke = commonCelebiDefinition
+};
+
+// https://bulbapedia.bulbagarden.net/wiki/List_of_Japanese_event_Pok%C3%A9mon_distributions_in_Generation_II
+// the wiki page indicates that trainer ids with a odd number get a specific OT and even numbers get another.
+// I can't replicate this with my current functionality. So I'm going to only hand out a specifid trainer number for this one
+static const Gen2DistributionPokemon g2_jpn_nintendoSpaceWorld2000Celebi = {
+    .name = "Nintendo Space World 2000 (JPN)",
+    .originalTrainer = "ワールド",
+    .originalTrainerID = 13463,
+    .setPlayerAsOriginalTrainer = false,
+    .regenerateTrainerID = false,
+    .shinyChance = 0,
+    .overrideLevel = 2,
+    .isEgg = false,
+    .iv_data = {0, 0},
+    .randomizeIVs = true,
+    .isJapanese = true,
     .poke = commonCelebiDefinition
 };
 
@@ -196,11 +957,29 @@ static const Gen2DistributionPokemon* mainList[] = {
     &g2_celebiTour,
     &g2_pokemonFunFestCelebi,
     &g2_nintendoPowerCelebi,
-    &g2_celebiSweepstakes
+    &g2_celebiSweepstakes,
+    &g2_jpn_pcMysteryEggBulbasaur,
+    &g2_jpn_pcMysteryEggCharmander,
+    &g2_jpn_pcMysteryEggTotodile,
+    &g2_jpn_pcMysteryEggHoothoot,
+    &g2_jpn_pcMysteryEgg13Pichu,
+    &g2_jpn_pcMysteryEggPsyduck,
+    &g2_jpn_pcMysteryEggChikorita,
+    &g2_jpn_pcMysteryEgg2Pichu,
+    &g2_jpn_pcMysteryEgg2Cleffa,
+    &g2_jpn_pcMysteryEggIgglybuff,
+    &g2_jpn_pcMysteryEgg2Smoochum,
+    &g2_jpn_pcMysteryEgg1Cleffa,
+    &g2_jpn_pcMysteryEggWooper,
+    &g2_jpn_pcMysteryEggPhanpy,
+    &g2_jpn_pcMysteryEgg1Smoochum,
+    &g2_jpn_worldHobbyFairCelebi,
+    &g2_jpn_shogakukanAnnualEventCelebi,
+    &g2_jpn_nintendoSpaceWorld2000Celebi
 };
 
 // PCNY (Pokemon Center New York) Gotta Catch 'em all! station distribution pokémon below
-const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
+static const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
     .name = "AncientPower Bulbasaur",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -211,6 +990,7 @@ const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 1,
         .held_item_index = 0,
@@ -246,7 +1026,7 @@ const Gen2DistributionPokemon g2_pcny_ancientpowerBulbasaur = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
+static const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
     .name = "Shiny Venusaur",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -257,6 +1037,7 @@ const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 3,
         .held_item_index = 0,
@@ -292,7 +1073,7 @@ const Gen2DistributionPokemon g2_pcny_shinyVenusaur = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
+static const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
     .name = "Crunch Charmander",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -303,6 +1084,7 @@ const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 4,
         .held_item_index = 0,
@@ -338,7 +1120,7 @@ const Gen2DistributionPokemon g2_pcny_crunchCharmander = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
+static const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
     .name = "Shiny Charizard",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -349,6 +1131,7 @@ const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 6,
         .held_item_index = 0,
@@ -384,7 +1167,7 @@ const Gen2DistributionPokemon g2_pcny_shinyCharizard = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
+static const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
     .name = "Zap Cannon Squirtle",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -395,6 +1178,7 @@ const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 7,
         .held_item_index = 0,
@@ -430,7 +1214,7 @@ const Gen2DistributionPokemon g2_pcny_zapCannonSquirtle = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
+static const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
     .name = "Shiny Blastoise",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -441,6 +1225,7 @@ const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 9,
         .held_item_index = 0,
@@ -476,7 +1261,7 @@ const Gen2DistributionPokemon g2_pcny_shinyBlastoise = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
+static const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
     .name = "SonicBoom Spearow",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -487,6 +1272,7 @@ const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 21,
         .held_item_index = 0,
@@ -522,7 +1308,7 @@ const Gen2DistributionPokemon g2_pcny_sonicboomSpearow = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
     .name = "Lovely Kiss Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -533,6 +1319,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 29,
         .held_item_index = 0,
@@ -568,7 +1355,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
     .name = "Moonlight Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -579,6 +1366,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 29,
         .held_item_index = 0,
@@ -614,7 +1402,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
     .name = "Sweet Kiss Nidoran♀",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -625,6 +1413,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 29,
         .held_item_index = 0,
@@ -660,7 +1449,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranFem = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
     .name = "Lovely Kiss Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -671,6 +1460,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 32,
         .held_item_index = 0,
@@ -706,7 +1496,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
     .name = "Morning Sun Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -717,6 +1507,7 @@ const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 32,
         .held_item_index = 0,
@@ -752,7 +1543,7 @@ const Gen2DistributionPokemon g2_pcny_morningSunNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
     .name = "Sweet Kiss Nidoran♂",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -763,6 +1554,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 32,
         .held_item_index = 0,
@@ -798,7 +1590,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissNidoranMale = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_flailZubat = {
+static const Gen2DistributionPokemon g2_pcny_flailZubat = {
     .name = "Flail Zubat",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -809,6 +1601,7 @@ const Gen2DistributionPokemon g2_pcny_flailZubat = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 41,
         .held_item_index = 0,
@@ -844,7 +1637,7 @@ const Gen2DistributionPokemon g2_pcny_flailZubat = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
+static const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
     .name = "Leech Seed Oddish",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -855,6 +1648,7 @@ const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 43,
         .held_item_index = 0,
@@ -890,7 +1684,7 @@ const Gen2DistributionPokemon g2_pcny_leechSeedOddish = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_synthesisParas = {
+static const Gen2DistributionPokemon g2_pcny_synthesisParas = {
     .name = "Synthesis Paras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -901,6 +1695,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisParas = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 46,
         .held_item_index = 0,
@@ -936,7 +1731,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisParas = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
+static const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
     .name = "Petal Dance Psyduck",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -947,6 +1742,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 54,
         .held_item_index = 0,
@@ -982,7 +1778,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePsyduck = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
+static const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
     .name = "Tri Attach Psyduck",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -993,6 +1789,7 @@ const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 54,
         .held_item_index = 0,
@@ -1028,7 +1825,7 @@ const Gen2DistributionPokemon g2_pcny_triAttackPsyduck = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
     .name = "Growth Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1039,6 +1836,7 @@ const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 60,
         .held_item_index = 0,
@@ -1074,7 +1872,7 @@ const Gen2DistributionPokemon g2_pcny_growthPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
     .name = "Lovely Kiss Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1085,6 +1883,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 60,
         .held_item_index = 0,
@@ -1120,7 +1919,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
     .name = "Sweet Kiss Poliwag",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1131,6 +1930,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 60,
         .held_item_index = 0,
@@ -1166,7 +1966,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissPoliwag = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_foresightAbra = {
+static const Gen2DistributionPokemon g2_pcny_foresightAbra = {
     .name = "Foresight Abra",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1177,6 +1977,7 @@ const Gen2DistributionPokemon g2_pcny_foresightAbra = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 63,
         .held_item_index = 0,
@@ -1212,7 +2013,7 @@ const Gen2DistributionPokemon g2_pcny_foresightAbra = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
+static const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
     .name = "False Swipe Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1223,6 +2024,7 @@ const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 66,
         .held_item_index = 0,
@@ -1258,7 +2060,7 @@ const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_thrashMachop = {
+static const Gen2DistributionPokemon g2_pcny_thrashMachop = {
     .name = "Thrash Swipe Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1269,6 +2071,7 @@ const Gen2DistributionPokemon g2_pcny_thrashMachop = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 66,
         .held_item_index = 0,
@@ -1304,7 +2107,7 @@ const Gen2DistributionPokemon g2_pcny_thrashMachop = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
     .name = "Lovely Kiss Bellsprout",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1315,6 +2118,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 69,
         .held_item_index = 0,
@@ -1350,7 +2154,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissBellsprout = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
     .name = "Sweet Kiss Bellsprout",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1361,6 +2165,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 69,
         .held_item_index = 0,
@@ -1396,7 +2201,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissBellsprout = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
+static const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
     .name = "Confuse Ray Tentacool",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1407,6 +2212,7 @@ const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 72,
         .held_item_index = 0,
@@ -1442,7 +2248,7 @@ const Gen2DistributionPokemon g2_pcny_confuseRayTentacool = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
+static const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
     .name = "Rapid Spin Geodude",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1453,6 +2259,7 @@ const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 74,
         .held_item_index = 0,
@@ -1488,7 +2295,7 @@ const Gen2DistributionPokemon g2_pcny_rapidSpinGeodude = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
+static const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
     .name = "Low Kick Ponyta",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1499,6 +2306,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 77,
         .held_item_index = 0,
@@ -1534,7 +2342,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickPonyta = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
+static const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
     .name = "Agility Magnemite",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1545,6 +2353,7 @@ const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 81,
         .held_item_index = 0,
@@ -1580,7 +2389,7 @@ const Gen2DistributionPokemon g2_pcny_agilityMagnemite = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
+static const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
     .name = "Fury Cutter Farfetch'd",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1591,6 +2400,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 83,
         .held_item_index = 0,
@@ -1626,7 +2436,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterFarfetchd = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
+static const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
     .name = "Low Kick Doduo",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1637,6 +2447,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 84,
         .held_item_index = 0,
@@ -1672,7 +2483,7 @@ const Gen2DistributionPokemon g2_pcny_lowKickDoduo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_flailSeel = {
+static const Gen2DistributionPokemon g2_pcny_flailSeel = {
     .name = "Flail Seel",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1683,6 +2494,7 @@ const Gen2DistributionPokemon g2_pcny_flailSeel = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 86,
         .held_item_index = 0,
@@ -1718,7 +2530,7 @@ const Gen2DistributionPokemon g2_pcny_flailSeel = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
+static const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
     .name = "Sharpen Onix",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1729,6 +2541,7 @@ const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 95,
         .held_item_index = 0,
@@ -1764,7 +2577,7 @@ const Gen2DistributionPokemon g2_pcny_sharpenOnix = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
+static const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
     .name = "Amnesia Drowsee",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1775,6 +2588,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 96,
         .held_item_index = 0,
@@ -1810,7 +2624,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaDrowsee = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
+static const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
     .name = "Metal Claw Crabby",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1821,6 +2635,7 @@ const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 98,
         .held_item_index = 0,
@@ -1856,7 +2671,7 @@ const Gen2DistributionPokemon g2_pcny_metalClawKrabby = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
+static const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
     .name = "Agility Voltorb",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1867,6 +2682,7 @@ const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 100,
         .held_item_index = 0,
@@ -1902,7 +2718,7 @@ const Gen2DistributionPokemon g2_pcny_agilityVoltorb = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
     .name = "Sweet Scent Exeggcute",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1913,6 +2729,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 102,
         .held_item_index = 0,
@@ -1948,7 +2765,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentExeggcute = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
+static const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
     .name = "Fury Attack Cubone",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -1959,6 +2776,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 104,
         .held_item_index = 0,
@@ -1994,7 +2812,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackCubone = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
+static const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
     .name = "DoubleSlap Lickitung",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2005,6 +2823,7 @@ const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 108,
         .held_item_index = 0,
@@ -2040,7 +2859,7 @@ const Gen2DistributionPokemon g2_pcny_doubleSlapLickitung = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
     .name = "Sweet Scent Chansey",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2051,6 +2870,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 113,
         .held_item_index = 0,
@@ -2086,7 +2906,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentChansey = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
+static const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
     .name = "Synthesis Tangela",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2097,6 +2917,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 114,
         .held_item_index = 0,
@@ -2132,7 +2953,7 @@ const Gen2DistributionPokemon g2_pcny_synthesisTangela = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
+static const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
     .name = "Faint Attack Kangaskhan",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2143,6 +2964,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 115,
         .held_item_index = 0,
@@ -2178,7 +3000,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackKangaskhan = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
+static const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
     .name = "Haze Horsea",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2189,6 +3011,7 @@ const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 116,
         .held_item_index = 0,
@@ -2224,7 +3047,7 @@ const Gen2DistributionPokemon g2_pcny_hazeHorsea = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
+static const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
     .name = "Swords Dance Goldeen",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2235,6 +3058,7 @@ const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 118,
         .held_item_index = 0,
@@ -2270,7 +3094,7 @@ const Gen2DistributionPokemon g2_pcny_swordsDanceGoldeen = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
+static const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
     .name = "Twister Staryu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2281,6 +3105,7 @@ const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 120,
         .held_item_index = 0,
@@ -2316,7 +3141,7 @@ const Gen2DistributionPokemon g2_pcny_twisterStaryu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
+static const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
     .name = "Mind Reader Mr. Mime",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2327,6 +3152,7 @@ const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 122,
         .held_item_index = 0,
@@ -2362,7 +3188,7 @@ const Gen2DistributionPokemon g2_pcny_mindReaderMrMime = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
+static const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
     .name = "SonicBoom Scyther",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2373,6 +3199,7 @@ const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 123,
         .held_item_index = 0,
@@ -2408,7 +3235,7 @@ const Gen2DistributionPokemon g2_pcny_sonicBoomScyther = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
     .name = "Rock Throw Pinsir",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2419,6 +3246,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 127,
         .held_item_index = 0,
@@ -2454,7 +3282,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowPinsir = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
+static const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
     .name = "Quick Attack Tauros",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2465,6 +3293,7 @@ const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 128,
         .held_item_index = 0,
@@ -2500,7 +3329,7 @@ const Gen2DistributionPokemon g2_pcny_quickAttackTauros = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
+static const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
     .name = "Bubble Magikarp",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2511,6 +3340,7 @@ const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 129,
         .held_item_index = 0,
@@ -2546,7 +3376,7 @@ const Gen2DistributionPokemon g2_pcny_bubbleMagikarp = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
+static const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
     .name = "Reversal Magikarp",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2557,6 +3387,7 @@ const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 129,
         .held_item_index = 0,
@@ -2592,7 +3423,7 @@ const Gen2DistributionPokemon g2_pcny_reversalMagikarp = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_biteLapras = {
+static const Gen2DistributionPokemon g2_pcny_biteLapras = {
     .name = "Bite Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2603,6 +3434,7 @@ const Gen2DistributionPokemon g2_pcny_biteLapras = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 131,
         .held_item_index = 0,
@@ -2638,7 +3470,7 @@ const Gen2DistributionPokemon g2_pcny_biteLapras = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
+static const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
     .name = "Future Sight Lapras",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2649,6 +3481,7 @@ const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 131,
         .held_item_index = 0,
@@ -2684,7 +3517,7 @@ const Gen2DistributionPokemon g2_pcny_futureSightLapras = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthEevee = {
+static const Gen2DistributionPokemon g2_pcny_growthEevee = {
     .name = "Growth Eevee",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2695,6 +3528,7 @@ const Gen2DistributionPokemon g2_pcny_growthEevee = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 133,
         .held_item_index = 0,
@@ -2730,7 +3564,7 @@ const Gen2DistributionPokemon g2_pcny_growthEevee = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
+static const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
     .name = "Barrier Porygon",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2741,6 +3575,7 @@ const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 137,
         .held_item_index = 0,
@@ -2776,7 +3611,7 @@ const Gen2DistributionPokemon g2_pcny_barrierPorygon = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
     .name = "Rock Throw Omanyte",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2787,6 +3622,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 138,
         .held_item_index = 0,
@@ -2822,7 +3658,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowOmanyte = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
     .name = "Rock Throw Kabuto",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2833,6 +3669,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 140,
         .held_item_index = 0,
@@ -2868,7 +3705,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowKabuto = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
+static const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
     .name = "Rock Throw Aerodactyl",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2879,6 +3716,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 142,
         .held_item_index = 0,
@@ -2914,7 +3752,7 @@ const Gen2DistributionPokemon g2_pcny_rockThrowAerodactyl = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
     .name = "Lovely Kiss Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2925,6 +3763,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 143,
         .held_item_index = 0,
@@ -2960,7 +3799,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
     .name = "Splash Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -2971,6 +3810,7 @@ const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 143,
         .held_item_index = 0,
@@ -3006,7 +3846,7 @@ const Gen2DistributionPokemon g2_pcny_splashSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
+static const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
     .name = "Sweet Kiss Snorlax",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3017,6 +3857,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 143,
         .held_item_index = 0,
@@ -3052,7 +3893,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissSnorlax = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
+static const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
     .name = "Shiny Articuno",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -3063,6 +3904,7 @@ const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 144,
         .held_item_index = 0,
@@ -3098,7 +3940,7 @@ const Gen2DistributionPokemon g2_pcny_shinyArticuno = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
+static const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
     .name = "Shiny Zapdos",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -3109,6 +3951,7 @@ const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 145,
         .held_item_index = 0,
@@ -3144,7 +3987,7 @@ const Gen2DistributionPokemon g2_pcny_shinyZapdos = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
+static const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
     .name = "Shiny Moltres",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -3155,6 +3998,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 146,
         .held_item_index = 0,
@@ -3190,7 +4034,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMoltres = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
+static const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
     .name = "Hydro Pump Dratini",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3201,6 +4045,7 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 147,
         .held_item_index = 0,
@@ -3236,7 +4081,7 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpDratini = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
+static const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
     .name = "Shiny Mewtwo",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -3247,6 +4092,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 150,
         .held_item_index = 0,
@@ -3282,7 +4128,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMewtwo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMew = {
+static const Gen2DistributionPokemon g2_pcny_shinyMew = {
     .name = "Shiny Mew",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -3293,6 +4139,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMew = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 151,
         .held_item_index = 0,
@@ -3328,7 +4175,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMew = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
     .name = "Petal Dance Chikorita",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3339,6 +4186,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 152,
         .held_item_index = 0,
@@ -3374,7 +4222,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceChikorita = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
+static const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
     .name = "Shiny Meganium",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -3385,6 +4233,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 154,
         .held_item_index = 0,
@@ -3420,7 +4269,7 @@ const Gen2DistributionPokemon g2_pcny_shinyMeganium = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
+static const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
     .name = "Double-Edge Cyndaquil",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3431,6 +4280,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 155,
         .held_item_index = 0,
@@ -3466,7 +4316,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeCyndaquil = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
+static const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
     .name = "Shiny Typhlosion",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -3477,6 +4327,7 @@ const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 157,
         .held_item_index = 0,
@@ -3512,7 +4363,7 @@ const Gen2DistributionPokemon g2_pcny_shinyTyphlosion = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
+static const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
     .name = "Submission Totodile",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3523,6 +4374,7 @@ const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 158,
         .held_item_index = 0,
@@ -3558,7 +4410,7 @@ const Gen2DistributionPokemon g2_pcny_submissionTotodile = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
+static const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
     .name = "Shiny Feraligatr",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -3569,6 +4421,7 @@ const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 160,
         .held_item_index = 0,
@@ -3604,7 +4457,7 @@ const Gen2DistributionPokemon g2_pcny_shinyFeraligatr = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
     .name = "Dizzy Punch Sentret",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3615,6 +4468,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 161,
         .held_item_index = 0,
@@ -3650,7 +4504,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchSentret = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
+static const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
     .name = "Night Shade Hoothoot",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3661,6 +4515,7 @@ const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 163,
         .held_item_index = 0,
@@ -3696,7 +4551,7 @@ const Gen2DistributionPokemon g2_pcny_nightShadeHoothoot = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
+static const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
     .name = "Barrier Ledyba",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3707,6 +4562,7 @@ const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 165,
         .held_item_index = 0,
@@ -3742,7 +4598,7 @@ const Gen2DistributionPokemon g2_pcny_barrierLedyba = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
+static const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
     .name = "Growth Spinarak",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3753,6 +4609,7 @@ const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 167,
         .held_item_index = 0,
@@ -3788,7 +4645,7 @@ const Gen2DistributionPokemon g2_pcny_growthSpinarak = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
+static const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
     .name = "Light Screen Chinchou",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3799,6 +4656,7 @@ const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 170,
         .held_item_index = 0,
@@ -3834,7 +4692,7 @@ const Gen2DistributionPokemon g2_pcny_lightScreenChinchou = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
     .name = "Dizzy Punch Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3845,6 +4703,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 172,
         .held_item_index = 0,
@@ -3880,7 +4739,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchPichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
+static const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
     .name = "Petal Dance Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3891,6 +4750,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 172,
         .held_item_index = 0,
@@ -3926,7 +4786,7 @@ const Gen2DistributionPokemon g2_pcny_petalDancePichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
+static const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
     .name = "Scary Face Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3937,6 +4797,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 172,
         .held_item_index = 0,
@@ -3972,7 +4833,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFacePichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_singPichu = {
+static const Gen2DistributionPokemon g2_pcny_singPichu = {
     .name = "Sing Pichu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -3983,6 +4844,7 @@ const Gen2DistributionPokemon g2_pcny_singPichu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 172,
         .held_item_index = 0,
@@ -4018,7 +4880,7 @@ const Gen2DistributionPokemon g2_pcny_singPichu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
     .name = "Petal Dance Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4029,6 +4891,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 173,
         .held_item_index = 0,
@@ -4064,8 +4927,8 @@ const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
-    .name = "Petal Dance Cleffa",
+static const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
+    .name = "Scary Face Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -4075,6 +4938,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 173,
         .held_item_index = 0,
@@ -4110,7 +4974,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
+static const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
     .name = "Swift Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4121,6 +4985,7 @@ const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 173,
         .held_item_index = 0,
@@ -4156,7 +5021,7 @@ const Gen2DistributionPokemon g2_pcny_swiftCleffa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
+static const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
     .name = "Mimic Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4167,6 +5032,7 @@ const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 174,
         .held_item_index = 0,
@@ -4202,7 +5068,7 @@ const Gen2DistributionPokemon g2_pcny_mimicIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
     .name = "Petal Dance Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4213,6 +5079,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 174,
         .held_item_index = 0,
@@ -4248,8 +5115,8 @@ const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
-    .name = "Petal Dance Igglybuff",
+static const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
+    .name = "Scary Face Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -4259,6 +5126,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 174,
         .held_item_index = 0,
@@ -4294,7 +5162,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
+static const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
     .name = "Safeguard Natu",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4305,6 +5173,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 177,
         .held_item_index = 0,
@@ -4340,7 +5209,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardNatu = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
     .name = "Dizzy Punch Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4351,6 +5220,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 183,
         .held_item_index = 0,
@@ -4386,7 +5256,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
+static const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
     .name = "Hydro Pump Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4397,6 +5267,7 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 183,
         .held_item_index = 0,
@@ -4432,8 +5303,8 @@ const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
-    .name = "Hydro Pump Marill",
+static const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
+    .name = "Scary Face Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -4443,6 +5314,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 183,
         .held_item_index = 0,
@@ -4478,7 +5350,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
+static const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
     .name = "Substitute Sudowoodo",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4489,6 +5361,7 @@ const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 185,
         .held_item_index = 0,
@@ -4524,7 +5397,7 @@ const Gen2DistributionPokemon g2_pcny_substituteSudowoodo = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
+static const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
     .name = "Agility Hoppip",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4535,6 +5408,7 @@ const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 187,
         .held_item_index = 0,
@@ -4570,7 +5444,7 @@ const Gen2DistributionPokemon g2_pcny_agilityHoppip = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicAipom = {
+static const Gen2DistributionPokemon g2_pcny_mimicAipom = {
     .name = "Mimic Aipom",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4581,6 +5455,7 @@ const Gen2DistributionPokemon g2_pcny_mimicAipom = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 190,
         .held_item_index = 0,
@@ -4616,7 +5491,7 @@ const Gen2DistributionPokemon g2_pcny_mimicAipom = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_splashSunkern = {
+static const Gen2DistributionPokemon g2_pcny_splashSunkern = {
     .name = "Splash Sunkern",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4627,6 +5502,7 @@ const Gen2DistributionPokemon g2_pcny_splashSunkern = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 191,
         .held_item_index = 0,
@@ -4662,7 +5538,7 @@ const Gen2DistributionPokemon g2_pcny_splashSunkern = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
+static const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
     .name = "Steel Wing Yanma",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4673,6 +5549,7 @@ const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 193,
         .held_item_index = 0,
@@ -4708,8 +5585,8 @@ const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
-    .name = "Steel Wing Yanma",
+static const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
+    .name = "Sweet Kiss Yanma",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -4719,6 +5596,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 193,
         .held_item_index = 0,
@@ -4754,7 +5632,7 @@ const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
+static const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
     .name = "Belly Drum Wooper",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4765,6 +5643,7 @@ const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 194,
         .held_item_index = 0,
@@ -4800,7 +5679,7 @@ const Gen2DistributionPokemon g2_pcny_bellyDrumWooper = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
+static const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
     .name = "Scary Face Wooper",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4811,6 +5690,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 194,
         .held_item_index = 0,
@@ -4846,7 +5726,7 @@ const Gen2DistributionPokemon g2_pcny_scaryFaceWooper = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
+static const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
     .name = "Beat Up Murkrow",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4857,6 +5737,7 @@ const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 198,
         .held_item_index = 0,
@@ -4892,7 +5773,7 @@ const Gen2DistributionPokemon g2_pcny_beatUpMurkrow = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
+static const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
     .name = "Hypnosis Misdreavus",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4903,6 +5784,7 @@ const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 200,
         .held_item_index = 0,
@@ -4938,7 +5820,7 @@ const Gen2DistributionPokemon g2_pcny_hypnosisMisdreavus = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
+static const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
     .name = "Mimic Wobbuffet",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4949,6 +5831,7 @@ const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 202,
         .held_item_index = 0,
@@ -4984,7 +5867,7 @@ const Gen2DistributionPokemon g2_pcny_mimicWobbuffet = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_substitutePineco = {
+static const Gen2DistributionPokemon g2_pcny_substitutePineco = {
     .name = "Substitute Pineco",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -4995,6 +5878,7 @@ const Gen2DistributionPokemon g2_pcny_substitutePineco = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 204,
         .held_item_index = 0,
@@ -5030,7 +5914,7 @@ const Gen2DistributionPokemon g2_pcny_substitutePineco = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
+static const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
     .name = "Fury Attack Dunsparce",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5041,6 +5925,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 206,
         .held_item_index = 0,
@@ -5076,7 +5961,7 @@ const Gen2DistributionPokemon g2_pcny_furyAttackDunsparce = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
+static const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
     .name = "Horn Drill Dunsparce",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5087,6 +5972,7 @@ const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 206,
         .held_item_index = 0,
@@ -5122,7 +6008,7 @@ const Gen2DistributionPokemon g2_pcny_hornDrillDunsparce = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
+static const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
     .name = "Lovely Kiss Snubbull",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5133,6 +6019,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 209,
         .held_item_index = 0,
@@ -5168,7 +6055,7 @@ const Gen2DistributionPokemon g2_pcny_lovelyKissSnubbull = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
+static const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
     .name = "Double-Edge Qwilfish",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5179,6 +6066,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 211,
         .held_item_index = 0,
@@ -5214,7 +6102,7 @@ const Gen2DistributionPokemon g2_pcny_doubleEdgeQwilfish = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
+static const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
     .name = "Seismic Toss Heracross",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5225,6 +6113,7 @@ const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 214,
         .held_item_index = 0,
@@ -5260,7 +6149,7 @@ const Gen2DistributionPokemon g2_pcny_seismicTossHeracross = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
+static const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
     .name = "Moonlight Sneasel",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5271,6 +6160,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 215,
         .held_item_index = 0,
@@ -5306,7 +6196,7 @@ const Gen2DistributionPokemon g2_pcny_moonlightSneasel = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
+static const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
     .name = "Sweet Scent Teddiursa",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5317,6 +6207,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 216,
         .held_item_index = 0,
@@ -5352,7 +6243,7 @@ const Gen2DistributionPokemon g2_pcny_sweetScentTeddiursa = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
+static const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
     .name = "Whirlwind Swinub",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5363,6 +6254,7 @@ const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 220,
         .held_item_index = 0,
@@ -5398,7 +6290,7 @@ const Gen2DistributionPokemon g2_pcny_whirlwindSwinub = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
+static const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
     .name = "Amnesia Remoraid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5409,6 +6301,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 223,
         .held_item_index = 0,
@@ -5444,7 +6337,7 @@ const Gen2DistributionPokemon g2_pcny_amnesiaRemoraid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
+static const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
     .name = "Mist Remoraid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5455,6 +6348,7 @@ const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 223,
         .held_item_index = 0,
@@ -5490,7 +6384,7 @@ const Gen2DistributionPokemon g2_pcny_mistRemoraid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
+static const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
     .name = "Pay Day Delibird",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5501,6 +6395,7 @@ const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 225,
         .held_item_index = 0,
@@ -5536,7 +6431,7 @@ const Gen2DistributionPokemon g2_pcny_payDayDelibird = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
+static const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
     .name = "Spikes Delibird",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5547,6 +6442,7 @@ const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 225,
         .held_item_index = 0,
@@ -5582,7 +6478,7 @@ const Gen2DistributionPokemon g2_pcny_spikesDelibird = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_gustMantine = {
+static const Gen2DistributionPokemon g2_pcny_gustMantine = {
     .name = "Gust Mantine",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5593,6 +6489,7 @@ const Gen2DistributionPokemon g2_pcny_gustMantine = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 226,
         .held_item_index = 0,
@@ -5628,7 +6525,7 @@ const Gen2DistributionPokemon g2_pcny_gustMantine = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
+static const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
     .name = "Fury Cutter Skarmory",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5639,6 +6536,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 227,
         .held_item_index = 0,
@@ -5674,7 +6572,7 @@ const Gen2DistributionPokemon g2_pcny_furyCutterSkarmory = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
+static const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
     .name = "Absorb Phanpy",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5685,6 +6583,7 @@ const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 231,
         .held_item_index = 0,
@@ -5720,7 +6619,7 @@ const Gen2DistributionPokemon g2_pcny_absorbPhanpy = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
+static const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
     .name = "Safeguard Stantler",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5731,6 +6630,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 234,
         .held_item_index = 0,
@@ -5766,7 +6666,7 @@ const Gen2DistributionPokemon g2_pcny_safeguardStantler = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
+static const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
     .name = "Rage Tyrogue",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5777,6 +6677,7 @@ const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 236,
         .held_item_index = 0,
@@ -5812,7 +6713,7 @@ const Gen2DistributionPokemon g2_pcny_rageTyrogue = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
+static const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
     .name = "Metronome Smoochum",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5823,6 +6724,7 @@ const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 238,
         .held_item_index = 0,
@@ -5858,7 +6760,7 @@ const Gen2DistributionPokemon g2_pcny_metronomeSmoochum = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
+static const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
     .name = "Petal Dance Smoochum",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5869,6 +6771,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 238,
         .held_item_index = 0,
@@ -5904,7 +6807,7 @@ const Gen2DistributionPokemon g2_pcny_petalDanceSmoochum = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
+static const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
     .name = "Dizzy Punch Elekid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5915,6 +6818,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 239,
         .held_item_index = 0,
@@ -5950,7 +6854,7 @@ const Gen2DistributionPokemon g2_pcny_dizzyPunchElekid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
+static const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
     .name = "Pursuit Elekid",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -5961,6 +6865,7 @@ const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 239,
         .held_item_index = 0,
@@ -5996,7 +6901,7 @@ const Gen2DistributionPokemon g2_pcny_pursuitElekid = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
+static const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
     .name = "Feint Attack Magby",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6007,6 +6912,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 240,
         .held_item_index = 0,
@@ -6042,7 +6948,7 @@ const Gen2DistributionPokemon g2_pcny_faintAttackMagby = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
+static const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
     .name = "Mega Kick Miltank",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6053,6 +6959,7 @@ const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 241,
         .held_item_index = 0,
@@ -6088,7 +6995,7 @@ const Gen2DistributionPokemon g2_pcny_megaKickMiltank = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
+static const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
     .name = "Shiny Raikou",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -6099,6 +7006,7 @@ const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 243,
         .held_item_index = 0,
@@ -6134,7 +7042,7 @@ const Gen2DistributionPokemon g2_pcny_shinyRaikou = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyEntei = {
+static const Gen2DistributionPokemon g2_pcny_shinyEntei = {
     .name = "Shiny Entei",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -6145,6 +7053,7 @@ const Gen2DistributionPokemon g2_pcny_shinyEntei = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 244,
         .held_item_index = 0,
@@ -6180,7 +7089,7 @@ const Gen2DistributionPokemon g2_pcny_shinyEntei = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinySuicune = {
+static const Gen2DistributionPokemon g2_pcny_shinySuicune = {
     .name = "Shiny Suicune",
     .originalTrainer = "PCNYc",
     .originalTrainerID = 0,
@@ -6191,6 +7100,7 @@ const Gen2DistributionPokemon g2_pcny_shinySuicune = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 245,
         .held_item_index = 0,
@@ -6226,7 +7136,7 @@ const Gen2DistributionPokemon g2_pcny_shinySuicune = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
+static const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
     .name = "Rage Larvitar",
     .originalTrainer = "",
     .originalTrainerID = 0,
@@ -6237,6 +7147,7 @@ const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
     .isEgg = true,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 246,
         .held_item_index = 0,
@@ -6272,7 +7183,7 @@ const Gen2DistributionPokemon g2_pcny_rageLarvitar = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyLugia = {
+static const Gen2DistributionPokemon g2_pcny_shinyLugia = {
     .name = "Shiny Lugia",
     .originalTrainer = "PCNYd",
     .originalTrainerID = 0,
@@ -6283,6 +7194,7 @@ const Gen2DistributionPokemon g2_pcny_shinyLugia = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 249,
         .held_item_index = 0,
@@ -6318,7 +7230,7 @@ const Gen2DistributionPokemon g2_pcny_shinyLugia = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
+static const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     .name = "Shiny Ho-Oh",
     .originalTrainer = "PCNYa",
     .originalTrainerID = 0,
@@ -6329,6 +7241,7 @@ const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
         .poke_index = 250,
         .held_item_index = 0,
@@ -6364,7 +7277,7 @@ const Gen2DistributionPokemon g2_pcny_shinyHoOh = {
     }
 };
 
-const Gen2DistributionPokemon g2_pcny_Celebi = {
+static const Gen2DistributionPokemon g2_pcny_Celebi = {
     .name = "Celebi",
     .originalTrainer = "PCNYb",
     .originalTrainerID = 0,
@@ -6375,13 +7288,14 @@ const Gen2DistributionPokemon g2_pcny_Celebi = {
     .isEgg = false,
     .iv_data = {0, 0},
     .randomizeIVs = true,
+    .isJapanese = false,
     .poke = {
-        .poke_index = 246,
+        .poke_index = 251,
         .held_item_index = 0,
-        .index_move1 = 44, // Leech Seed
-        .index_move2 = 43, // Confusion
-        .index_move3 = 99, // Heal Bell
-        .index_move4 = 0, // Recover
+        .index_move1 = 73, // Leech Seed
+        .index_move2 = 93, // Confusion
+        .index_move3 = 215, // Heal Bell
+        .index_move4 = 105, // Recover
         .original_trainer_ID = 0,
         .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
         .hp_effort_value = 0,
@@ -6390,10 +7304,10 @@ const Gen2DistributionPokemon g2_pcny_Celebi = {
         .speed_effort_value = 0,
         .special_effort_value = 0,
         .iv_data = {0, 0},
-        .pp_move1 = 25,
-        .pp_move2 = 30,
-        .pp_move3 = 20,
-        .pp_move4 = 0,
+        .pp_move1 = 10,
+        .pp_move2 = 25,
+        .pp_move3 = 5,
+        .pp_move4 = 5,
         .friendship_or_remaining_egg_cycles = 0,
         .pokerus = 0,
         .caught_data = 0,

@@ -41,9 +41,9 @@ Gen1IconDecoder::Gen1IconDecoder(IRomReader& romReader, Gen1GameType gameType)
  * 
  * Anyway, we need to deal with this mess and that makes our code below a bit messy as well.
  */
-uint8_t* Gen1IconDecoder::decode(Gen1PokemonIconType iconType, bool firstFrame)
+uint8_t* Gen1IconDecoder::decode(Gen1LocalizationLanguage language, Gen1PokemonIconType iconType, bool firstFrame)
 {
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x7184D : 0x717C0;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, language).icons;
     const uint32_t ENTRY_SIZE = 6;
     const uint8_t MAX_NUM_TILES = 8;
 

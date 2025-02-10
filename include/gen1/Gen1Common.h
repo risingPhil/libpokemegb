@@ -4,7 +4,10 @@
 #include "common.h"
 
 class Gen1GameReader;
+class IRomReader;
 typedef struct Gen1DistributionPokemon Gen1DistributionPokemon;
+
+enum class Gen1LocalizationLanguage;
 
 enum class Gen1GameType
 {
@@ -123,17 +126,22 @@ private:
  */
 Gen1GameType gen1_determineGameType(const GameboyCartridgeHeader& cartridgeHeader);
 
+/**
+ * @brief this function determines the games' language
+ */
+Gen1LocalizationLanguage gen1_determineGameLanguage(IRomReader& romReader, Gen1GameType gameType);
+
 void gen1_recalculatePokeStats(Gen1GameReader& gameReader, Gen1TrainerPokemon& poke);
 
 /**
  * @brief This function decodes a text (This could be a name or something else) found in the rom.
  * @return the number of characters copied to the output buffer
  */
-uint16_t gen1_decodePokeText(const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength);
+uint16_t gen1_decodePokeText(const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength, Gen1LocalizationLanguage language);
 /**
  * @brief The opposite of gen1_decodePokeText()
  */
-uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator);
+uint16_t gen1_encodePokeText(const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator, Gen1LocalizationLanguage language);
 
 /**
  * Prepares the gen 1 distribution pokemon for injection with Gen1GameReader::addPokemon()

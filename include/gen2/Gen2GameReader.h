@@ -5,6 +5,7 @@
 #include "gen2/Gen2IconDecoder.h"
 #include "gen2/Gen2PlayerPokemonStorage.h"
 #include "gen2/Gen2DistributionPokemon.h"
+#include "gen2/Gen2Localization.h"
 
 class IRomReader;
 class ISaveManager;
@@ -15,10 +16,12 @@ class ISaveManager;
 class Gen2GameReader
 {
 public:
-    Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType);
+    Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage language = Gen2LocalizationLanguage::MAX);
     ~Gen2GameReader();
 
     Gen2GameType getGameType() const;
+
+    Gen2LocalizationLanguage getGameLanguage() const;
 
     /**
      * @brief get the name of a pokémon based on an index number
@@ -239,6 +242,7 @@ private:
     Gen2SpriteDecoder spriteDecoder_;
     Gen2IconDecoder iconDecoder_;
     Gen2GameType gameType_;
+    Gen2LocalizationLanguage localization_;
 };
 
 #endif

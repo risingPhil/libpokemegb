@@ -244,8 +244,15 @@ int main(int argc, char** argv)
     gen1Reader.addPokemon(bulby, nullptr, "bulmama");
     gen1Reader.addPokemon(bulby);
 #endif
-    gen1Reader.addDistributionPokemon(g1_coraChatelineauMew);
-    gen1Reader.addDistributionPokemon(g1_nintendoPowerPikachu);
+
+    const Gen1DistributionPokemon** distributionEventPokemon;
+    uint32_t numPokemon;
+    gen1_getMainDistributionPokemonList(distributionEventPokemon, numPokemon);
+    const Gen1DistributionPokemon* g1_coraChatelineauMew = distributionEventPokemon[12];
+    const Gen1DistributionPokemon* g1_nintendoPowerPikachu = distributionEventPokemon[24];
+
+    gen1Reader.addDistributionPokemon(*g1_coraChatelineauMew);
+    gen1Reader.addDistributionPokemon(*g1_nintendoPowerPikachu);
 
     FILE* f = fopen("out.sav", "w");
     fwrite(savBuffer, 1, savFileSize, f);

@@ -225,16 +225,27 @@ int main(int argc, char** argv)
         printf("Backup checksum valid\n");
     }
 
+    const Gen2DistributionPokemon** distributionList;
+    uint32_t listSize;
     printf("Injecting Mew and Celebi\n");
-    gameReader.addDistributionPokemon(g2_clubNintendoMexico_Mew);
-    gameReader.addDistributionPokemon(g2_nintendoPowerCelebi);
+    gen2_getMainDistributionPokemonList(distributionList, listSize);
+    gameReader.addDistributionPokemon(*distributionList[0]);
+    gameReader.addDistributionPokemon(*distributionList[6]);
 
-    gameReader.addDistributionPokemon(g2_pcny_mistRemoraid);
-    gameReader.addDistributionPokemon(g2_pcny_biteLapras);
-    gameReader.addDistributionPokemon(g2_pcny_shinyZapdos);
-    gameReader.addDistributionPokemon(g2_pcny_shinyMoltres);
-    gameReader.addDistributionPokemon(g2_pcny_shinyArticuno);
-    gameReader.addDistributionPokemon(g2_pcny_shinyEntei);
+    printf("Injecting a few PCNY pokémon\n");
+    gen2_getPokemonCenterNewYorkDistributionPokemonList(distributionList, listSize);
+    // mist remoraid
+    gameReader.addDistributionPokemon(*distributionList[114]);
+    // bite lapras
+    gameReader.addDistributionPokemon(*distributionList[52]);
+    // Shiny Zapdos
+    gameReader.addDistributionPokemon(*distributionList[63]);
+    // Shiny Moltres
+    gameReader.addDistributionPokemon(*distributionList[64]);
+    // Shiny Articuno
+    gameReader.addDistributionPokemon(*distributionList[62]);
+    // Shiny Entei
+    gameReader.addDistributionPokemon(*distributionList[129]);
     gameReader.finishSave();
 
     if(gameReader.isMainChecksumValid())

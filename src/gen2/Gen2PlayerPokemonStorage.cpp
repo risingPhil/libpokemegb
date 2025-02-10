@@ -4,17 +4,20 @@
 
 #include <cstring>
 
-static const int ORIGINAL_TRAINER_NAME_SIZE = 0xB;
-static const int NICKNAME_SIZE = 0xB;
+static const uint8_t ORIGINAL_TRAINER_NAME_SIZE = 0xB;
+static const uint8_t ORIGINAL_TRAINER_NAME_SIZE_JPN = 0x6;
+static const uint8_t NICKNAME_SIZE = 0xB;
+static const uint8_t NICKNAME_SIZE_JPN = 0x6;
 
 static const uint8_t PARTY_LIST_CAPACITY = 6;
 static const uint8_t PARTY_LIST_PKMN_ENTRY_SIZE = 48;
 static const uint8_t PC_BOX_LIST_CAPACITY = 20;
 static const uint8_t PC_BOX_LIST_PKMN_ENTRY_SIZE = 32;
 
-Gen2PokemonList::Gen2PokemonList(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t listCapacity, uint8_t entrySize)
+Gen2PokemonList::Gen2PokemonList(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t listCapacity, uint8_t entrySize, Gen2LocalizationLanguage language)
     : gameReader_(gameReader)
     , saveManager_(saveManager)
+    , localization_(language)
     , listCapacity_(listCapacity)
     , entrySize_(entrySize)
 {
@@ -264,18 +267,20 @@ const char* Gen2PokemonList::getPokemonNickname(uint8_t index)
 {
     static char result[20];
     const uint8_t pokeTextTerminator = 0x50;
+    const uint8_t otSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? ORIGINAL_TRAINER_NAME_SIZE : ORIGINAL_TRAINER_NAME_SIZE_JPN;
+    const uint8_t nickNameSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
     uint8_t encodedNickName[NICKNAME_SIZE];
-    const uint16_t nicknameOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (listCapacity_ * ORIGINAL_TRAINER_NAME_SIZE) + (index * NICKNAME_SIZE);
+    const uint16_t nicknameOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (listCapacity_ * otSize) + (index * nickNameSize);
 
     if(!saveManager_.seek(getSaveOffset() + nicknameOffset))
     {
         return nullptr;
     }
 
-    saveManager_.readUntil(encodedNickName, pokeTextTerminator, NICKNAME_SIZE);
+    saveManager_.readUntil(encodedNickName, pokeTextTerminator, nickNameSize);
 
-    gen2_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result));
+    gen2_decodePokeText(encodedNickName, sizeof(encodedNickName), result, sizeof(result), localization_);
 
     return result;
 }
@@ -284,6 +289,8 @@ bool Gen2PokemonList::setPokemonNickname(uint8_t index, const char* nickname)
 {
     uint8_t encodedNickName[NICKNAME_SIZE];
     const uint8_t pokeTextTerminator = 0x50;
+    const uint8_t otSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? ORIGINAL_TRAINER_NAME_SIZE : ORIGINAL_TRAINER_NAME_SIZE_JPN;
+    const uint8_t nickNameSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
     if(!nickname)
     {
@@ -292,8 +299,8 @@ bool Gen2PokemonList::setPokemonNickname(uint8_t index, const char* nickname)
         nickname = gameReader_.getPokemonName(poke.poke_index);
     }
     
-    const uint16_t encodedLength = gen2_encodePokeText(nickname, strlen(nickname), encodedNickName, NICKNAME_SIZE, pokeTextTerminator);
-    const uint16_t nicknameOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (listCapacity_ * ORIGINAL_TRAINER_NAME_SIZE) + (index * NICKNAME_SIZE);
+    const uint16_t encodedLength = gen2_encodePokeText(nickname, strlen(nickname), encodedNickName, nickNameSize, pokeTextTerminator, localization_);
+    const uint16_t nicknameOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (listCapacity_ * otSize) + (index * nickNameSize);
 
     if(!saveManager_.seek(getSaveOffset() + nicknameOffset))
     {
@@ -308,18 +315,19 @@ const char* Gen2PokemonList::getOriginalTrainerOfPokemon(uint8_t index)
 {
     static char result[20];
     const uint8_t pokeTextTerminator = 0x50;
+    const uint8_t otSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? ORIGINAL_TRAINER_NAME_SIZE : ORIGINAL_TRAINER_NAME_SIZE_JPN;
 
     uint8_t encodedOTName[ORIGINAL_TRAINER_NAME_SIZE];
-    const uint16_t originalTrainerOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (index * ORIGINAL_TRAINER_NAME_SIZE);
+    const uint16_t originalTrainerOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (index * otSize);
 
     if(!saveManager_.seek(getSaveOffset() + originalTrainerOffset))
     {
         return nullptr;
     }
 
-    saveManager_.readUntil(encodedOTName, pokeTextTerminator, NICKNAME_SIZE);
+    saveManager_.readUntil(encodedOTName, pokeTextTerminator, otSize);
 
-    gen2_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result));
+    gen2_decodePokeText(encodedOTName, sizeof(encodedOTName), result, sizeof(result), localization_);
 
     return result;
 }
@@ -328,9 +336,10 @@ bool Gen2PokemonList::setOriginalTrainerOfPokemon(uint8_t index, const char* ori
 {
     uint8_t encodedOTName[ORIGINAL_TRAINER_NAME_SIZE];
     const uint8_t pokeTextTerminator = 0x50;
+    const uint8_t otSize = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? ORIGINAL_TRAINER_NAME_SIZE : ORIGINAL_TRAINER_NAME_SIZE_JPN;
 
-    const uint16_t encodedLength = gen2_encodePokeText(originalTrainerID, strlen(originalTrainerID), encodedOTName, ORIGINAL_TRAINER_NAME_SIZE, pokeTextTerminator);
-    const uint16_t originalTrainerOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (index * ORIGINAL_TRAINER_NAME_SIZE);
+    const uint16_t encodedLength = gen2_encodePokeText(originalTrainerID, strlen(originalTrainerID), encodedOTName, otSize, pokeTextTerminator, localization_);
+    const uint16_t originalTrainerOffset = listCapacity_ + 2 + (listCapacity_ * entrySize_) + (index * otSize);
 
     if(!saveManager_.seek(getSaveOffset() + originalTrainerOffset))
     {
@@ -340,8 +349,8 @@ bool Gen2PokemonList::setOriginalTrainerOfPokemon(uint8_t index, const char* ori
     return true;
 }
 
-Gen2Party::Gen2Party(Gen2GameReader& gameReader, ISaveManager& saveManager)
-    : Gen2PokemonList(gameReader, saveManager, PARTY_LIST_CAPACITY, PARTY_LIST_PKMN_ENTRY_SIZE)
+Gen2Party::Gen2Party(Gen2GameReader& gameReader, ISaveManager& saveManager, Gen2LocalizationLanguage language)
+    : Gen2PokemonList(gameReader, saveManager, PARTY_LIST_CAPACITY, PARTY_LIST_PKMN_ENTRY_SIZE, language)
 {
 }
 
@@ -351,11 +360,11 @@ Gen2Party::~Gen2Party()
 
 uint32_t Gen2Party::getSaveOffset()
 {
-    return (gameReader_.isGameCrystal()) ? 0x2865 : 0x288A;
+    return gen2_getSRAMOffsets(gameReader_.getGameType(), localization_).party;
 }
 
-Gen2Box::Gen2Box(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex)
-    : Gen2PokemonList(gameReader, saveManager, PC_BOX_LIST_CAPACITY, PC_BOX_LIST_PKMN_ENTRY_SIZE)
+Gen2Box::Gen2Box(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex, Gen2LocalizationLanguage language)
+    : Gen2PokemonList(gameReader, saveManager, PC_BOX_LIST_CAPACITY, PC_BOX_LIST_PKMN_ENTRY_SIZE, language)
     , boxIndex_(boxIndex)
 {
 }

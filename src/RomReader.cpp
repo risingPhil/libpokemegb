@@ -115,12 +115,21 @@ bool BaseRomReader::seekToRomPointer(uint16_t pointer, uint8_t bankIndex)
 
 uint32_t BaseRomReader::readUntil(uint8_t* outBuffer, uint8_t terminator, uint32_t maxRead)
 {
+    return readUntil(outBuffer, &terminator, 1, maxRead);
+}
+
+uint32_t BaseRomReader::readUntil(uint8_t* outBuffer, const uint8_t* terminatorList, uint8_t numTerminators, uint32_t maxRead)
+{
     uint8_t* cur = outBuffer;
+    uint8_t i;
     while(static_cast<uint32_t>(cur - outBuffer) < maxRead && read(cur, 1))
     {
-        if((*cur) == terminator)
+        for(i=0; i < numTerminators; ++i)
         {
-            break;
+            if((*cur) == terminatorList[i])
+            {
+                return (cur - outBuffer);
+            }
         }
         ++cur;
     }
