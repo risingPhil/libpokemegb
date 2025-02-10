@@ -479,7 +479,7 @@ static const Gen2DistributionPokemon g2_jpn_pcMysteryEggPsyduck = {
 };
 
 static const Gen2DistributionPokemon g2_jpn_pcMysteryEggChikorita = {
-    .name = "PC Mystery Egg Chikorita (JPN)",
+    .name = "PC Mystery Egg #1|#2 Chikorita (JPN)",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -4928,7 +4928,7 @@ static const Gen2DistributionPokemon g2_pcny_petalDanceCleffa = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_scaryFaceCleffa = {
-    .name = "Petal Dance Cleffa",
+    .name = "Scary Face Cleffa",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -5116,7 +5116,7 @@ static const Gen2DistributionPokemon g2_pcny_petalDanceIgglybuff = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_scaryFaceIgglybuff = {
-    .name = "Petal Dance Igglybuff",
+    .name = "Scary Face Igglybuff",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -5304,7 +5304,7 @@ static const Gen2DistributionPokemon g2_pcny_hydroPumpMarill = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_scaryFaceMarill = {
-    .name = "Hydro Pump Marill",
+    .name = "Scary Face Marill",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -5586,7 +5586,7 @@ static const Gen2DistributionPokemon g2_pcny_steelWingYanma = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_sweetKissYanma = {
-    .name = "Steel Wing Yanma",
+    .name = "Sweet Kiss Yanma",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
@@ -7290,12 +7290,12 @@ static const Gen2DistributionPokemon g2_pcny_Celebi = {
     .randomizeIVs = true,
     .isJapanese = false,
     .poke = {
-        .poke_index = 246,
+        .poke_index = 251,
         .held_item_index = 0,
-        .index_move1 = 44, // Leech Seed
-        .index_move2 = 43, // Confusion
-        .index_move3 = 99, // Heal Bell
-        .index_move4 = 0, // Recover
+        .index_move1 = 73, // Leech Seed
+        .index_move2 = 93, // Confusion
+        .index_move3 = 215, // Heal Bell
+        .index_move4 = 105, // Recover
         .original_trainer_ID = 0,
         .exp = getExpNeededForLevel(5, GEN2_GRW_MEDIUM_SLOW),
         .hp_effort_value = 0,
@@ -7304,10 +7304,10 @@ static const Gen2DistributionPokemon g2_pcny_Celebi = {
         .speed_effort_value = 0,
         .special_effort_value = 0,
         .iv_data = {0, 0},
-        .pp_move1 = 25,
-        .pp_move2 = 30,
-        .pp_move3 = 20,
-        .pp_move4 = 0,
+        .pp_move1 = 10,
+        .pp_move2 = 25,
+        .pp_move3 = 5,
+        .pp_move4 = 5,
         .friendship_or_remaining_egg_cycles = 0,
         .pokerus = 0,
         .caught_data = 0,
