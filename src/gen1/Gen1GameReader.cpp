@@ -63,6 +63,11 @@ Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager,
     }
 }
 
+Gen1LocalizationLanguage Gen1GameReader::getGameLanguage() const
+{
+    return localization_;
+}
+
 const char *Gen1GameReader::getPokemonName(uint8_t index) const
 {
     // based on: https://github.com/seanmorris/pokemon-parser/blob/master/source/PokemonRom.js#L493
