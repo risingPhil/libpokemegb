@@ -11,10 +11,7 @@ I'm happy to accept pull requests if the community wants to do them.
 - Read Trainers' party and PC boxes from Gen 1 and 2
 - Inject Pokémon from past distribution events into your Gen 1/Gen 2 game save
 - Inject other pokémon into your Gen 1/Gen 2 game save
-- Supports all localizations (some limitations on the Korean Gold/Silver games apply though, see below)
-
-
-The reason is that the Korean games have a character set that works way differently and more complex than all other localizations. (2-byte character codes, for instance). I don't personally care enough to implement that behaviour, but feel free to contribute to fix this.
+- Supports all localizations
 
 # Dependencies
 This library only depends on libc. I specifically wanted to avoid the bloat of libstdc++ or any other library. This choice is to keep this library small and portable.
