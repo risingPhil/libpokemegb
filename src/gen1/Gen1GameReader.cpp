@@ -349,9 +349,8 @@ uint16_t Gen1GameReader::getTrainerID() const
 
 Gen1Maps Gen1GameReader::getCurrentMap() const
 {
-    const uint8_t CURRENT_MAP_FIELD_OFFSET_RELATIVE_TO_TRAINER_ID = 5;
     uint8_t result;
-    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).trainerID + CURRENT_MAP_FIELD_OFFSET_RELATIVE_TO_TRAINER_ID;
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).currentMap;
     saveManager_.seek(savOffset);
 
     saveManager_.readByte(result);
@@ -491,7 +490,8 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
     else
     {
         const uint8_t currentBoxIndex = getCurrentBoxIndex();
-        for(uint8_t i = 0; i < 12; ++i)
+        const uint8_t numBoxes = (localization_ != Gen1LocalizationLanguage::JAPANESE)? 12 : 8;
+        for(uint8_t i = 0; i < numBoxes; ++i)
         {
             Gen1Box box = getBox(i);
             if(box.getNumberOfPokemon() == box.getMaxNumberOfPokemon())
@@ -502,7 +502,7 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
             box.add(poke, originalTrainerID, nickname);
             result = i;
 
-            updateWholeBoxBankChecksum(getGen1BoxBankIndex(i, currentBoxIndex));
+            updateWholeBoxBankChecksum(getGen1BoxBankIndex(i, currentBoxIndex, localization_));
             break;
         }   
     }

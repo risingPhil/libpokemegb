@@ -14,7 +14,8 @@ enum class Gen1GameType
     INVALID,
     BLUE,
     RED,
-    YELLOW
+    YELLOW,
+    GREEN
 };
 
 typedef struct Gen1PokeStats

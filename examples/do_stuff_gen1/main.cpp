@@ -171,8 +171,8 @@ int main(int argc, char** argv)
     }
 
     Gen1GameReader gen1Reader(romReader, saveManager, gameType);
-    Gen1PokeStats stats;
 #ifdef PRINT_POKESTATS
+    Gen1PokeStats stats;
     printf("Pokémon names:\n");
     // Note: indices are 1-based: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
     for(uint8_t i = 1; i < 191; ++i)
@@ -201,7 +201,8 @@ int main(int argc, char** argv)
     printf("Bank 2 valid: %d\n", gen1Reader.isWholeBoxBankValid(2));
     printf("Bank 3 valid: %d\n", gen1Reader.isWholeBoxBankValid(3));
 
-    for(uint8_t i = 0; i < 13; ++i)
+    const uint8_t numBoxes = (gen1Reader.getGameLanguage() != Gen1LocalizationLanguage::JAPANESE) ? 12 : 8;
+    for(uint8_t i = 0; i < numBoxes; ++i)
     {
         Gen1Box box = gen1Reader.getBox(i);
         printf("Box %hhu valid: %d, currentBoxIndex=%hhu\n", (i + 1), box.isChecksumValid(currentBoxIndex), currentBoxIndex);

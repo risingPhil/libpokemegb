@@ -15,7 +15,7 @@ typedef struct Gen1TrainerPartyMeta
 typedef struct Gen1TrainerBoxMeta
 {
     uint8_t number_of_pokemon;
-    uint8_t species_index_list[21];
+    uint8_t species_index_list[31];
 } Gen1TrainerBoxMeta;
 
 static const uint8_t NICKNAME_SIZE = 0xB;
@@ -46,7 +46,7 @@ static void writePartyMetadata(ISaveManager& saveManager, Gen1TrainerPartyMeta& 
     saveManager.writeByte(0xFF);
 }
 
-uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex)
+uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language)
 {
     // NOTE: important: current box data to the "longterm" bank (in bank 2 or 3) until you switch the current box in the pc
     // found this while experimenting with a Pkmn Blue save saved close to the start of the game by transferring a ratata to box 1
@@ -55,22 +55,27 @@ uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex)
     {
         return 1;
     }
-    return (boxIndex < 6) ? 2 : 3;
+
+    // non-japanese versions have 12 boxes of 20 items. Japanese ones have 8 boxes of 30 items.
+    const uint8_t boxesPerBank = (language != Gen1LocalizationLanguage::JAPANESE) ? 6 : 4;
+    return (boxIndex < boxesPerBank) ? 2 : 3;
 }
 
-static uint16_t getBoxBankOffset(uint8_t boxIndex, uint8_t currentBoxIndex)
+static uint16_t getBoxBankOffset(uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language)
 {
-    const uint16_t boxSize = 0x462;
+    const uint16_t boxSize = (language != Gen1LocalizationLanguage::JAPANESE) ? 0x462 : 0x566;
 
     // NOTE: important: current box data to the "longterm" bank (in bank 2 or 3) until you switch the current box in the pc
     // found this while experimenting with a Pkmn Blue save saved close to the start of the game by transferring a ratata to box 1
     // the current box is stored at this offset
     if(boxIndex == currentBoxIndex)
     {
-        return 0x10C0;
+        return (language != Gen1LocalizationLanguage::JAPANESE) ? 0x10C0 : 0x102D;
     }
 
-    return (boxIndex % 6) * boxSize;
+    // non-japanese versions have 12 boxes of 20 items. Japanese ones have 8 boxes of 30 items.
+    const uint8_t boxesPerBank = (language != Gen1LocalizationLanguage::JAPANESE) ? 6 : 4;
+    return (boxIndex % boxesPerBank) * boxSize;
 }
 
 static void readCommonPokeData(ISaveManager& saveManager, Gen1TrainerPokemon& outTrainerPokemon)
@@ -138,12 +143,13 @@ static void writeCommonPokeData(ISaveManager& saveManager, const Gen1TrainerPoke
  * @brief This function will load the metadata of the trainer box into the specified outBoxMeta variable.
  * Note that it won't contain the detailed data about the pokemon in the party.
  */
-static bool getBoxMetadata(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex, Gen1TrainerBoxMeta& outBoxMeta)
+static bool getBoxMetadata(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language, Gen1TrainerBoxMeta& outBoxMeta)
 {
-    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex), getBoxBankOffset(boxIndex, currentBoxIndex));
+    const uint8_t boxCapacity = (language != Gen1LocalizationLanguage::JAPANESE) ? 20 : 30;
+    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex, language), getBoxBankOffset(boxIndex, currentBoxIndex, language));
     saveManager.readByte(outBoxMeta.number_of_pokemon);
-    saveManager.read(outBoxMeta.species_index_list, 20);
-    outBoxMeta.species_index_list[20] = 0xFF;
+    saveManager.read(outBoxMeta.species_index_list, boxCapacity);
+    outBoxMeta.species_index_list[boxCapacity] = 0xFF;
 
     // if seems the number_of_pokemon field read is unreliable if the box hasn't been used before.
     // fortunately we can also use the species index list to determine the number
@@ -167,22 +173,23 @@ static bool getBoxMetadata(ISaveManager& saveManager, uint8_t boxIndex, uint8_t 
     return true;
 }
 
-static void writeBoxMetadata(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex, const Gen1TrainerBoxMeta& boxMeta)
+static void writeBoxMetadata(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language, const Gen1TrainerBoxMeta& boxMeta)
 {
-    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex), getBoxBankOffset(boxIndex, currentBoxIndex));
+    const uint8_t boxCapacity = (language != Gen1LocalizationLanguage::JAPANESE) ? 20 : 30;
+    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex, language), getBoxBankOffset(boxIndex, currentBoxIndex, language));
     saveManager.writeByte(boxMeta.number_of_pokemon);
-    saveManager.write(boxMeta.species_index_list, 20);
+    saveManager.write(boxMeta.species_index_list, boxCapacity);
     saveManager.writeByte(0xFF);
 }
 
-static uint8_t calculateBoxChecksum(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex)
+static uint8_t calculateBoxChecksum(ISaveManager& saveManager, uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language)
 {
     Gen1Checksum checksum;
-    const uint16_t boxSize = 0x462;
+    const uint16_t boxSize = (language != Gen1LocalizationLanguage::JAPANESE) ? 0x462 : 0x566;
     uint16_t i;
     uint8_t byte;
 
-    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex), getBoxBankOffset(boxIndex, currentBoxIndex));
+    saveManager.seekToBankOffset(getGen1BoxBankIndex(boxIndex, currentBoxIndex, language), getBoxBankOffset(boxIndex, currentBoxIndex, language));
     
     for(i = 0; i < boxSize; ++i)
     {
@@ -419,7 +426,7 @@ uint8_t Gen1Box::getSpeciesAtIndex(uint8_t index)
 {
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);
 
     if(index >= boxMeta.number_of_pokemon)
     {
@@ -436,8 +443,8 @@ bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, b
     const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
 
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
 
     saveManager_.seekToBankOffset(bankIndex, boxOffset + FIRST_POKE_STRUCT_OFFSET + (index * BOX_POKEMON_NUM_BYTES));
     
@@ -461,7 +468,7 @@ bool Gen1Box::setPokemon(uint8_t index, Gen1TrainerPokemon& poke)
     const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);
 
     if(index >= boxMeta.number_of_pokemon)
     {
@@ -471,15 +478,15 @@ bool Gen1Box::setPokemon(uint8_t index, Gen1TrainerPokemon& poke)
 
     boxMeta.species_index_list[index] = poke.poke_index;
 
-    writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);
 
     // make sure the stat fields are filled in by recalculating them.
     // this is the same as what happens when withdrawing them from an ingame PC box
     gen1_recalculatePokeStats(gameReader_, poke);
     poke.current_hp = poke.max_hp;
 
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
     saveManager_.seekToBankOffset(bankIndex, boxOffset + FIRST_POKE_STRUCT_OFFSET + (index * BOX_POKEMON_NUM_BYTES));
 
     writeCommonPokeData(saveManager_, poke);
@@ -496,7 +503,7 @@ uint8_t Gen1Box::getNumberOfPokemon()
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     
-    if(!getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta))
+    if(!getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta))
     {
         return 0;
     }
@@ -505,7 +512,7 @@ uint8_t Gen1Box::getNumberOfPokemon()
 
 uint8_t Gen1Box::getMaxNumberOfPokemon()
 {
-    return 20;
+    return (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 20 : 30;
 }
 
 const char* Gen1Box::getPokemonNickname(uint8_t index)
@@ -513,10 +520,10 @@ const char* Gen1Box::getPokemonNickname(uint8_t index)
     static char result[20];
 
     uint8_t encodedNickName[NICKNAME_SIZE];
-    const uint16_t nicknameOffset = 0x386;
+    const uint16_t nicknameOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x386 : 0x4B2;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
     saveManager_.seekToBankOffset(bankIndex, boxOffset + nicknameOffset + (index * entrySize));
@@ -530,10 +537,10 @@ const char* Gen1Box::getPokemonNickname(uint8_t index)
 void Gen1Box::setPokemonNickname(uint8_t index, const char* name)
 {
     uint8_t encodedNickName[NICKNAME_SIZE];
-    const uint16_t nicknameOffset = 0x386;
+    const uint16_t nicknameOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x386 : 0x4B2;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? NICKNAME_SIZE : NICKNAME_SIZE_JPN;
 
     if(!name)
@@ -553,10 +560,10 @@ const char* Gen1Box::getOriginalTrainerOfPokemon(uint8_t index)
     static char result[20];
     uint8_t encodedOTName[OT_NAME_SIZE];
 
-    const uint16_t otOffset = 0x2AA;
+    const uint16_t otOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2AA : 0x3FE;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
     saveManager_.seekToBankOffset(bankIndex, boxOffset + otOffset + (index * entrySize));
@@ -570,10 +577,10 @@ const char* Gen1Box::getOriginalTrainerOfPokemon(uint8_t index)
 void Gen1Box::setOriginalTrainerOfPokemon(uint8_t index, const char* originalTrainer)
 {
     uint8_t encodedOTName[OT_NAME_SIZE];
-    const uint16_t otOffset = 0x2AA;
+    const uint16_t otOffset = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0x2AA : 0x3FE;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
-    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
+    const uint16_t boxOffset = getBoxBankOffset(boxIndex_, currentBoxIndex, localization_);
     const uint8_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? OT_NAME_SIZE : OT_NAME_SIZE_JPN;
 
     const uint16_t encodedLength = gen1_encodePokeText(originalTrainer, strlen(originalTrainer), encodedOTName, entrySize, 0x50, (Gen1LocalizationLanguage)localization_);
@@ -586,7 +593,7 @@ bool Gen1Box::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const
 {
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
-    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);
     const uint8_t index = boxMeta.number_of_pokemon;
 
     if(index >= getMaxNumberOfPokemon())
@@ -604,7 +611,7 @@ bool Gen1Box::add(Gen1TrainerPokemon& poke, const char* originalTrainerID, const
         boxMeta.species_index_list[boxMeta.number_of_pokemon] = 0xFF;
     }
 
-    writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, boxMeta);
+    writeBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);
     if(!setPokemon(index, poke))
     {
         return false;
@@ -630,13 +637,13 @@ bool Gen1Box::isChecksumValid(uint8_t currentBoxIndex)
         return true;
     }
 
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
     const uint16_t offset = 0x1A4D + (boxIndex_ % 6);
 
     saveManager_.seekToBankOffset(bankIndex, offset);
     saveManager_.readByte(storedChecksum);
 
-    calculatedBoxChecksum = calculateBoxChecksum(saveManager_, boxIndex_, currentBoxIndex);
+    calculatedBoxChecksum = calculateBoxChecksum(saveManager_, boxIndex_, currentBoxIndex, localization_);
 
     return (storedChecksum == calculatedBoxChecksum);
 }
@@ -647,9 +654,9 @@ void Gen1Box::updateChecksum(uint8_t currentBoxIndex)
     {
         return;
     }
-    const uint8_t calculatedBoxChecksum = calculateBoxChecksum(saveManager_, boxIndex_, currentBoxIndex);
+    const uint8_t calculatedBoxChecksum = calculateBoxChecksum(saveManager_, boxIndex_, currentBoxIndex, localization_);
 
-    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex);
+    const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
     const uint16_t offset = 0x1A4D + (boxIndex_ % 6);
 
     saveManager_.seekToBankOffset(bankIndex, offset);

@@ -9,6 +9,7 @@
 
 #define POKEMON_BLUE_CARTRIDGE_TITLE "POKEMON BLUE"
 #define POKEMON_RED_CARTRIDGE_TITLE "POKEMON RED"
+#define POKEMON_GREEN_CARTRIDGE_TITLE "POKEMON GREEN"
 #define POKEMON_YELLOW_CARTRIDGE_TITLE "POKEMON YEL"
 
 static const uint8_t g1_indexNumberMapFingerprint[] = {
@@ -377,6 +378,10 @@ Gen1GameType gen1_determineGameType(const GameboyCartridgeHeader& cartridgeHeade
     {
         result = Gen1GameType::YELLOW;
     }
+	else if (strncmp(cartridgeHeader.title, POKEMON_GREEN_CARTRIDGE_TITLE, sizeof(POKEMON_GREEN_CARTRIDGE_TITLE) - 1) == 0)
+	{
+		result = Gen1GameType::GREEN;
+	}
 	else
 	{
 		result = Gen1GameType::INVALID;

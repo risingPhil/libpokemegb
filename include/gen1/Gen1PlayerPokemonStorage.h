@@ -6,7 +6,7 @@
 class Gen1GameReader;
 class ISaveManager;
 
-uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex);
+uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language);
 
 /**
  * @brief This class represents the trainer party in the GEN1 games
