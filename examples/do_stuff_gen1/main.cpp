@@ -100,13 +100,18 @@ static void printParty(const char* prefix, Gen1GameReader& reader)
     }
 }
 
-static void printBox(const char* prefix, Gen1GameReader& reader, uint8_t boxIndex)
+static void printBox(const char* prefix, Gen1GameReader& reader, uint8_t boxIndex, uint8_t currentBoxIndex)
 {
     Gen1Box box = reader.getBox(boxIndex);
     Gen1TrainerPokemon poke;
     const uint8_t numPokemon = box.getNumberOfPokemon();
+    bool boxValid = box.isChecksumValid(currentBoxIndex);
 
-    printf("%sBox %hhu:\n", prefix, boxIndex + 1);
+    printf("%sBox %hhu: %s\n", prefix, boxIndex + 1, (boxValid) ? "valid" : "invalid");
+    if(!boxValid)
+    {
+        return;
+    }
     printf("%sNumber: %hhu\n", prefix, numPokemon);
 
     for(uint8_t i=0; i < numPokemon; ++i)
@@ -179,22 +184,23 @@ int main(int argc, char** argv)
     printf("end\n");
 #endif
 
+    uint8_t currentBoxIndex = gen1Reader.getCurrentBoxIndex();
     printf("Save game:\n");
     printf("\tTrainer: %s (0x%hx)\n", gen1Reader.getTrainerName(), gen1Reader.getTrainerID());
+    printf("\tCurrent Map: %s\n", gen1Maps_toString(gen1Reader.getCurrentMap()));
     printf("\tRival: %s\n", gen1Reader.getRivalName());
     printf("\tSeen: %hhu\n", gen1Reader.getPokedexCounter(POKEDEX_SEEN));
     printf("\tOwned: %hhu\n", gen1Reader.getPokedexCounter(POKEDEX_OWNED));
     printf("\tParty:\n");
     printParty("\t\t", gen1Reader);
-    printBox("\t\t", gen1Reader, 0);
-    printBox("\t\t", gen1Reader, 1);
+    printBox("\t\t", gen1Reader, 0, currentBoxIndex);
+    printBox("\t\t", gen1Reader, 1, currentBoxIndex);
 
 #if 0
     printf("Main checksum valid: %d\n", gen1Reader.isMainChecksumValid());
     printf("Bank 2 valid: %d\n", gen1Reader.isWholeBoxBankValid(2));
     printf("Bank 3 valid: %d\n", gen1Reader.isWholeBoxBankValid(3));
 
-    uint8_t currentBoxIndex = gen1Reader.getCurrentBoxIndex();
     for(uint8_t i = 0; i < 13; ++i)
     {
         Gen1Box box = gen1Reader.getBox(i);

@@ -6,6 +6,7 @@
 #include "gen1/Gen1PlayerPokemonStorage.h"
 #include "gen1/Gen1DistributionPokemon.h"
 #include "gen1/Gen1Localization.h"
+#include "gen1/Gen1Maps.h"
 
 class IRomReader;
 class ISaveManager;
@@ -84,6 +85,11 @@ public:
      * @brief Get the player ID from the save file
      */
     uint16_t getTrainerID() const;
+
+    /**
+     * Retrieves the current map the player is in.
+     */
+    Gen1Maps getCurrentMap() const;
 
     /**
      * @brief Returns a Gen1Party instance, which can be used to retrieve the information about the pokemon currently in the trainers' party

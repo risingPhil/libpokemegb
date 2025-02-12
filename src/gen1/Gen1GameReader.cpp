@@ -347,6 +347,17 @@ uint16_t Gen1GameReader::getTrainerID() const
     return result;
 }
 
+Gen1Maps Gen1GameReader::getCurrentMap() const
+{
+    const uint8_t CURRENT_MAP_FIELD_OFFSET_RELATIVE_TO_TRAINER_ID = 5;
+    uint8_t result;
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).trainerID + CURRENT_MAP_FIELD_OFFSET_RELATIVE_TO_TRAINER_ID;
+    saveManager_.seek(savOffset);
+
+    saveManager_.readByte(result);
+    return static_cast<Gen1Maps>(result);
+}
+
 Gen1Party Gen1GameReader::getParty()
 {
     return Gen1Party((*this), saveManager_, localization_);
