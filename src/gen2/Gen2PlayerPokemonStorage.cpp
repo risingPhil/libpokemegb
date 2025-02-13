@@ -12,6 +12,7 @@ static const uint8_t NICKNAME_SIZE_JPN = 0x6;
 static const uint8_t PARTY_LIST_CAPACITY = 6;
 static const uint8_t PARTY_LIST_PKMN_ENTRY_SIZE = 48;
 static const uint8_t PC_BOX_LIST_CAPACITY = 20;
+static const uint8_t PC_BOX_LIST_CAPACITY_JPN = 30;
 static const uint8_t PC_BOX_LIST_PKMN_ENTRY_SIZE = 32;
 
 Gen2PokemonList::Gen2PokemonList(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t listCapacity, uint8_t entrySize, Gen2LocalizationLanguage language)
@@ -364,7 +365,7 @@ uint32_t Gen2Party::getSaveOffset()
 }
 
 Gen2Box::Gen2Box(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex, Gen2LocalizationLanguage language)
-    : Gen2PokemonList(gameReader, saveManager, PC_BOX_LIST_CAPACITY, PC_BOX_LIST_PKMN_ENTRY_SIZE, language)
+    : Gen2PokemonList(gameReader, saveManager, (language != Gen2LocalizationLanguage::JAPANESE) ? PC_BOX_LIST_CAPACITY : PC_BOX_LIST_CAPACITY_JPN, PC_BOX_LIST_PKMN_ENTRY_SIZE, language)
     , boxIndex_(boxIndex)
 {
 }
@@ -380,46 +381,46 @@ uint32_t Gen2Box::getSaveOffset()
     switch(boxIndex_)
     {
         case 0:
-            result = 0x4000;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x4000 : 0x4000;
             break;
         case 1:
-            result = 0x4450;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x4450 : 0x454A;
             break;
         case 2:
-            result = 0x48A0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x48A0 : 0x4A94;
             break;
         case 3:
-            result = 0x4CF0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x4CF0 : 0x4FDE;
             break;
         case 4:
-            result = 0x5140;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x5140 : 0x5528;
             break;
         case 5:
-            result = 0x5590;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x5590 : 0x5A72;
             break;
         case 6:
-            result = 0x59E0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x59E0 : 0x6000;
             break;
         case 7:
-            result = 0x6000;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x6000 : 0x654A;
             break;
         case 8:
-            result = 0x6450;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x6450 : 0x6A94;
             break;
         case 9:
-            result = 0x68A0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x68A0 : 0x0;
             break;
         case 10:
-            result = 0x6CF0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x6CF0 : 0x0;
             break;
         case 11:
-            result = 0x7140;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x7140 : 0x0;
             break;
         case 12:
-            result = 0x7590;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x7590 : 0x0;
             break;
         case 13:
-            result = 0x79E0;
+            result = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? 0x79E0 : 0x0;
             break;
         default:
             result = 0;
