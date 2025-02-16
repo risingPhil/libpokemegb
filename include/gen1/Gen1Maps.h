@@ -258,4 +258,9 @@ enum class Gen1Maps
  */
 const char* gen1Maps_toString(Gen1Maps map);
 
+/**
+ * @brief Returns a boolean indicating whether the current map is a pokémon center
+ */
+bool gen1_isAPokeCenter(Gen1Maps map);
+
 #endif

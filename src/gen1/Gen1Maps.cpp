@@ -504,3 +504,24 @@ const char *gen1Maps_toString(Gen1Maps map)
         return "Unknown Map";
     }
 }
+
+bool gen1_isAPokeCenter(Gen1Maps map)
+{
+    switch(map)
+    {
+    case Gen1Maps::VIRIDIAN_POKECENTER:
+    case Gen1Maps::PEWTER_POKECENTER:
+    case Gen1Maps::CERULEAN_POKECENTER:
+    case Gen1Maps::MT_MOON_POKECENTER:
+    case Gen1Maps::ROCK_TUNNEL_POKECENTER:
+    case Gen1Maps::VERMILION_POKECENTER:
+    case Gen1Maps::CELEDON_POKECENTER:
+    case Gen1Maps::LAVENDER_POKECENTER:
+    case Gen1Maps::FUCHSIA_POKECENTER:
+    case Gen1Maps::CINNABAR_POKECENTER:
+    case Gen1Maps::SAFFRON_POKECENTER:
+        return true;
+    default:
+        return false;
+    }
+}
