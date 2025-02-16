@@ -3637,8 +3637,8 @@ void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2Distr
 			// Obviously non-japanese cartridges/roms don't have the japanese characters in their character set.
 			// So if transferring a japanese distribution event pokémon to a non-japanese cartridge,
 			// we need to replace the OT.
-			// We'll replace it with PokeMe64
-			originalTrainerName = "PokeMe64";
+			// We'll replace it with PM64
+			originalTrainerName = "PM64";
 		}
 		else
 		{
