@@ -135,6 +135,12 @@ uint16_t encodeText(const struct TextCodePair* textCodes, uint16_t numTextCodes,
 	uint8_t* const outputBufferEnd = outputBuffer + outputBufferLength;
 	bool match;
 
+    // turns out for nicknames, any unsed bytes after the actual string should be filled with the terminator byte
+    // otherwise nickname detection won't work correctly.
+    // https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_I)#bank1_sec_party
+    // "A Pokémon's name is a nickname if it does not perfectly match the default name for a Pokémon (typically all uppercase) with any unused bytes of the entry's 11-byte capacity filled with 0x50 terminators."
+    memset(outputBuffer, terminator, outputBufferLength);
+
 	while(cur < inputBufferEnd)
 	{
 		match = false;
