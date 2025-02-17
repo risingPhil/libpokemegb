@@ -11,7 +11,7 @@
 #include <png.h>
 #endif
 
-static const char* findCharsByTextCode(TextCodePair* textCodes, uint16_t numEntries, uint8_t code)
+const char* findCharsByTextCode(const TextCodePair* textCodes, uint16_t numEntries, uint8_t code)
 {
 	const TextCodePair* const end = textCodes + numEntries;
 	const TextCodePair* cur = textCodes;
@@ -27,7 +27,7 @@ static const char* findCharsByTextCode(TextCodePair* textCodes, uint16_t numEntr
 	return nullptr;
 }
 
-static void findTextcodeByString(TextCodePair* textCodes, uint16_t numEntries, const char* input, uint16_t inputLength, uint8_t& outCode, uint16_t& needleLength)
+bool findTextcodeByString(const TextCodePair* textCodes, uint16_t numEntries, const char* input, uint16_t inputLength, uint8_t& outCode, uint16_t& needleLength)
 {
 	const TextCodePair* const end = textCodes + numEntries;
 	const TextCodePair* cur = textCodes;
@@ -45,13 +45,14 @@ static void findTextcodeByString(TextCodePair* textCodes, uint16_t numEntries, c
 		if(strncmp(input, cur->chars, needleLength) == 0)
 		{
 			outCode = cur->code;
-			return;
+			return true;
 		}
 		++cur;
 	}
 
 	needleLength = 0;
 	outCode = 0;
+    return false;
 }
 
 const uint8_t* memSearch(const uint8_t* haystack, uint32_t haystackLength, const uint8_t* needle, uint32_t needleLength)
@@ -79,7 +80,7 @@ const uint8_t* memSearch(const uint8_t* haystack, uint32_t haystackLength, const
     return NULL;
 }
 
-uint16_t decodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength)
+uint16_t decodeText(const struct TextCodePair* textCodes, uint16_t numTextCodes, const uint8_t* inputBuffer, uint16_t inputBufferLength, char* outputBuffer, uint16_t outputBufferLength)
 {
     uint16_t result = 0;
     if(inputBufferLength > outputBufferLength)
@@ -124,7 +125,7 @@ uint16_t decodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const
     return result;
 }
 
-uint16_t encodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator)
+uint16_t encodeText(const struct TextCodePair* textCodes, uint16_t numTextCodes, const char* inputBuffer, uint16_t inputBufferLength, uint8_t* outputBuffer, uint16_t outputBufferLength, uint8_t terminator)
 {
 	uint16_t needleLength;
 	uint8_t code;
@@ -133,6 +134,12 @@ uint16_t encodeText(struct TextCodePair* textCodes, uint16_t numTextCodes, const
 	uint8_t* outputCur = outputBuffer;
 	uint8_t* const outputBufferEnd = outputBuffer + outputBufferLength;
 	bool match;
+
+    // turns out for nicknames, any unsed bytes after the actual string should be filled with the terminator byte
+    // otherwise nickname detection won't work correctly.
+    // https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_I)#bank1_sec_party
+    // "A Pokémon's name is a nickname if it does not perfectly match the default name for a Pokémon (typically all uppercase) with any unused bytes of the entry's 11-byte capacity filled with 0x50 terminators."
+    memset(outputBuffer, terminator, outputBufferLength);
 
 	while(cur < inputBufferEnd)
 	{

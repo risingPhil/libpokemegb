@@ -1,7 +1,8 @@
 #ifndef _GEN2PLAYERPOKEMONSTORAGE_H
 #define _GEN2PLAYERPOKEMONSTORAGE_H
 
-#include "Gen2Common.h"
+#include "gen2/Gen2Common.h"
+#include "gen2/Gen2Localization.h"
 
 class ISaveManager;
 class Gen2GameReader;
@@ -20,7 +21,7 @@ const int GEN2_PC_BOX_SIZE_IN_BYTES = 20 * (32 + 23) + 2;
 class Gen2PokemonList
 {
 public:
-    Gen2PokemonList(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t listCapacity, uint8_t entrySize);
+    Gen2PokemonList(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t listCapacity, uint8_t entrySize, Gen2LocalizationLanguage language);
     virtual ~Gen2PokemonList();
 
     virtual uint32_t getSaveOffset() = 0;
@@ -79,6 +80,7 @@ public:
 protected:
     Gen2GameReader& gameReader_;
     ISaveManager& saveManager_;
+    Gen2LocalizationLanguage localization_;
 private:
     const uint8_t listCapacity_;
     const uint8_t entrySize_;
@@ -87,7 +89,7 @@ private:
 class Gen2Party : public Gen2PokemonList
 {
 public:
-    Gen2Party(Gen2GameReader& gameReader, ISaveManager& saveManager);
+    Gen2Party(Gen2GameReader& gameReader, ISaveManager& saveManager, Gen2LocalizationLanguage language);
     virtual ~Gen2Party();
 
     uint32_t getSaveOffset() override;
@@ -98,7 +100,7 @@ private:
 class Gen2Box : public Gen2PokemonList
 {
 public:
-    Gen2Box(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex);
+    Gen2Box(Gen2GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex, Gen2LocalizationLanguage language);
     virtual ~Gen2Box();
 
     uint32_t getSaveOffset() override;

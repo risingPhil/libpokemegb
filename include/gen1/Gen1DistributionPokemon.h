@@ -18,39 +18,16 @@ typedef struct Gen1DistributionPokemon
     bool setPlayerAsOriginalTrainer;
     // generate a random trainer ID for the pokemon. see originalTrainerID above
     bool regenerateTrainerID;
+    // indicates whether this is a Japanese distribution event pokémon.
+    // This is important because we can't support the Trainer OT characters of a Japanese one in other
+    // localizations. When injecting a Japanese pokémon into a different localization, we replace the OT with POKEME64.
+    // when injecting a US/EU pokémon into a japanese cartridge, we'll replace the OT with ポケ64
+    bool isJapanese;
+    // overrides the held item field
+    uint8_t held_item_override;
     // definition of the pokemon
     Gen1TrainerPokemon poke;
 } Gen1DistributionPokemon;
-
-// https://bulbapedia.bulbagarden.net/wiki/List_of_European_language_event_Pok%C3%A9mon_distributions_(Generation_I)
-
-extern const Gen1DistributionPokemon g1_nintendoUKPokemonFestivalMew2016;
-extern const Gen1DistributionPokemon g1_clubNintendoMexicoGiveawayMew;
-extern const Gen1DistributionPokemon g1_farMorBornMew;
-extern const Gen1DistributionPokemon g1_christmasPresentMew;
-extern const Gen1DistributionPokemon g1_swedenMewOnTour;
-extern const Gen1DistributionPokemon g1_tennispalatsiMew;
-extern const Gen1DistributionPokemon g1_norwayPokemonTourMew;
-extern const Gen1DistributionPokemon g1_clubNintendoMew;
-extern const Gen1DistributionPokemon g1_pokemon2000ChampionshipMew;
-extern const Gen1DistributionPokemon g1_millenniumDomeMew;
-extern const Gen1DistributionPokemon g1_austriaMew;
-extern const Gen1DistributionPokemon g1_ukIrelandPokemonChampionship2000Mew;
-extern const Gen1DistributionPokemon g1_coraChatelineauMew;
-extern const Gen1DistributionPokemon g1_francePokemonTournamentMew;
-extern const Gen1DistributionPokemon g1_spainPokemonTournamentMew;
-extern const Gen1DistributionPokemon g1_mewsFlashMew;
-extern const Gen1DistributionPokemon g1_pokemonPatrolMew;
-extern const Gen1DistributionPokemon g1_nintendoOfficialMagazineTourMew;
-extern const Gen1DistributionPokemon g1_canadianPokemonStadiumTour2000Mew;
-extern const Gen1DistributionPokemon g1_pokemonStadiumTour2000Mew;
-extern const Gen1DistributionPokemon g1_canadaToysRUsMew;
-extern const Gen1DistributionPokemon g1_usToysRUsMew;
-extern const Gen1DistributionPokemon g1_nintendoPowerMew;
-extern const Gen1DistributionPokemon g1_pokemonLeagueNintendoTrainingTour99Mew;
-extern const Gen1DistributionPokemon g1_nintendoPowerPikachu;
-extern const Gen1DistributionPokemon g1_pokeTourMew;
-extern const Gen1DistributionPokemon g1_pokemonPowerMew;
 
 /**
  * @brief Gets a list of const Gen1DistributionPokemon pointers of the distribution pokemon that were available worldwide

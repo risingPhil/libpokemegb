@@ -4,13 +4,11 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <cstdio>
 
 // needed for crystal_fixPicBank() below
 #define CRYSTAL_PICS_FIX 0x36
 #define CRYSTAL_BANK_PICS_1 72
-
-#define EVENT_FLAGS_OFFSET_GOLDSILVER 0x261F
-#define EVENT_FLAGS_OFFSET_CRYSTAL 0x2600
 
 #define SAVE_CORRUPTION_CHECK1_EXPECTED_VALUE 99
 #define SAVE_CORRUPTION_CHECK2_EXPECTED_VALUE 127
@@ -89,7 +87,7 @@ static uint8_t gold_silver_fixPicBank(uint8_t bankIndex)
     return result;
 }
 
-static void addBytesToChecksum(ISaveManager &saveManager, uint16_t savOffsetStart, uint16_t savOffsetEnd, Gen2Checksum &checksum)
+static void addBytesToChecksum(ISaveManager &saveManager, uint32_t savOffsetStart, uint32_t savOffsetEnd, Gen2Checksum &checksum)
 {
     if (!saveManager.seek(savOffsetStart))
     {
@@ -105,11 +103,11 @@ static void addBytesToChecksum(ISaveManager &saveManager, uint16_t savOffsetStar
 }
 
 // based on https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_II)#Gold_and_Silver
-static uint16_t calculateMainRegionChecksum(ISaveManager &saveManager, bool isGameCrystal)
+static uint16_t calculateMainRegionChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
 {
     Gen2Checksum checksum;
-    const uint16_t savOffsetStart = 0x2009;
-    const uint16_t savOffsetEnd = (isGameCrystal) ? 0x2B82 : 0x2D68;
+    const uint32_t savOffsetStart = 0x2009;
+    const uint32_t savOffsetEnd = gen2_getSRAMOffsets(gameType, localization).mainChecksumDataEndPos;
 
     addBytesToChecksum(saveManager, savOffsetStart, savOffsetEnd, checksum);
 
@@ -117,103 +115,156 @@ static uint16_t calculateMainRegionChecksum(ISaveManager &saveManager, bool isGa
 }
 
 // based on https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_II)#Gold_and_Silver
-static uint16_t calculateBackupRegionChecksum(ISaveManager &saveManager, bool isGameCrystal)
+static uint16_t calculateBackupRegionChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
 {
     Gen2Checksum checksum;
 
-    if (isGameCrystal)
+    if(localization == Gen2LocalizationLanguage::JAPANESE)
     {
-        // for crystal, the backup save region is a contiguous address range
-        addBytesToChecksum(saveManager, 0x1209, 0x1D82, checksum);
+        if(gameType == Gen2GameType::CRYSTAL)
+        {
+            addBytesToChecksum(saveManager, 0x7209, 0x7CE3, checksum);
+        }
+        else
+        {
+            addBytesToChecksum(saveManager, 0x7209, 0x7E8C, checksum);
+        }
+    }
+    else if(localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        addBytesToChecksum(saveManager, 0x106B, 0x1533, checksum); // 1224 bytes
+        addBytesToChecksum(saveManager, 0x1534, 0x1A12, checksum); // 1246 bytes
+        addBytesToChecksum(saveManager, 0x1A13, 0x1C38, checksum); // 549 bytes
+        addBytesToChecksum(saveManager, 0x3DD8, 0x3F79, checksum); // 417 bytes
+        addBytesToChecksum(saveManager, 0x7E39, 0x7E6A, checksum); // 49 bytes
     }
     else
     {
-        // for Gold/Silver the backup save region is split up into 5 blocks
-        addBytesToChecksum(saveManager, 0x15C7, 0x17EC, checksum); //  550 bytes
-        addBytesToChecksum(saveManager, 0x3D96, 0x3F3F, checksum); //  426 bytes
-        addBytesToChecksum(saveManager, 0x0C6B, 0x10E7, checksum); // 1149 bytes
-        addBytesToChecksum(saveManager, 0x7E39, 0x7E6C, checksum); //   52 bytes
-        addBytesToChecksum(saveManager, 0x10E8, 0x15C6, checksum); // 1247 bytes
+        if (gameType == Gen2GameType::CRYSTAL)
+        {
+            // for crystal, the backup save region is a contiguous address range
+            addBytesToChecksum(saveManager, 0x1209, 0x1D82, checksum);
+        }
+        else
+        {
+            // for Gold/Silver the backup save region is split up into 5 blocks
+            addBytesToChecksum(saveManager, 0x15C7, 0x17EC, checksum); //  550 bytes
+            addBytesToChecksum(saveManager, 0x3D96, 0x3F3F, checksum); //  426 bytes
+            addBytesToChecksum(saveManager, 0x0C6B, 0x10E7, checksum); // 1149 bytes
+            addBytesToChecksum(saveManager, 0x7E39, 0x7E6C, checksum); //   52 bytes
+            addBytesToChecksum(saveManager, 0x10E8, 0x15C6, checksum); // 1247 bytes
+        }
     }
     return checksum.get();
 }
 
-static uint16_t readMainChecksum(ISaveManager &saveManager, bool isGameCrystal)
+static uint16_t readMainChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
 {
     uint16_t result;
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType, localization).mainChecksum;
 
-    if (isGameCrystal)
-    {
-        saveManager.seek(0x2D0D);
-        saveManager.readUint16(result, Endianness::LITTLE);
-    }
-    else
-    {
-        saveManager.seek(0x2D69);
-        saveManager.readUint16(result, Endianness::LITTLE);
-    }
+    saveManager.seek(savOffset);
+    saveManager.readUint16(result, Endianness::LITTLE);
+
     return result;
 }
 
-static uint16_t readBackupChecksum(ISaveManager &saveManager, bool isGameCrystal)
+static uint16_t readBackupChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
 {
     uint16_t result;
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType, localization).backupChecksum;
 
-    if (isGameCrystal)
-    {
-        saveManager.seek(0x1F0D);
-        saveManager.readUint16(result, Endianness::LITTLE);
-    }
-    else
-    {
-        saveManager.seek(0x7E6D);
-        saveManager.readUint16(result, Endianness::LITTLE);
-    }
+    saveManager.seek(savOffset);
+    saveManager.readUint16(result, Endianness::LITTLE);
+
     return result;
 }
 
-static void writeMainChecksum(ISaveManager &saveManager, uint16_t checksum, bool isGameCrystal)
+static void writeMainChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization, uint16_t checksum)
 {
-    if (isGameCrystal)
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType, localization).mainChecksum;
+
+    saveManager.seek(savOffset);
+    saveManager.writeUint16(checksum, Endianness::LITTLE);
+}
+
+static void writeBackupChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization, uint16_t checksum)
+{
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType, localization).backupChecksum;
+
+    saveManager.seek(savOffset);
+    saveManager.writeUint16(checksum, Endianness::LITTLE);
+}
+
+static void updateMainChecksum(ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
+{
+    const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager, gameType, localization);
+    writeMainChecksum(saveManager, gameType, localization, calculatedChecksum);
+}
+
+/**
+ * This function copies the main save region to the backup save region.
+ * It therefore overwrites the current backup save region.
+ */
+static void copyMainSaveRegionToBackupSaveRegion(ISaveManager& saveManager, Gen2GameType gameType, Gen2LocalizationLanguage localization)
+{
+    if(localization == Gen2LocalizationLanguage::JAPANESE)
     {
-        saveManager.seek(0x2D0D);
-        saveManager.writeUint16(checksum, Endianness::LITTLE);
+        if(gameType == Gen2GameType::CRYSTAL)
+        {
+            saveManager.copyRegion(0x2009, 0x7209, 2778);
+        }
+        else
+        {
+            saveManager.copyRegion(0x2009, 0x7209, 3203);
+        }
+    }
+    else if(localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        saveManager.copyRegion(0x2009, 0x106B, 1224); // 1224 bytes
+        saveManager.copyRegion(0x24D1, 0x1534, 1246); // 1246 bytes
+        saveManager.copyRegion(0x29AF, 0x1A13, 549); // 549 bytes
+        saveManager.copyRegion(0x2BD4, 0x3DD8, 417); // 417 bytes
+        saveManager.copyRegion(0x2D75, 0x7E39, 49); // 49 bytes
     }
     else
     {
-        saveManager.seek(0x2D69);
-        saveManager.writeUint16(checksum, Endianness::LITTLE);
+        if (gameType == Gen2GameType::CRYSTAL)
+        {
+            // for crystal, the backup save region is a contiguous address range
+            saveManager.copyRegion(0x2009, 0x1209, 2938);
+        }
+        else
+        {
+            // for Gold/Silver the backup save region is split up into 3 blocks
+            saveManager.copyRegion(0x2009, 0x15C7, 550);  //  550 bytes
+            saveManager.copyRegion(0x222F, 0x3D96, 426);  //  426 bytes
+            saveManager.copyRegion(0x23D9, 0x0C6B, 1149); // 1149 bytes
+            saveManager.copyRegion(0x2856, 0x7E39, 52);   //   52 bytes
+            saveManager.copyRegion(0x288A, 0x10E8, 1247); // 1247 bytes
+        }
     }
-}
 
-static void writeBackupChecksum(ISaveManager &saveManager, uint16_t checksum, bool isGameCrystal)
-{
-    if (isGameCrystal)
-    {
-        saveManager.seek(0x1F0D);
-        saveManager.writeUint16(checksum, Endianness::LITTLE);
-    }
-    else
-    {
-        saveManager.seek(0x7E6D);
-        saveManager.writeUint16(checksum, Endianness::LITTLE);
-    }
-}
-
-static void updateMainChecksum(ISaveManager &saveManager, bool isCrystal)
-{
-    const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager, isCrystal);
-    writeMainChecksum(saveManager, calculatedChecksum, isCrystal);
+    // read main data checksum and copy that to the backup checksum
+    writeBackupChecksum(saveManager, gameType, localization, readMainChecksum(saveManager, gameType, localization));
 }
 
 /**
  * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
  */
-static bool hasMainSave(ISaveManager& saveManager, bool isCrystal)
+static bool hasMainSave(ISaveManager& saveManager, Gen2LocalizationLanguage localization, bool isCrystal)
 {
     // check first canary value
     uint8_t saveCorruptionCheckValue1;
     uint8_t saveCorruptionCheckValue2;
+
+    if(localization == Gen2LocalizationLanguage::JAPANESE || localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        // I can't check for the canary values in a japanese or Korean save because I don't know the save offset nor the expected value.
+        // I can't rely on the decompilation projects (Pret's pokegold/pokecrystal) because they only do the international version.
+        // I also can't rely on PkHex's source code because they're not checking this.
+        return true;
+    }
 
     // this value is at the same offset for Gold/Silver/Crystal
     saveManager.seekToBankOffset(1, 0x8);
@@ -243,11 +294,19 @@ static bool hasMainSave(ISaveManager& saveManager, bool isCrystal)
 /**
  * Gen 2 has 2 canary values for the main save to check whether SRAM actually contains a save
  */
-static bool hasBackupSave(ISaveManager& saveManager, bool isCrystal)
+static bool hasBackupSave(ISaveManager& saveManager, Gen2LocalizationLanguage localization, bool isCrystal)
 {
     // check first canary value
     uint8_t saveCorruptionCheckValue1;
     uint8_t saveCorruptionCheckValue2;
+
+    if(localization == Gen2LocalizationLanguage::JAPANESE || localization == Gen2LocalizationLanguage::KOREAN)
+    {
+        // I can't check for the canary values in a japanese or Korean save because I don't know the save offset nor the expected value.
+        // I can't rely on the decompilation projects (Pret's pokegold/pokecrystal) because they only do the international version.
+        // I also can't rely on PkHex's source code because they're not checking this.
+        return true;
+    }
 
     if(isCrystal)
     {
@@ -280,17 +339,33 @@ static bool hasBackupSave(ISaveManager& saveManager, bool isCrystal)
 
 }
 
-Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType)
+Gen2GameReader::Gen2GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen2GameType gameType, Gen2LocalizationLanguage language)
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader)
     , iconDecoder_(romReader, gameType)
     , gameType_(gameType)
+    , localization_(language)
 {
+    if(language == Gen2LocalizationLanguage::MAX)
+    {
+        localization_ = gen2_determineGameLanguage(romReader, gameType);
+//      printf("Detected localization=%d\n", (int)localization_);
+    }
 }
 
 Gen2GameReader::~Gen2GameReader()
 {
+}
+
+Gen2GameType Gen2GameReader::getGameType() const
+{
+    return gameType_;
+}
+
+Gen2LocalizationLanguage Gen2GameReader::getGameLanguage() const
+{
+    return localization_;
 }
 
 const char *Gen2GameReader::getPokemonName(uint8_t index) const
@@ -298,34 +373,45 @@ const char *Gen2GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
+    uint8_t maxNumBytesPerName;
 
-    const uint32_t romOffset = (isGameCrystal()) ? 0x53384 : 0x1B0B74;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).names;
+    if(!romOffset)
+    {
+        snprintf(result, sizeof(result) - 1, "poke-%hhu", index);
+        return result;
+    }
 
-    romReader_.seek(romOffset + (0xA * (index - 1)));
-    numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
+    // The max name length is only 5 chars (and therefore bytes) in Japanese roms.
+    // But it's 10 for every other language
+    switch(localization_)
+    {
+    case Gen2LocalizationLanguage::JAPANESE:
+        maxNumBytesPerName = 5;
+        break;
+    default:
+        maxNumBytesPerName = 10;
+        break;
+    }
 
-    gen2_decodePokeText(encodedText, numRead, result, sizeof(result) - 1);
+    romReader_.seek(romOffset + (maxNumBytesPerName * (index - 1)));
+
+    // based on what I encountered so far. 0x50 is default, however it turns out 0x75 (…) is used too!
+    const uint8_t nameTerminators[] = {0x50, 0x75};
+    numRead = romReader_.readUntil(encodedText, nameTerminators, sizeof(nameTerminators), maxNumBytesPerName);
+
+    gen2_decodePokeText(encodedText, numRead, result, sizeof(result) - 1, localization_);
     return result;
 }
 
 Gen2PokemonIconType Gen2GameReader::getPokemonIconType(uint8_t index) const
 {
-    uint32_t romOffset;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).iconTypes;
     uint8_t byteVal;
 
-    switch(gameType_)
+    if(!romOffset)
     {
-        case Gen2GameType::GOLD:
-            romOffset = 0x8E975;
-            break;
-        case Gen2GameType::SILVER:
-            romOffset = 0x8E95B;
-            break;
-        case Gen2GameType::CRYSTAL:
-            romOffset = 0x8EAC4;
-            break;
-        default:
-            return Gen2PokemonIconType::GEN2_ICONTYPE_MAX;
+        return Gen2PokemonIconType::GEN2_ICONTYPE_MAX;
     }
 
     romReader_.seek(romOffset);
@@ -343,7 +429,7 @@ bool Gen2GameReader::isValidIndex(uint8_t index) const
 bool Gen2GameReader::readPokemonStatsForIndex(uint8_t index, Gen2PokeStats &outStats) const
 {
     const uint8_t statsStructSize = 32;
-    const uint32_t romOffset = (isGameCrystal()) ? 0x051424 : 0x51B0B;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).stats;
 
     romReader_.seek(romOffset);
 
@@ -389,7 +475,7 @@ bool Gen2GameReader::readFrontSpritePointer(uint8_t index, uint8_t &outBankIndex
     // https://raw.githubusercontent.com/pret/pokecrystal/symbols/pokecrystal.map
     // https://github.com/pret/pokecrystal/blob/master/data/pokemon/pic_pointers.asm
     //
-    const uint32_t romOffset = (isGameCrystal()) ? 0x120000 : 0x48000;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).spritePointers;
 
     // I don't support Unown sprite decoding right now, because unown is stored separately based on the variant.
     if (index == 201)
@@ -445,7 +531,7 @@ bool Gen2GameReader::readColorPaletteForPokemon(uint8_t index, bool shiny, uint1
     // that's because for every color palette, the first color is white and the last color is black.
     // so the rom only stores the 2nd and 3rd colors
     // each of these colors is an uint16_t
-    const uint32_t romOffset = (isGameCrystal()) ? 0xA8D6 : 0xAD45;
+    const uint32_t romOffset = gen2_getRomOffsets(gameType_, localization_).spritePalettes;
 
     if (!romReader_.seek(romOffset + ((index - 1) * 8)))
     {
@@ -483,7 +569,7 @@ uint8_t *Gen2GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 
 uint8_t *Gen2GameReader::decodePokemonIcon(Gen2PokemonIconType iconType, bool firstFrame)
 {
-    return iconDecoder_.decode(iconType, firstFrame);
+    return iconDecoder_.decode(localization_, iconType, firstFrame);
 }
 
 uint8_t Gen2GameReader::addPokemon(Gen2TrainerPokemon &poke, bool isEgg, const char *originalTrainerID, const char *nickname)
@@ -548,10 +634,11 @@ const char *Gen2GameReader::getTrainerName() const
 {
     static char result[20];
     uint8_t encodedPlayerName[0xB];
+
     saveManager_.seek(0x200B);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), localization_);
     return result;
 }
 
@@ -559,17 +646,19 @@ const char *Gen2GameReader::getRivalName() const
 {
     static char result[20];
     uint8_t encodedPlayerName[0xB];
-    saveManager_.seek(0x2021);
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType_, localization_).rivalName;
 
+    saveManager_.seek(savOffset);
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+
+    gen2_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), localization_);
     return result;
 }
 
 uint8_t Gen2GameReader::getCurrentBoxIndex()
 {
     uint8_t result;
-    const uint16_t saveOffset = (isGameCrystal()) ? 0x2700 : 0x2724;
+    const uint16_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).currentBoxIndex;
     if (!saveManager_.seek(saveOffset))
     {
         return 0;
@@ -582,30 +671,30 @@ uint8_t Gen2GameReader::getCurrentBoxIndex()
 
 Gen2Party Gen2GameReader::getParty()
 {
-    return Gen2Party((*this), saveManager_);
+    return Gen2Party((*this), saveManager_, localization_);
 }
 
 Gen2Box Gen2GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen2Box((*this), saveManager_, boxIndex);
+    return Gen2Box((*this), saveManager_, boxIndex, localization_);
 }
 
 Gen2ItemList Gen2GameReader::getItemList(Gen2ItemListType type)
 {
-    return Gen2ItemList(saveManager_, type, isGameCrystal());
+    return Gen2ItemList(saveManager_, type, gameType_, localization_);
 }
 
 bool Gen2GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber)
 {
-    uint16_t saveOffset;
+    uint32_t saveOffset;
 
-    if (isGameCrystal())
+    if(dexFlag == POKEDEX_SEEN)
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A47 : 0x2A27;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexSeen;
     }
     else
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A6C : 0x2A4C;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexOwned;
     }
 
     uint8_t byte;
@@ -626,15 +715,15 @@ bool Gen2GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber)
 
 void Gen2GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber)
 {
-    uint16_t saveOffset;
+    uint32_t saveOffset;
 
-    if (isGameCrystal())
+    if(dexFlag == POKEDEX_SEEN)
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A47 : 0x2A27;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexSeen;
     }
     else
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A6C : 0x2A4C;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexOwned;
     }
 
     uint8_t byte;
@@ -656,15 +745,15 @@ void Gen2GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber)
 
 uint8_t Gen2GameReader::getPokedexCounter(PokedexFlag dexFlag)
 {
-    uint16_t saveOffset;
+    uint32_t saveOffset;
 
-    if (isGameCrystal())
+    if(dexFlag == POKEDEX_SEEN)
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A47 : 0x2A27;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexSeen;
     }
     else
     {
-        saveOffset = (dexFlag == POKEDEX_SEEN) ? 0x2A6C : 0x2A4C;
+        saveOffset = gen2_getSRAMOffsets(gameType_, localization_).dexOwned;
     }
 
     uint8_t bytes[32];
@@ -705,19 +794,17 @@ uint8_t Gen2GameReader::getPokedexCounter(PokedexFlag dexFlag)
     return result;
 }
 
-
-#include <cstdio>
 bool Gen2GameReader::isMainChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
 
-    if(!hasMainSave(saveManager_, isCrystal))
+    if(!hasMainSave(saveManager_, localization_, isCrystal))
     {
         return false;
     }
 
-    const uint16_t storedChecksum = readMainChecksum(saveManager_, isCrystal);
-    const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager_, isCrystal);
+    const uint16_t storedChecksum = readMainChecksum(saveManager_, gameType_, localization_);
+    const uint16_t calculatedChecksum = calculateMainRegionChecksum(saveManager_, gameType_, localization_);
 
     return (storedChecksum == calculatedChecksum);
 }
@@ -726,21 +813,20 @@ bool Gen2GameReader::isBackupChecksumValid()
 {
     const bool isCrystal = isGameCrystal();
 
-    if(!hasBackupSave(saveManager_, isCrystal))
+    if(!hasBackupSave(saveManager_, localization_, isCrystal))
     {
         return false;
     }
 
-    const uint16_t storedChecksum = readBackupChecksum(saveManager_, isCrystal);
-    const uint16_t calculatedChecksum = calculateBackupRegionChecksum(saveManager_, isCrystal);
+    const uint16_t storedChecksum = readBackupChecksum(saveManager_, gameType_, localization_);
+    const uint16_t calculatedChecksum = calculateBackupRegionChecksum(saveManager_, gameType_, localization_);
 
     return (storedChecksum == calculatedChecksum);
 }
 
 void Gen2GameReader::finishSave()
 {
-    const bool isCrystal = isGameCrystal();
-    const uint16_t currentPcBoxSaveOffset = (isCrystal) ? 0x2D10 : 0x2D6C;
+    const uint16_t currentPcBoxSaveOffset = gen2_getSRAMOffsets(gameType_, localization_).currentBox;
     Gen2Box currentBox = getBox(getCurrentBoxIndex());
 
 #if 1
@@ -749,26 +835,10 @@ void Gen2GameReader::finishSave()
     // and we rely on this function (finishSave) to copy the changed PC box to the current PC box save region.
     saveManager_.copyRegion(currentBox.getSaveOffset(), currentPcBoxSaveOffset, GEN2_PC_BOX_SIZE_IN_BYTES);
 #endif
-    updateMainChecksum(saveManager_, isCrystal);
+    updateMainChecksum(saveManager_, gameType_, localization_);
 
     // now start copying the main save region to the backup save region(s)
-    if (isCrystal)
-    {
-        // for crystal, the backup save region is a contiguous address range
-        saveManager_.copyRegion(0x2009, 0x1209, 2938);
-    }
-    else
-    {
-        // for Gold/Silver the backup save region is split up into 3 blocks
-        saveManager_.copyRegion(0x2009, 0x15C7, 550);  //  550 bytes
-        saveManager_.copyRegion(0x222F, 0x3D96, 426);  //  426 bytes
-        saveManager_.copyRegion(0x23D9, 0x0C6B, 1149); // 1149 bytes
-        saveManager_.copyRegion(0x2856, 0x7E39, 52);   //   52 bytes
-        saveManager_.copyRegion(0x288A, 0x10E8, 1247); // 1247 bytes
-    }
-
-    // read main data checksum and copy that to the backup checksum
-    writeBackupChecksum(saveManager_, readMainChecksum(saveManager_, isCrystal), isCrystal);
+    copyMainSaveRegionToBackupSaveRegion(saveManager_, gameType_, localization_);
 }
 
 bool Gen2GameReader::isGameCrystal() const
@@ -782,6 +852,7 @@ void Gen2GameReader::unlockGsBallEvent()
     {
         return;
     }
+    const Gen2LocalizationSRAMOffsets& sramOffsets = gen2_getSRAMOffsets(gameType_, localization_);
 
     // let's remove the GS ball from the players' inventory first (if it exists)
     // this is to cover up my earlier fuck up with PokeMe64 which only handed out the item.
@@ -798,16 +869,16 @@ void Gen2GameReader::unlockGsBallEvent()
     // unlock the event itself. This triggers the NPC to stop you when trying to leave the Golden Rod pokémon center
     // to give you the GS Ball.
     // to be honest I have no clue what the exact meaning of this byte is. But hey, it works!
-    saveManager_.seek(0x3E3C);
-    saveManager_.writeByte(0xB);
+    saveManager_.seek(sramOffsets.gsBallMain);
+    saveManager_.writeByte(CRYSTAL_GS_BALL_ENABLE_VALUE);
     // this is a mirror of the previous byte. It's supposedly not needed. But let's just set it to be safe.
-    saveManager_.seek(0x3E44);
-    saveManager_.writeByte(0xB);
+    saveManager_.seek(sramOffsets.gsBallBackup);
+    saveManager_.writeByte(CRYSTAL_GS_BALL_ENABLE_VALUE);
 }
 
 bool Gen2GameReader::getEventFlag(uint16_t flagNumber)
 {
-    const uint16_t saveOffset = (isGameCrystal()) ? EVENT_FLAGS_OFFSET_CRYSTAL : EVENT_FLAGS_OFFSET_GOLDSILVER;
+    const uint32_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).eventFlags;
     uint8_t byteVal;
     const uint8_t flag = 1 << (flagNumber % 8);
 
@@ -819,7 +890,7 @@ bool Gen2GameReader::getEventFlag(uint16_t flagNumber)
 
 void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
 {
-    const uint16_t saveOffset = (isGameCrystal()) ? EVENT_FLAGS_OFFSET_CRYSTAL : EVENT_FLAGS_OFFSET_GOLDSILVER;
+    const uint32_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).eventFlags;
     uint8_t byteVal;
     uint8_t resultVal;
     const uint8_t flag = 1 << (flagNumber % 8);
@@ -848,8 +919,9 @@ void Gen2GameReader::resetRTC()
     // Based on sRTCStatusFlags, RecordRTCStatus, .set_bit_7 in
     // https://github.com/pret/pokecrystal
     // https://github.com/pret/pokegold
+    const uint32_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).rtcFlags;
     const uint8_t rtcStatusFieldValue = 0xC0;
 
-    saveManager_.seekToBankOffset(0, 0xC60);
+    saveManager_.seekToBankOffset(0, saveOffset);
     saveManager_.writeByte(rtcStatusFieldValue);
 }

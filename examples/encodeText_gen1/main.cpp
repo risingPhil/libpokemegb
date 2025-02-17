@@ -1,7 +1,9 @@
-#include "gen1/Gen1Common.h"
+#include "gen1/Gen1Localization.h"
 
 #include <cstdio>
 #include <cstring>
+
+static const Gen1LocalizationLanguage g1_localization = Gen1LocalizationLanguage::ENGLISH;
 
 static void print_hex(const unsigned char* buffer, size_t length)
 {
@@ -22,6 +24,6 @@ int main(int argc, char** argv)
 
     uint8_t outputBuffer[4096];
 
-    const uint16_t size = gen1_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50);
+    const uint16_t size = gen1_encodePokeText(argv[1], strlen(argv[1]), outputBuffer, sizeof(outputBuffer), 0x50, g1_localization);
     print_hex(outputBuffer, size);
 }

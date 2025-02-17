@@ -6,7 +6,7 @@
 class Gen1GameReader;
 class ISaveManager;
 
-uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex);
+uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex, Gen1LocalizationLanguage language);
 
 /**
  * @brief This class represents the trainer party in the GEN1 games
@@ -14,7 +14,7 @@ uint8_t getGen1BoxBankIndex(uint8_t boxIndex, uint8_t currentBoxIndex);
 class Gen1Party
 {
 public:
-    Gen1Party(Gen1GameReader& gameReader, ISaveManager& saveManager);
+    Gen1Party(Gen1GameReader& gameReader, ISaveManager& saveManager, Gen1LocalizationLanguage language);
     ~Gen1Party();
 
     /**
@@ -41,6 +41,7 @@ protected:
 private:
     Gen1GameReader& gameReader_;
     ISaveManager& saveManager_;
+    Gen1LocalizationLanguage localization_;
 };
 
 /**
@@ -49,7 +50,7 @@ private:
 class Gen1Box
 {
 public:
-    Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex);
+    Gen1Box(Gen1GameReader& gameReader, ISaveManager& saveManager, uint8_t boxIndex, Gen1LocalizationLanguage language);
     ~Gen1Box();
 
     /**
@@ -73,6 +74,7 @@ private:
     Gen1GameReader& gameReader_;
     ISaveManager& saveManager_;
     uint8_t boxIndex_;
+    Gen1LocalizationLanguage localization_;
 };
 
 #endif

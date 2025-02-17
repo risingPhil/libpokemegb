@@ -2,6 +2,7 @@
 #define _GEN2ICONDECODER_H
 
 #include "gen2/Gen2Common.h"
+#include "gen2/Gen2Localization.h"
 
 #define GEN2_TILE_BITS_PER_PIXEL 2
 #define GEN2_BYTES_PER_TILE 16
@@ -27,7 +28,7 @@ public:
      * 
      * @return Internal buffer containing the icon tiles in vertical tile order.
      */
-    uint8_t* decode(Gen2PokemonIconType iconType, bool firstFrame);
+    uint8_t* decode(Gen2LocalizationLanguage language, Gen2PokemonIconType iconType, bool firstFrame);
 protected:
 private:
     uint8_t buffer_[GEN2_ICON_NUM_BYTES];

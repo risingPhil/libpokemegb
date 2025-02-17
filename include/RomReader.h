@@ -30,6 +30,11 @@ public:
     virtual uint32_t readUntil(uint8_t* outBuffer, uint8_t terminator, uint32_t maxRead) = 0;
 
     /**
+     * @brief Same as above but with multiple possible terminator characters
+     */
+    virtual uint32_t readUntil(uint8_t* outBuffer, const uint8_t* terminatorList, uint8_t numTerminators, uint32_t maxRead) = 0;
+
+    /**
      * @brief Reads a 16 bit unsigned integer from the rom at the current position.
      * The Endianness enum indicates whether the field we're trying to read is actually stored in little endian or big endian form.
      * Turns out there's a mix of them in the roms even though most fields are in little endian.
@@ -112,6 +117,7 @@ public:
     bool seekToRomPointer(uint16_t pointer, uint8_t bankIndex = 0xFF) override;
 
     uint32_t readUntil(uint8_t* outBuffer, uint8_t terminator, uint32_t maxRead) override;
+    uint32_t readUntil(uint8_t* outBuffer, const uint8_t* terminatorList, uint8_t numTerminators, uint32_t maxRead) override;
 protected:
 private:
     const bool cpuLittleEndian_;

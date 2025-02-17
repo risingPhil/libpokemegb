@@ -5,19 +5,21 @@
 #include "utils.h"
 
 #include <cstdlib>
+#include <cstdio>
+
 /**
  * @brief This function calculates the main data checksum
  */
-uint8_t calculateMainDataChecksum(ISaveManager& saveManager)
+uint8_t calculateMainDataChecksum(ISaveManager& saveManager, Gen1LocalizationLanguage localization)
 {
     Gen1Checksum checksum;
-    const uint16_t checksummedDataStart = 0x598;
-    const uint16_t checksummedDataEnd = 0x1523;
-    const uint16_t numBytes = checksummedDataEnd - checksummedDataStart;
-    uint16_t i;
+    const uint32_t checksummedDataStart = 0x2598;
+    const uint32_t checksummedDataEnd = gen1_getSRAMOffsets(localization).checksum;
+    const uint32_t numBytes = checksummedDataEnd - checksummedDataStart;
+    uint32_t i;
     uint8_t byte;
 
-    saveManager.seekToBankOffset(1, checksummedDataStart);
+    saveManager.seek(checksummedDataStart);
 
     for(i=0; i < numBytes; ++i)
     {
@@ -47,13 +49,23 @@ uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankInd
     return checksum.get();
 }
 
-Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType)
+Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType, Gen1LocalizationLanguage language)
     : romReader_(romReader)
     , saveManager_(saveManager)
     , spriteDecoder_(romReader_)
     , iconDecoder_(romReader, gameType)
     , gameType_(gameType)
+    , localization_(language)
 {
+    if(language == Gen1LocalizationLanguage::MAX)
+    {
+        localization_ = gen1_determineGameLanguage(romReader, gameType);
+    }
+}
+
+Gen1LocalizationLanguage Gen1GameReader::getGameLanguage() const
+{
+    return localization_;
 }
 
 const char *Gen1GameReader::getPokemonName(uint8_t index) const
@@ -62,31 +74,22 @@ const char *Gen1GameReader::getPokemonName(uint8_t index) const
     static char result[20];
     uint8_t encodedText[0xA];
     uint32_t numRead;
-    uint16_t pointer;
+    const uint16_t entrySize = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 0xA : 0x5;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, localization_).names;
 
-    if(gameType_ == Gen1GameType::BLUE || gameType_ == Gen1GameType::RED)
+    if(!romOffset)
     {
-        romReader_.seek(0x2FA3);
-        const uint8_t bankByte = romReader_.peek();
-
-        romReader_.seek(0x2FAE);
-        romReader_.readUint16(pointer);
-
-        // seek to the right location
-        romReader_.seekToRomPointer(pointer, bankByte);
-    }
-    else
-    {   
-        // Pkmn Yellow
-        romReader_.seek(0xE8000);
+        snprintf(result, sizeof(result) - 1, "poke-%hhu", index);
+        return result;
     }
 
-    romReader_.advance((index - 1) * 0xA);
+    romReader_.seek(romOffset);
+    romReader_.advance((index - 1) * entrySize);
 
     // max 10 bytes
-    numRead = romReader_.readUntil(encodedText, 0x50, 0xA);
+    numRead = romReader_.readUntil(encodedText, 0x50, entrySize);
 
-    gen1_decodePokeText(encodedText, numRead, result, sizeof(result));
+    gen1_decodePokeText(encodedText, numRead, result, sizeof(result), localization_);
     return result;
 }
 
@@ -94,7 +97,7 @@ uint8_t Gen1GameReader::getPokemonNumber(uint8_t index) const
 {
     // Based on https://github.com/seanmorris/pokemon-parser/blob/master/source/PokemonRom.js#L509
     uint8_t result = 0xFF;
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x410B1 : 0x41024;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, localization_).numbers;
     romReader_.seek(romOffset + (index - 1));
     romReader_.readByte(result);
     return result;
@@ -105,7 +108,7 @@ Gen1PokemonIconType Gen1GameReader::getPokemonIconType(uint8_t index) const
     //MonPartyData in pret/pokered and pret/pokeyellow
     // strangely, this array is in pokemon _number_ order, not index
     uint8_t number = getPokemonNumber(index);
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x719BA : 0x7190D;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, localization_).iconTypes;
     uint8_t byteVal;
     Gen1PokemonIconType result;
 
@@ -198,8 +201,6 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
     const uint8_t pokeNumber = getPokemonNumber(index);
 
     uint8_t spriteBank;
-    uint8_t statsBank;
-    uint16_t statsPointer;
 
     if (gameType_ != Gen1GameType::YELLOW && index == 0x15)
     {
@@ -235,23 +236,14 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
         // Mew (of which the pokenumber is 151) stats are stored at a completely different location in the rom than the rest
         if (pokeNumber != 151)
         {
-            romReader_.seek(0x153B);
-            romReader_.readByte(statsBank);
-
-            romReader_.seek(0x1578);
-            romReader_.readUint16(statsPointer);
+            romReader_.seek(gen1_getRomOffsets(gameType_, localization_).stats);
         }
         else
         {
             // mew stats
-            romReader_.seek(0x159C);
-            romReader_.readByte(statsBank);
-
-            romReader_.seek(0x1593);
-            romReader_.readUint16(statsPointer);
+            romReader_.seek(gen1_getRomOffsets(gameType_, localization_).statsMew);
         }
 
-        romReader_.seekToRomPointer(statsPointer, statsBank);
         if (pokeNumber != 151)
         {
             // the number is 1-based.
@@ -261,7 +253,7 @@ bool Gen1GameReader::readPokemonStatsForIndex(uint8_t index, Gen1PokeStats &outS
     else
     {
         // Dealing with Pokemon yellow
-        romReader_.seek(0x383DE);
+        romReader_.seek(gen1_getRomOffsets(gameType_, localization_).stats);
         // the number is 1-based.
         romReader_.advance(statsStructSize * (pokeNumber - 1));
     }
@@ -290,7 +282,7 @@ uint8_t Gen1GameReader::getColorPaletteIndexByPokemonNumber(uint8_t pokeNumber)
 {
     uint8_t result;
     // pokeyellow.map from https://github.com/pret/pokeyellow (after compilation)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ?  0x72922 : 0x725C9;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, localization_).paletteIndices;
     if(!romReader_.seek(romOffset + (pokeNumber - 1)))
     {
         return 0xFF;
@@ -311,7 +303,7 @@ void Gen1GameReader::readColorPalette(uint8_t paletteId, uint16_t* outColorPalet
 
     // based on https://datacrystal.romhacking.net/wiki/Pok%C3%A9mon_Red_and_Blue/ROM_map
     // and https://bulbapedia.bulbagarden.net/wiki/List_of_color_palettes_by_index_number_(Generation_I)
-    const uint32_t romOffset = (gameType_ == Gen1GameType::YELLOW) ? 0x72AF9 : 0x72660;
+    const uint32_t romOffset = gen1_getRomOffsets(gameType_, localization_).palettes;
     romReader_.seek(romOffset + (paletteId * 8));
     while(cur < end)
     {
@@ -328,7 +320,7 @@ const char *Gen1GameReader::getTrainerName() const
     saveManager_.seek(0x2598);
 
     saveManager_.readUntil(encodedPlayerName, 0x50, 0xB);
-    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result));
+    gen1_decodePokeText(encodedPlayerName, sizeof(encodedPlayerName), result, sizeof(result), localization_);
     return result;
 }
 
@@ -336,38 +328,51 @@ const char *Gen1GameReader::getRivalName() const
 {
     static char result[20];
     uint8_t encodedRivalName[0xB];
-    saveManager_.seek(0x25F6);
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).rivalName;
+
+    saveManager_.seek(savOffset);
 
     saveManager_.readUntil(encodedRivalName, 0x50, sizeof(encodedRivalName));
-    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result));
+    gen1_decodePokeText(encodedRivalName, sizeof(encodedRivalName), result, sizeof(result), localization_);
     return result;
 }
 
 uint16_t Gen1GameReader::getTrainerID() const
 {
     uint16_t result;
-
-    saveManager_.seek(0x2605);
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).trainerID;
+    saveManager_.seek(savOffset);
     saveManager_.readUint16(result);
 
     return result;
 }
 
+Gen1Maps Gen1GameReader::getCurrentMap() const
+{
+    uint8_t result;
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).currentMap;
+    saveManager_.seek(savOffset);
+
+    saveManager_.readByte(result);
+    return static_cast<Gen1Maps>(result);
+}
+
 Gen1Party Gen1GameReader::getParty()
 {
-    return Gen1Party((*this), saveManager_);
+    return Gen1Party((*this), saveManager_, localization_);
 }
 
 Gen1Box Gen1GameReader::getBox(uint8_t boxIndex)
 {
-    return Gen1Box((*this), saveManager_, boxIndex);
+    return Gen1Box((*this), saveManager_, boxIndex, localization_);
 }
 
 uint8_t Gen1GameReader::getCurrentBoxIndex()
 {
     uint8_t byte;
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).currentBoxIndex;
 
-    saveManager_.seek(0x284C);
+    saveManager_.seek(savOffset);
     saveManager_.readByte(byte);
 
     return byte & 0x3F;   
@@ -375,8 +380,10 @@ uint8_t Gen1GameReader::getCurrentBoxIndex()
 
 bool Gen1GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    const Gen1LocalizationSRAMOffsets& sramOffsets = gen1_getSRAMOffsets(localization_);
+    const uint32_t saveOffset = (dexFlag == POKEDEX_SEEN) ? sramOffsets.dexSeen : sramOffsets.dexOwned;
     uint8_t byte;
+
     if(pokedexNumber < 1 || pokedexNumber > 151)
     {
         return false;
@@ -394,8 +401,10 @@ bool Gen1GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) 
 
 void Gen1GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    const Gen1LocalizationSRAMOffsets& sramOffsets = gen1_getSRAMOffsets(localization_);
+    const uint32_t saveOffset = (dexFlag == POKEDEX_SEEN) ? sramOffsets.dexSeen : sramOffsets.dexOwned;
     uint8_t byte;
+    
     if(pokedexNumber < 1 || pokedexNumber > 151)
     {
         return;
@@ -414,7 +423,8 @@ void Gen1GameReader::setPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber) 
 
 uint8_t Gen1GameReader::getPokedexCounter(PokedexFlag dexFlag) const
 {
-    const uint16_t saveOffset = (dexFlag == POKEDEX_SEEN)  ? 0x25B6 : 0x25A3;
+    const Gen1LocalizationSRAMOffsets& sramOffsets = gen1_getSRAMOffsets(localization_);
+    const uint32_t saveOffset = (dexFlag == POKEDEX_SEEN) ? sramOffsets.dexSeen : sramOffsets.dexOwned;
     uint8_t bytes[19];
     uint8_t result = 0;
 
@@ -458,7 +468,7 @@ uint8_t* Gen1GameReader::decodeSprite(uint8_t bankIndex, uint16_t pointer)
 
 uint8_t* Gen1GameReader::decodePokemonIcon(Gen1PokemonIconType iconType, bool firstFrame)
 {
-    return iconDecoder_.decode(iconType, firstFrame);
+    return iconDecoder_.decode(localization_, iconType, firstFrame);
 }
 
 uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* originalTrainerID, const char* nickname)
@@ -480,7 +490,8 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
     else
     {
         const uint8_t currentBoxIndex = getCurrentBoxIndex();
-        for(uint8_t i = 0; i < 12; ++i)
+        const uint8_t numBoxes = (localization_ != Gen1LocalizationLanguage::JAPANESE)? 12 : 8;
+        for(uint8_t i = 0; i < numBoxes; ++i)
         {
             Gen1Box box = getBox(i);
             if(box.getNumberOfPokemon() == box.getMaxNumberOfPokemon())
@@ -491,7 +502,7 @@ uint8_t Gen1GameReader::addPokemon(Gen1TrainerPokemon& poke, const char* origina
             box.add(poke, originalTrainerID, nickname);
             result = i;
 
-            updateWholeBoxBankChecksum(getGen1BoxBankIndex(i, currentBoxIndex));
+            updateWholeBoxBankChecksum(getGen1BoxBankIndex(i, currentBoxIndex, localization_));
             break;
         }   
     }
@@ -514,22 +525,22 @@ uint8_t Gen1GameReader::addDistributionPokemon(const Gen1DistributionPokemon& di
 
 bool Gen1GameReader::isMainChecksumValid()
 {
-    const uint16_t mainDataChecksumOffset = 0x3523;
+    const uint32_t mainDataChecksumOffset = gen1_getSRAMOffsets(localization_).checksum;
     uint8_t storedChecksum;
     uint8_t calculatedChecksum;
 
     saveManager_.seek(mainDataChecksumOffset);
     saveManager_.readByte(storedChecksum);
 
-    calculatedChecksum = calculateMainDataChecksum(saveManager_);
+    calculatedChecksum = calculateMainDataChecksum(saveManager_, localization_);
 
     return (storedChecksum == calculatedChecksum);
 }
 
 void Gen1GameReader::updateMainChecksum()
 {
-    const uint16_t mainDataChecksumOffset = 0x3523;
-    const uint8_t calculatedChecksum = calculateMainDataChecksum(saveManager_);
+    const uint32_t mainDataChecksumOffset = gen1_getSRAMOffsets(localization_).checksum;
+    const uint8_t calculatedChecksum = calculateMainDataChecksum(saveManager_, localization_);
 
     saveManager_.seek(mainDataChecksumOffset);
     saveManager_.writeByte(calculatedChecksum);
