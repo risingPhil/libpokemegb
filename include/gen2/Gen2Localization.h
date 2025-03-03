@@ -83,6 +83,18 @@ typedef struct Gen2LocalizationSRAMOffsets
     uint32_t itemPocketBall;
     uint32_t itemPocketPC;
     uint32_t rtcFlags;
+    uint32_t mysteryGiftUnlocked;
+    /**
+     * This field indicates the offset of the player's day settings in relation to
+     * the rtc chips' value at the time.
+     *
+     * Similar fields for hours, minutes and seconds follow right after this one.
+     *
+     * Based on the wStartDay in pokegold https://github.com/pret/pokegold/blob/symbols/pokegold.sym
+     * if you look at TryLoadSaveData in save.asm, you'll see that
+     * the sram offset is sPlayerData + (wStartDay - wPlayerData)
+     */
+    uint32_t rtcDayOffset;
 } Gen2LocalizationSRAMOffsets;
 
 const Gen2LocalizationRomOffsets& gen2_getRomOffsets(Gen2GameType gameType, Gen2LocalizationLanguage language);

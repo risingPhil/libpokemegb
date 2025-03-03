@@ -269,4 +269,9 @@ const char* gen2_getItemListTypeString(Gen2ItemListType type);
  */
 void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2DistributionPokemon& distributionPoke, Gen2TrainerPokemon& poke, const char*& outTrainerName);
 
+/**
+ * @brief This function converts the given decorationID into the associated event flag index
+ */
+uint16_t gen2_convertDecorationIDIntoEventFlag(uint8_t decorationID);
+
 #endif

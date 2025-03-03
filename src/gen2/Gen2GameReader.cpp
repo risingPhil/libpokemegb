@@ -684,6 +684,16 @@ Gen2ItemList Gen2GameReader::getItemList(Gen2ItemListType type)
     return Gen2ItemList(saveManager_, type, gameType_, localization_);
 }
 
+Gen2ClockManager Gen2GameReader::getClockManager(IRTCReader& rtcReader)
+{
+    return Gen2ClockManager(saveManager_, rtcReader, gameType_, localization_);
+}
+
+Gen2MysteryGiftManager Gen2GameReader::getMysteryGiftManager()
+{
+    return Gen2MysteryGiftManager(saveManager_, gameType_, localization_);
+}
+
 bool Gen2GameReader::getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber)
 {
     uint32_t saveOffset;
@@ -909,19 +919,4 @@ void Gen2GameReader::setEventFlag(uint16_t flagNumber, bool enabled)
     }
 
     saveManager_.writeByte(resultVal);
-}
-
-void Gen2GameReader::resetRTC()
-{
-    // The game checks bit 7 on the sRTCStatusFlags field in SRAM
-    // this is set when the game detects wrong RTC register values.
-    // In order to let the game prompt to reconfigure the RTC clock, we just have to set this bit
-    // Based on sRTCStatusFlags, RecordRTCStatus, .set_bit_7 in
-    // https://github.com/pret/pokecrystal
-    // https://github.com/pret/pokegold
-    const uint32_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).rtcFlags;
-    const uint8_t rtcStatusFieldValue = 0xC0;
-
-    saveManager_.seekToBankOffset(0, saveOffset);
-    saveManager_.writeByte(rtcStatusFieldValue);
 }

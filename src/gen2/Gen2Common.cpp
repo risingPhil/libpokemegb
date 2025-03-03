@@ -3681,3 +3681,68 @@ void gen2_prepareDistributionPokemon(Gen2GameReader& gameReader, const Gen2Distr
         poke.iv_data[1] = distributionPoke.iv_data[1];
     }
 }
+
+uint16_t gen2_convertDecorationIDIntoEventFlag(uint8_t decorationID)
+{
+	const uint16_t DECORATION_EVENTFLAG_INDEX_OFFSET = 676;
+	uint8_t correction;
+
+	// sequence break in event flags vs decoration ids.
+	// the big dolls are at the end
+	switch(decorationID)
+	{
+	case 26:
+		return 719; // BIG SNORLAX DOLL
+	case 27:
+		return 720; // BIG ONIX
+	case 28:
+		return 721; // BIG LAPRAS
+	case 51:
+		return 717; // GOLD TROPHY
+	case 52:
+		return 718; // SILVER TROPHY
+	default:
+		break;
+	}
+
+	// The correction variable is based on the grayed out "Put it away" rows here:
+	// https://bulbapedia.bulbagarden.net/wiki/List_of_decorations_in_Generation_II
+	// and the fact that the IDs start at index 1
+	if(decorationID < 6)
+	{
+		correction = 2;
+	}
+	else if(decorationID < 11)
+	{
+		correction = 3;
+	}
+	else if(decorationID < 15)
+	{
+		correction = 4;
+	}
+	else if(decorationID < 20)
+	{
+		// In the flags, there were 4 plants reserved. But there are only 3
+		// not only that, but the town map isn't reserved in the flags either
+		correction = 5;
+	}
+	else if(decorationID < 25)
+	{
+		correction = 6;
+	}
+	else if(decorationID < 29)
+	{
+		// should not happen.
+		// There's a sequence break in regards to the big dolls in the event flags.
+		// The big dolls appear at the end instead of in sequence of the decoration IDS.
+		correction = 0;
+	}
+	else
+	{
+		// because of the sequence break of the big dolls which do not appear in sequence in the event flags
+		// the correction becomes much larger here.
+		correction = 11;
+	}
+
+	return DECORATION_EVENTFLAG_INDEX_OFFSET + (decorationID - correction);
+}

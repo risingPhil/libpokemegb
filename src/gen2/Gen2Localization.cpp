@@ -235,7 +235,9 @@ static const Gen2LocalizationSRAMOffsets g2_dummySRAMOffsets = {
     .itemPocketKey = 0,
     .itemPocketBall = 0,
     .itemPocketPC = 0,
-    .rtcFlags = 0
+    .rtcFlags = 0,
+    .mysteryGiftUnlocked = 0,
+    .rtcDayOffset = 0
 };
 
 static const Gen2LocalizationSRAMOffsets g2_internationalSRAMOffsetsGS = {
@@ -256,7 +258,9 @@ static const Gen2LocalizationSRAMOffsets g2_internationalSRAMOffsetsGS = {
     .itemPocketKey = 0x2449,
     .itemPocketBall = 0x2464,
     .itemPocketPC = 0x247E,
-    .rtcFlags = 0xC60
+    .rtcFlags = 0xC60,
+    .mysteryGiftUnlocked = 0xBE3,
+    .rtcDayOffset = 0x2044
 };
 
 static const Gen2LocalizationSRAMOffsets g2_internationalSRAMOffsetsC = {
@@ -277,7 +281,9 @@ static const Gen2LocalizationSRAMOffsets g2_internationalSRAMOffsetsC = {
     .itemPocketKey = 0x244A,
     .itemPocketBall = 0x2465,
     .itemPocketPC = 0x247F,
-    .rtcFlags = 0xC60
+    .rtcFlags = 0xC60,
+    .mysteryGiftUnlocked = 0xBE3,
+    .rtcDayOffset = 0x2044
 };
 
 static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsGS[] = {
@@ -310,7 +316,9 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsGS[] = {
         .itemPocketKey = 0x2441,
         .itemPocketBall = 0x245C,
         .itemPocketPC = 0x2476,
-        .rtcFlags = 0x1060
+        .rtcFlags = 0x1060,
+        .mysteryGiftUnlocked = 0x0,
+        .rtcDayOffset = 0x0 // TODO
     },
     // JAPANESE
     {
@@ -331,7 +339,9 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsGS[] = {
         .itemPocketKey = 0x242A,
         .itemPocketBall = 0x2445,
         .itemPocketPC = 0x245F,
-        .rtcFlags = 0x1000
+        .rtcFlags = 0x1000,
+        .mysteryGiftUnlocked = 0xB51,
+        .rtcDayOffset = 0x0 // TODO
     }
 };
 
@@ -367,7 +377,9 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsC[] = {
         .itemPocketKey = 0x242C,
         .itemPocketBall = 0x2447,
         .itemPocketPC = 0x2461,
-        .rtcFlags = 0x0C80
+        .rtcFlags = 0x0C80,
+        .mysteryGiftUnlocked = 0xB51,
+        .rtcDayOffset = 0x0 // TODO
     }
 };
 

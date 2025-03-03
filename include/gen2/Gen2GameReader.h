@@ -3,6 +3,8 @@
 
 #include "gen2/Gen2SpriteDecoder.h"
 #include "gen2/Gen2IconDecoder.h"
+#include "gen2/Gen2ClockManager.h"
+#include "gen2/Gen2MysteryGiftManager.h"
 #include "gen2/Gen2PlayerPokemonStorage.h"
 #include "gen2/Gen2DistributionPokemon.h"
 #include "gen2/Gen2Localization.h"
@@ -159,6 +161,16 @@ public:
     Gen2ItemList getItemList(Gen2ItemListType type);
 
     /**
+     * Returns a Gen2ClockManager instance, which can be used to retrieve data from RTC
+     */
+    Gen2ClockManager getClockManager(IRTCReader& rtcReader);
+
+    /**
+     * @brief Returns a Gen2MysteryGiftManager instance, which can be used to read and manipulate the Mystery Gift functionality in a save
+     */
+     Gen2MysteryGiftManager getMysteryGiftManager();
+
+    /**
      * @brief This function returns whether the pokemon with the given pokedexNumber has been SEEN/OWNED.
      */
     bool getPokedexFlag(PokedexFlag dexFlag, uint8_t pokedexNumber);
@@ -229,12 +241,6 @@ public:
      * Don't forget to call finishSave() after using this function!
      */
     void setEventFlag(uint16_t flagNumber, bool enabled);
-
-    /**
-     * @brief This function will change an SRAM field to let gen 2 games prompt you
-     * to reconfigure the game clock
-     */
-    void resetRTC();
 protected:
 private:
     IRomReader &romReader_;

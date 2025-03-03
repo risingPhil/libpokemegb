@@ -14,6 +14,8 @@ all:
 	$(MAKE) -C gen2_removeItem $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_getEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C gen2_setEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C gen2_readRTC $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C gen2_mysteryGift $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C decodePartyIcons $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C findLocalizationOffsets $(MAKECMDGOALS) $(MAKEOVERRIDES)
 
@@ -30,6 +32,8 @@ clean:
 	$(MAKE) -C gen2_removeItem clean
 	$(MAKE) -C gen2_getEventFlag clean
 	$(MAKE) -C gen2_setEventFlag clean
+	$(MAKE) -C gen2_readRTC clean
+	$(MAKE) -C gen2_mysteryGift clean
 	$(MAKE) -C decodePartyIcons clean
 	$(MAKE) -C findLocalizationOffsets clean
 	
