@@ -317,8 +317,8 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsGS[] = {
         .itemPocketBall = 0x245C,
         .itemPocketPC = 0x2476,
         .rtcFlags = 0x1060,
-        .mysteryGiftUnlocked = 0x0,
-        .rtcDayOffset = 0x0 // TODO
+        .mysteryGiftUnlocked = 0xFE3, // source: https://github.com/kwsch/PKHeX/issues/4106
+        .rtcDayOffset = 0x2044
     },
     // JAPANESE
     {
@@ -341,7 +341,7 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsGS[] = {
         .itemPocketPC = 0x245F,
         .rtcFlags = 0x1000,
         .mysteryGiftUnlocked = 0xB51,
-        .rtcDayOffset = 0x0 // TODO
+        .rtcDayOffset = 0x202B
     }
 };
 
@@ -379,7 +379,7 @@ static const Gen2LocalizationSRAMOffsets g2_localizationSRAMOffsetsC[] = {
         .itemPocketPC = 0x2461,
         .rtcFlags = 0x0C80,
         .mysteryGiftUnlocked = 0xB51,
-        .rtcDayOffset = 0x0 // TODO
+        .rtcDayOffset = 0x202B
     }
 };
 

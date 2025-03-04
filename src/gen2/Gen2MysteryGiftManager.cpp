@@ -313,7 +313,7 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
     Gen2ItemListType itemListType;
     MysteryGiftResult result;
     uint8_t numMysteryGiftPartners;
-    const uint8_t currentDay = (uint8_t)gameReader.getClockManager(rtcReader).getDay();
+    const uint8_t currentDay = (uint8_t)gameReader.getClockManager(rtcReader).getDayCounter();
     uint8_t previousTimerStartDay;
     uint8_t previousTimerNumDays;
 
@@ -324,7 +324,7 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
 
     // if the mystery gift day timer has expired, reset the number of mystery gift partners
     readDayTimer(getMysteryGiftTimerValue(), previousTimerNumDays, previousTimerStartDay);
-    if(currentDay >= ((previousTimerStartDay + previousTimerNumDays) % 7))
+    if(currentDay >= (previousTimerStartDay + previousTimerNumDays))
     {
         // reset number of daily mystery gift partners
         setNumberOfDailyMysteryGiftPartners(0);
@@ -498,6 +498,17 @@ bool Gen2MysteryGiftManager::isDecorationsReceivedFlagSet(uint8_t flagIndex) con
     return (byteVal & flag);
 }
 
+bool Gen2MysteryGiftManager::isDecorationIDReceived(uint8_t decorationID) const
+{
+    const uint8_t flagIndex = getMysteryGiftDecorationReceivedFlagIndexFor(decorationID);
+    if(flagIndex == 0xFF)
+    {
+        return false;
+    }
+
+    return isDecorationsReceivedFlagSet(flagIndex);
+}
+
 void Gen2MysteryGiftManager::setDecorationsReceivedFlag(uint8_t flagIndex)
 {
     const uint8_t byteIndex = flagIndex / 8;
@@ -519,6 +530,16 @@ void Gen2MysteryGiftManager::setDecorationsReceivedFlag(uint8_t flagIndex)
     byteVal |= flag;
     saveManager_.rewind();
     saveManager_.writeByte(byteVal);
+}
+
+void Gen2MysteryGiftManager::setDecorationIDReceivedFlag(uint8_t decorationID)
+{
+    const uint8_t flagIndex = getMysteryGiftDecorationReceivedFlagIndexFor(decorationID);
+    if(flagIndex == 0xFF)
+    {
+        return;
+    }
+    setDecorationsReceivedFlag(flagIndex);
 }
 
 uint16_t Gen2MysteryGiftManager::getMysteryGiftTimerValue() const
