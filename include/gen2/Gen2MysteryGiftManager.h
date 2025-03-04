@@ -39,6 +39,22 @@ MysteryGiftSelection selectRandomGift();
 /**
  * @brief This class implements support for Gen2MysteryGift WITHOUT the trainerID
  * restrictions.
+ *
+ * Items will be sent to the players' item/ball pocket instead of to the delivery agent in the pokémon center.
+ * This ensures that you don't have to collect the gift between every attempt.
+ *
+ * The player will be able to use Mystery Gift 5 times in total per day.
+ *
+ * It is mostly based on:
+ * - https://bulbapedia.bulbagarden.net/wiki/Mystery_Gift
+ * - https://bulbapedia.bulbagarden.net/wiki/List_of_decorations_in_Generation_II
+ * - https://github.com/pret/pokegold/blob/master/engine/rtc/rtc.asm
+ * - https://github.com/pret/pokegold/blob/master/home/time.asm
+ * - https://github.com/pret/pokegold/blob/master/ram/wram.asm
+ * - https://github.com/pret/pokegold/blob/master/ram/sram.asm
+ * - https://github.com/pret/pokegold/blob/master/data/decorations/mystery_gift_decos.asm
+ * - https://github.com/pret/pokegold/blob/master/engine/link/mystery_gift.asm
+ * - https://github.com/pret/pokegold/blob/master/engine/link/mystery_gift_2.asm
  */
 class Gen2MysteryGiftManager
 {

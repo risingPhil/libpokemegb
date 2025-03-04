@@ -183,6 +183,12 @@ static uint16_t constructDayTimer(uint8_t numberOfDays, uint8_t curDay)
     return (numberOfDays << 8) | curDay;
 }
 
+static void readDayTimer(uint16_t timer, uint8_t& numberOfDays, uint8_t& startDay)
+{
+    numberOfDays = static_cast<uint8_t>(timer >> 8);
+    startDay = static_cast<uint8_t>(timer & 0xFF);
+}
+
 MysteryGiftSelection selectRandomGift()
 {
     MysteryGiftSelection result;
@@ -197,7 +203,7 @@ MysteryGiftSelection selectRandomGift()
 
     // according to https://bulbapedia.bulbagarden.net/wiki/Mystery_Gift#Item_gift_set
     // we may need up to 3 8 bit random numbers
-    // since rand() generates a 32 bit number, we just use every byte of it instead of generating multiple random numbers
+    // since rand() generates a 32 bit number, we just use every byte of it separately, instead of generating multiple random numbers
     if((randomValue & 0xFF) <= 25)
     {
         // uncommon set. next roll for rare
@@ -307,10 +313,21 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
     Gen2ItemListType itemListType;
     MysteryGiftResult result;
     uint8_t numMysteryGiftPartners;
-    const uint8_t currentDay = gameReader.getClockManager(rtcReader).getDayCounter();
+    const uint8_t currentDay = (uint8_t)gameReader.getClockManager(rtcReader).getDay();
+    uint8_t previousTimerStartDay;
+    uint8_t previousTimerNumDays;
+
     if(!isUnlocked())
     {
         return MYSTERYGIFT_RESULT_ERROR_NOT_UNLOCKED;
+    }
+
+    // if the mystery gift day timer has expired, reset the number of mystery gift partners
+    readDayTimer(getMysteryGiftTimerValue(), previousTimerNumDays, previousTimerStartDay);
+    if(currentDay >= ((previousTimerStartDay + previousTimerNumDays) % 7))
+    {
+        // reset number of daily mystery gift partners
+        setNumberOfDailyMysteryGiftPartners(0);
     }
 
     numMysteryGiftPartners = getNumberOfDailyMysteryGiftPartners();

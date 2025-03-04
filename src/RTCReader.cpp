@@ -147,19 +147,19 @@ void fixRTCCounters(uint8_t& seconds, uint8_t& minutes, uint8_t& hours, uint16_t
     // start fixing up the new values. (some of them might have gone over their ranges)
     if(seconds > 59)
     {
-        ++minutes;
+        minutes += (seconds / 60);
         seconds %= 60;
     }
 
     if(minutes > 59)
     {
-        ++hours;
+        hours += (minutes / 60);
         minutes %= 60;
     }
 
     if(hours > 23)
     {
-        ++newDaysCounter;
+        newDaysCounter += (hours / 24);
         hours %= 24;
     }
 
