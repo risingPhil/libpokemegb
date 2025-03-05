@@ -310,11 +310,12 @@ void Gen2MysteryGiftManager::unlock()
 
 MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRTCReader& rtcReader, const MysteryGiftSelection& selectedMysteryGift)
 {
+    Gen2ClockManager clockManager = gameReader.getClockManager(rtcReader);
     Gen2ItemListType itemListType;
     MysteryGiftResult result;
     uint16_t trainerID;
     uint8_t numMysteryGiftPartners;
-    const uint8_t currentDay = (uint8_t)gameReader.getClockManager(rtcReader).getDayCounter();
+    uint8_t currentDay;
     uint8_t previousTimerStartDay;
     uint8_t previousTimerNumDays;
 
@@ -322,6 +323,11 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
     {
         return MYSTERYGIFT_RESULT_ERROR_NOT_UNLOCKED;
     }
+
+    // clockManager needs to latch the RTC values first and then we need to use the same instance
+    // to obtain the actual values.
+    clockManager.latchRTC();
+    currentDay = (uint8_t)clockManager.getDayCounter();
 
     // if the mystery gift day timer has expired, reset the number of mystery gift partners
     readDayTimer(getMysteryGiftTimerValue(), previousTimerNumDays, previousTimerStartDay);
