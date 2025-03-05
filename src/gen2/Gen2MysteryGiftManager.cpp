@@ -5,12 +5,13 @@
 #include <string.h>
 #include <cstdlib>
 
+#define MYSTERYGIFT_OFFSET_UNLOCKED 0
 #define MYSTERYGIFT_OFFSET_ITEM 1
 #define MYSTERYGIFT_OFFSET_NUM_PARTNERS 2
 #define MYSTERYGIFT_OFFSET_PARTNER_IDS 3
-#define MYSTERYGIFT_OFFSET_DECORATIONS_RECEIVED 10
-#define MYSTERYGIFT_OFFSET_TIMER 20
-#define MYSTERYGIFT_OFFSET_TRAINER_HOUSE_FLAG 23
+#define MYSTERYGIFT_OFFSET_DECORATIONS_RECEIVED 13
+#define MYSTERYGIFT_OFFSET_TIMER 23
+#define MYSTERYGIFT_OFFSET_TRAINER_HOUSE_FLAG 26
 
 #define MYSTERYGIFT_POKEME64_TRAINER_ID 0xADA0
 
@@ -277,7 +278,7 @@ bool Gen2MysteryGiftManager::isUnlocked() const
 {
     uint8_t value;
 
-    if(!seekToMysteryGiftOffset(saveManager_, gameType_, localization_, 0))
+    if(!seekToMysteryGiftOffset(saveManager_, gameType_, localization_, MYSTERYGIFT_OFFSET_UNLOCKED))
     {
         // can't seek or unsupported by game localization
         return false;
@@ -301,10 +302,9 @@ void Gen2MysteryGiftManager::unlock()
     saveManager_.rewind();
     // sMysteryGiftItem to 0
     saveManager_.writeByte(0);
-    // sMysteryGiftUnlocked to 0
-    saveManager_.writeByte(0);
     // sBackupMysteryGiftItem to 0
     saveManager_.writeByte(0);
+    // will also set the sMysteryGiftUnlocked flag to 0
     setNumberOfDailyMysteryGiftPartners(0);
 }
 
@@ -312,6 +312,7 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
 {
     Gen2ItemListType itemListType;
     MysteryGiftResult result;
+    uint16_t trainerID;
     uint8_t numMysteryGiftPartners;
     const uint8_t currentDay = (uint8_t)gameReader.getClockManager(rtcReader).getDayCounter();
     uint8_t previousTimerStartDay;
@@ -336,7 +337,23 @@ MysteryGiftResult Gen2MysteryGiftManager::obtain(Gen2GameReader& gameReader, IRT
         return MYSTERYGIFT_RESULT_ERROR_TOO_MANY_GIFTS;
     }
 
-    setDailyMysteryGiftPartnerAtIndex(numMysteryGiftPartners, MYSTERYGIFT_POKEME64_TRAINER_ID);
+    // read current partner ids into mysteryGiftPartnerIdBuffer_
+    // check if the trainer id we were about to use was already used and adapt
+    // we are assuming our trainerIDs will be used in sequence. Therefore if 0xADA0 is used, we don't have to restart the loop
+    // to check for 0xADA1
+    // we need to make sure we use unique ones, otherwise stadium 2 and the gameboy version of mystery gift may not respect
+    // the limit.
+    getDailyMysteryGiftPartnerIDs();
+    trainerID = MYSTERYGIFT_POKEME64_TRAINER_ID;
+    for(uint8_t i=0; i < numMysteryGiftPartners; ++i)
+    {
+        if(mysteryGiftPartnerIdBuffer_[i] == trainerID)
+        {
+            ++trainerID;
+        }
+    }
+    // at this point, the resulting trainerID should be one that isn't included in the dialy mystery gift partner list
+    setDailyMysteryGiftPartnerAtIndex(numMysteryGiftPartners, trainerID);
     ++numMysteryGiftPartners;
     setNumberOfDailyMysteryGiftPartners(numMysteryGiftPartners);
     setMysteryGiftTimerValue(constructDayTimer(1, currentDay));
@@ -432,6 +449,19 @@ uint8_t Gen2MysteryGiftManager::getNumberOfDailyMysteryGiftPartners() const
 void Gen2MysteryGiftManager::setNumberOfDailyMysteryGiftPartners(uint8_t numPartners)
 {
     if(!seekToMysteryGiftOffset(saveManager_, gameType_, localization_, MYSTERYGIFT_OFFSET_NUM_PARTNERS))
+    {
+        // can't seek or unsupported by game localization
+        return;
+    }
+
+    saveManager_.writeByte(numPartners);
+
+    // for some reason the num partners field is being copied to the unlocked field, supposedly as a backup.
+    // source: https://github.com/pret/pokegold/blob/master/engine/link/mystery_gift.asm
+    // look at the BackupMysteryGift and RestoreMysteryGift functions
+    // If we don't do this, Pokémon Stadium 2 (and probably the gameboy mystery gift implementation too)
+    // won't respect our daily partner list and therefore won't respect the daily limit!
+    if(!seekToMysteryGiftOffset(saveManager_, gameType_, localization_, MYSTERYGIFT_OFFSET_UNLOCKED))
     {
         // can't seek or unsupported by game localization
         return;
