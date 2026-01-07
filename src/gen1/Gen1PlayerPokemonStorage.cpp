@@ -440,7 +440,7 @@ bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, b
 {
     Gen1PokeStats stats;
     const uint8_t BOX_POKEMON_NUM_BYTES = 33;
-    const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
+    const uint8_t FIRST_POKE_STRUCT_OFFSET = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 22 : 32;
 
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     const uint8_t bankIndex = getGen1BoxBankIndex(boxIndex_, currentBoxIndex, localization_);
@@ -465,7 +465,7 @@ bool Gen1Box::getPokemon(uint8_t index, Gen1TrainerPokemon& outTrainerPokemon, b
 bool Gen1Box::setPokemon(uint8_t index, Gen1TrainerPokemon& poke)
 {
     const uint8_t BOX_POKEMON_NUM_BYTES = 33;
-    const uint8_t FIRST_POKE_STRUCT_OFFSET = 22;
+    const uint8_t FIRST_POKE_STRUCT_OFFSET = (localization_ != Gen1LocalizationLanguage::JAPANESE) ? 22 : 32;
     Gen1TrainerBoxMeta boxMeta;
     const uint8_t currentBoxIndex = gameReader_.getCurrentBoxIndex();
     getBoxMetadata(saveManager_, boxIndex_, currentBoxIndex, localization_, boxMeta);

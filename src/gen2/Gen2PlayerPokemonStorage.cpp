@@ -253,7 +253,8 @@ bool Gen2PokemonList::add(const Gen2TrainerPokemon& poke, bool isEgg, const char
     setOriginalTrainerOfPokemon(oldNumberOfPokemon, originalTrainerID);
     if(isEgg)
     {
-        setPokemonNickname(oldNumberOfPokemon, "EGG");
+        const char* eggNickname = (localization_ != Gen2LocalizationLanguage::JAPANESE) ? "EGG" : "タマゴ";
+        setPokemonNickname(oldNumberOfPokemon, eggNickname);
     }
     else
     {

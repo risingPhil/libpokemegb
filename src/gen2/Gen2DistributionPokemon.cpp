@@ -936,7 +936,7 @@ static const Gen2DistributionPokemon g2_jpn_shogakukanAnnualEventCelebi = {
 // the wiki page indicates that trainer ids with a odd number get a specific OT and even numbers get another.
 // I can't replicate this with my current functionality. So I'm going to only hand out a specifid trainer number for this one
 static const Gen2DistributionPokemon g2_jpn_nintendoSpaceWorld2000Celebi = {
-    .name = "Nintendo Space World 2000 (JPN)",
+    .name = "Nintendo Space World 2000 Celebi (JPN)",
     .originalTrainer = "ワールド",
     .originalTrainerID = 13463,
     .setPlayerAsOriginalTrainer = false,
@@ -2062,7 +2062,7 @@ static const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_thrashMachop = {
-    .name = "Thrash Swipe Machop",
+    .name = "Thrash Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
