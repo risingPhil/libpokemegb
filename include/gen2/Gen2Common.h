@@ -12,6 +12,7 @@ typedef struct Gen2DistributionPokemon Gen2DistributionPokemon;
 
 // source: https://bulbapedia.bulbagarden.net/wiki/List_of_items_by_index_number_(Generation_II)
 #define CRYSTAL_ITEM_ID_GS_BALL 0x73
+#define CRYSTAL_ITEM_ID_EGG_TICKET 0x81
 
 // Based on https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Resources/text/script/gen2/flags_c_en.txt
 // Look at this file to see more events
@@ -19,6 +20,7 @@ typedef struct Gen2DistributionPokemon Gen2DistributionPokemon;
 #define CRYSTAL_EVENTFLAG_KURT_READY_TO_RETURN_GSBALL 191
 #define CRYSTAL_EVENTFLAG_GSBALL_USABLE_IN_ILEX_FOREST_SHRINE 192
 #define CRYSTAL_EVENTFLAG_RECEIVED_GSBALL 832
+#define CRYSTAL_EVENTFLAG_EGG_TICKET 830
 #define CRYSTAL_GS_BALL_ENABLE_VALUE 0xB
 
 enum class Gen2GameType

@@ -216,6 +216,11 @@ public:
     void unlockGsBallEvent();
 
     /**
+     * @brief This function unlocks the Egg Ticket in Japanese Pokémon Crystal saves.
+     */
+    void unlockEggTicketEvent();
+
+    /**
      * @brief Retrieves the value of the given event flag
      * Hint: You can find the number and meaning of various event flags here:
      * https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Resources/text/script/gen2/flags_c_en.txt

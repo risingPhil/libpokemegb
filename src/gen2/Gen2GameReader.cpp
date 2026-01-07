@@ -876,6 +876,20 @@ void Gen2GameReader::unlockGsBallEvent()
     saveManager_.writeByte(CRYSTAL_GS_BALL_ENABLE_VALUE);
 }
 
+void Gen2GameReader::unlockEggTicketEvent()
+{
+    if(!isGameCrystal() || getGameLanguage() != Gen2LocalizationLanguage::JAPANESE)
+    {
+        return;
+    }
+
+    // let's remove the Egg Ticket from the players' inventory first (if it exists)
+    Gen2ItemList itemList = getItemList(Gen2ItemListType::GEN2_ITEMLISTTYPE_KEYITEMPOCKET);
+    itemList.remove(CRYSTAL_ITEM_ID_EGG_TICKET);
+
+    setEventFlag(CRYSTAL_EVENTFLAG_EGG_TICKET, true);
+}
+
 bool Gen2GameReader::getEventFlag(uint16_t flagNumber)
 {
     const uint32_t saveOffset = gen2_getSRAMOffsets(gameType_, localization_).eventFlags;
