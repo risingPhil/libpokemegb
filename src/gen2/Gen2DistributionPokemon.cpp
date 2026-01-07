@@ -2062,7 +2062,7 @@ static const Gen2DistributionPokemon g2_pcny_falseSwipeMachop = {
 };
 
 static const Gen2DistributionPokemon g2_pcny_thrashMachop = {
-    .name = "Thrash Swipe Machop",
+    .name = "Thrash Machop",
     .originalTrainer = "",
     .originalTrainerID = 0,
     .setPlayerAsOriginalTrainer = true,
