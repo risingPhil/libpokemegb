@@ -204,16 +204,15 @@ MysteryGiftSelection selectRandomGift()
 
     // according to https://bulbapedia.bulbagarden.net/wiki/Mystery_Gift#Item_gift_set
     // we may need up to 3 8 bit random numbers
-    // since rand() generates a 32 bit number, we just use every byte of it separately, instead of generating multiple random numbers
     if((randomValue & 0xFF) <= 25)
     {
         // uncommon set. next roll for rare
-        randomValue >>= 8;
+        randomValue = (uint32_t)rand();
 
         if((randomValue & 0xFF) <= 50)
         {
             // rare set, next roll for very rare
-            randomValue >>= 8;
+            randomValue = (uint32_t)rand();
 
             if((randomValue & 0xFF) <= 50)
             {
@@ -241,8 +240,7 @@ MysteryGiftSelection selectRandomGift()
         }
     }
 
-    // worst case, after the bitshift we only have the upper 8 bits left (well, at the bottom 8 bits now)
-    randomValue >>= 8;
+    randomValue = (uint32_t)rand();
     // use the first bit of the resulting value to determine whether to return a decoration or an item
     shouldReturnDecoration = (randomValue & 0x1);
     // now generate a new random number for the index in the list
@@ -254,8 +252,8 @@ MysteryGiftSelection selectRandomGift()
     setIndex = (randomValue & 0xFF) % selectedDecorationSetSize;
     result.decorationID = selectedDecorationSet[setIndex];
 
-    // now use the next 8 bits of the random value for the selected item.
-    randomValue >>= 8;
+    // another random value for the selected item.
+    randomValue = (uint32_t)rand();
     setIndex = (randomValue & 0xFF) % selectedItemSetSize;
     result.itemID = selectedItemSet[setIndex];
 
