@@ -151,6 +151,7 @@ static const Gen1LocalizationRomOffsets g1_localizationROMOffsetsY[] = {
 
 static const Gen1LocalizationSRAMOffsets g1_sRAMOffsetsInternational = {
     .trainerID = 0x2605,
+    .trainerMoney = 0x25F3,
     .currentMap = 0x260A,
     .dexSeen = 0x25B6,
     .dexOwned = 0x25A3,
@@ -162,6 +163,7 @@ static const Gen1LocalizationSRAMOffsets g1_sRAMOffsetsInternational = {
 
 static const Gen1LocalizationSRAMOffsets g1_sRAMOffsetsJapan = {
     .trainerID = 0x25FB,
+    .trainerMoney = 0x25EE,
     .currentMap = 0x2600,
     .dexSeen = 0x25B1,
     .dexOwned = 0x259E,
