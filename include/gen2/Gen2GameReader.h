@@ -132,6 +132,18 @@ public:
     const char *getTrainerName() const;
 
     /**
+     * @brief This function retrieves the amount of pokédollars the trainer currently has
+     */
+    uint32_t getTrainerMoney() const;
+
+    /**
+     * @brief Sets the amount of pokédollars the trainer currently has
+     * NOTE: the value is capped to 16777215 as this is the maximum value that can be represented by 3 bytes
+     */
+    void setTrainerMoney(uint32_t amount);
+
+
+    /**
      * @brief Get the rival name from the save file
      * Note: the resulting const char* does not need to be free'd.
      * However, it needs to be either used rightaway or strdup()'d, because the data will get overwritten on the next call to this function.

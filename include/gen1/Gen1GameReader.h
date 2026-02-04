@@ -87,6 +87,17 @@ public:
     uint16_t getTrainerID() const;
 
     /**
+     * @brief This function retrieves the amount of pokédollars the trainer currently has
+     */
+    uint32_t getTrainerMoney() const;
+
+    /**
+     * @brief Sets the amount of pokédollars the trainer currently has
+     * NOTE: the value is capped to 16777215 as this is the maximum value that can be represented by 3 bytes
+     */
+    void setTrainerMoney(uint32_t amount);
+
+    /**
      * Retrieves the current map the player is in.
      */
     Gen1Maps getCurrentMap() const;

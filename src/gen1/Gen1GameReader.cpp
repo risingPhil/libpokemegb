@@ -10,7 +10,7 @@
 /**
  * @brief This function calculates the main data checksum
  */
-uint8_t calculateMainDataChecksum(ISaveManager& saveManager, Gen1LocalizationLanguage localization)
+static uint8_t calculateMainDataChecksum(ISaveManager& saveManager, Gen1LocalizationLanguage localization)
 {
     Gen1Checksum checksum;
     const uint32_t checksummedDataStart = 0x2598;
@@ -30,7 +30,7 @@ uint8_t calculateMainDataChecksum(ISaveManager& saveManager, Gen1LocalizationLan
     return checksum.get();
 }
 
-uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankIndex)
+static uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankIndex)
 {
     Gen1Checksum checksum;
     const uint16_t checksummedDataStart = 0x0;
@@ -47,6 +47,50 @@ uint8_t calculateWholeBoxBankChecksum(ISaveManager& saveManager, uint8_t bankInd
     }
 
     return checksum.get();
+}
+
+/**
+ * @brief This function decodes a binary coded decimal number stored in big endian format.
+ * (see: https://en.wikipedia.org/wiki/Binary-coded_decimal)
+ * It assumes 4 bits per digit and all digits are decimal (0-9)
+ * 
+ * @param bcdData the buffer containing the Binary coded decimal data
+ * @param numDigits number of digits in the buffer
+ */
+static uint32_t decodeBigEndianBinaryCodedDecimalNumber(const uint8_t *bcdData, uint8_t numDigits)
+{
+    uint32_t result = 0;
+    // The + 1 is because the division always rounds down.
+    // but we want to make sure that if there's an odd number of digits, we still process the last one
+    for(uint8_t i=0; i < (numDigits + 1) / 2; ++i)
+    {
+        const uint8_t upperNibble = (bcdData[i] >> 4);
+        const uint8_t lowerNibble = (bcdData[i] & 0xF);
+        result = (result * 100) + (upperNibble * 10) + lowerNibble;
+    }
+    return result;
+}
+
+/**
+ * @brief This function encodes a binary coded decimal number in big endian format.
+ * (see: https://en.wikipedia.org/wiki/Binary-coded_decimal)
+ * The output will use 4 bits per digit and all digits are decimal (0-9)
+ * 
+ * @param bcdData a buffer with sufficient size to hold the binary encoded decimal data
+ * @param numDigits number of digits to encode
+ */
+static void encodeBigEndianBinaryCodedDecimalNumber(uint32_t value, uint8_t *outBcdData, uint8_t numDigits)
+{
+    // since we're doing big endian, but we're extracting the digits from least significant to most significant,
+    // we need to fill the output buffer backwards
+    for(int8_t i = numDigits - 1; i >= 0; i -= 2)
+    {
+        const uint8_t lowerNibble = value % 10;
+        value /= 10;
+        const uint8_t upperNibble = value % 10;
+        value /= 10;
+        outBcdData[i] = (upperNibble << 4) | lowerNibble;
+    }
 }
 
 Gen1GameReader::Gen1GameReader(IRomReader &romReader, ISaveManager &saveManager, Gen1GameType gameType, Gen1LocalizationLanguage language)
@@ -345,6 +389,30 @@ uint16_t Gen1GameReader::getTrainerID() const
     saveManager_.readUint16(result);
 
     return result;
+}
+
+uint32_t Gen1GameReader::getTrainerMoney() const
+{
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).trainerMoney;
+    saveManager_.seek(savOffset);
+
+    uint8_t encodedAmount[3];
+    saveManager_.read(encodedAmount, 3);
+
+    // for gen 1, money is stored as a big-endian BCD number (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_I)#Main_Data)
+    return decodeBigEndianBinaryCodedDecimalNumber(encodedAmount, 6);
+}
+
+void Gen1GameReader::setTrainerMoney(uint32_t amount)
+{
+    const uint32_t savOffset = gen1_getSRAMOffsets(localization_).trainerMoney;
+    saveManager_.seek(savOffset);
+
+    // for gen 1, money is stored as a big-endian BCD number (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_(Generation_I)#Main_Data)
+    uint8_t encodedAmount[3];
+    encodeBigEndianBinaryCodedDecimalNumber(amount, encodedAmount, 6);
+
+    saveManager_.write(encodedAmount, 3);
 }
 
 Gen1Maps Gen1GameReader::getCurrentMap() const

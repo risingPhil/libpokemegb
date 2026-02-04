@@ -55,12 +55,18 @@ int main(int argc, char** argv)
     {
         Gen1GameReader gameReader(romReader, saveManager, gen1Type);
         printf("%s", (gameReader.isMainChecksumValid()) ? "Game save valid!\n" : "Game save NOT valid!\n");
+        printf("OT: %u\n", gameReader.getTrainerID());
+        printf("Name: %s\n", gameReader.getTrainerName());
+        printf("Money: %u\n", gameReader.getTrainerMoney());
     }
     else if (gen2Type != Gen2GameType::INVALID)
     {
         Gen2GameReader gameReader(romReader, saveManager, gen2Type);
         printf("%s", (gameReader.isMainChecksumValid()) ? "Main save valid!\n" : "Main save NOT valid!\n");
         printf("%s", (gameReader.isBackupChecksumValid()) ? "Backup save valid!\n" : "Backup save NOT valid!\n");
+        printf("OT: %u\n", gameReader.getTrainerID());
+        printf("Name: %s\n", gameReader.getTrainerName());
+        printf("Money: %u\n", gameReader.getTrainerMoney());
     }
 
     free(romBuffer);

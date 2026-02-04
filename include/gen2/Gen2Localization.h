@@ -69,6 +69,7 @@ typedef struct Gen2LocalizationSRAMOffsets
     uint32_t currentBox;
     uint32_t dexSeen;
     uint32_t dexOwned;
+    uint32_t trainerMoney;
     uint32_t party;
     uint32_t eventFlags;
     uint32_t mainChecksum;

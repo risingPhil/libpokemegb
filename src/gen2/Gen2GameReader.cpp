@@ -642,6 +642,24 @@ const char *Gen2GameReader::getTrainerName() const
     return result;
 }
 
+uint32_t Gen2GameReader::getTrainerMoney() const
+{
+    uint32_t result = 0;
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType_, localization_).trainerMoney;
+
+    saveManager_.seek(savOffset);
+    saveManager_.readUint24(result, Endianness::BIG);
+    return result;
+}
+
+void Gen2GameReader::setTrainerMoney(uint32_t amount)
+{
+    const uint32_t savOffset = gen2_getSRAMOffsets(gameType_, localization_).trainerMoney;
+
+    saveManager_.seek(savOffset);
+    saveManager_.writeUint24(amount, Endianness::BIG);
+}
+
 const char *Gen2GameReader::getRivalName() const
 {
     static char result[20];

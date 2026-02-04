@@ -36,7 +36,7 @@ all: $(TARGET) examples
 
 examples: $(TARGET)
 	$(MAKE) -C examples $(MAKECMDGOALS) $(MAKEOVERRIDES)
-	
+
 # Rule to build the target executable
 $(TARGET): $(OBJS)
 	@echo "Creating static library $(TARGET)"

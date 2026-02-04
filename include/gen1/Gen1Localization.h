@@ -76,6 +76,7 @@ typedef struct Gen1LocalizationRomOffsets
 typedef struct Gen1LocalizationSRAMOffsets
 {
     uint32_t trainerID;
+    uint32_t trainerMoney;
     uint32_t currentMap;
     uint32_t dexSeen;
     uint32_t dexOwned;
