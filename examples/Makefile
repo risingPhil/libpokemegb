@@ -16,6 +16,7 @@ all:
 	$(MAKE) -C gen2_setEventFlag $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C decodePartyIcons $(MAKECMDGOALS) $(MAKEOVERRIDES)
 	$(MAKE) -C findLocalizationOffsets $(MAKECMDGOALS) $(MAKEOVERRIDES)
+	$(MAKE) -C setMoney $(MAKECMDGOALS) $(MAKEOVERRIDES)
 
 clean:
 	$(MAKE) -C do_stuff_gen1 clean
@@ -32,4 +33,5 @@ clean:
 	$(MAKE) -C gen2_setEventFlag clean
 	$(MAKE) -C decodePartyIcons clean
 	$(MAKE) -C findLocalizationOffsets clean
+	$(MAKE) -C setMoney clean
 	
