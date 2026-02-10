@@ -89,7 +89,7 @@ static void encodeBigEndianBinaryCodedDecimalNumber(uint32_t value, uint8_t *out
         value /= 10;
         const uint8_t upperNibble = value % 10;
         value /= 10;
-        outBcdData[i] = (upperNibble << 4) | lowerNibble;
+        outBcdData[i / 2] = (upperNibble << 4) | lowerNibble;
     }
 }
 
